@@ -4,10 +4,9 @@ Marit Beerepoot
 10983430
 
 ## Probleem beschrijving:
-Niks is vervelender dan telkens maar weer in je browser geschiedenis terug te moeten zoeken wat de laatste aflvevering is die je hebt gekeken van de favoriete serie. Daarnaast wordt de struggle nog groter met telkens verschillende platformen waarop series te bekijken zijn, waar de ene wel bijhoudt wat de laatst bekeken aflevering was, en de andere niet. Op het moment dat je je browser geschiedenis en coockies verwijderd wordt het nog erger: nergens is meer terug te vinden waar je was, wat resulteert in minuten tot uren lange zoektochten om te vinden waar je was. 
-
-#### Probleem wat de app ook kan oplossen:
-Het is ook super vervelend als je achterloopt met een serie kijken, en je vrienden, waar jij bij bent, over een aflevering gaan praten die je nog niet gezien hebt. Zonder dat je er om vraagt vliegen de spoilers om je hoofd.
+Het lost de volgende problemen op:  
+1. Niks is vervelender dan telkens maar weer in je browser geschiedenis terug te moeten zoeken wat de laatste aflvevering is die je hebt gekeken van de favoriete serie. Daarnaast wordt de struggle nog groter met telkens verschillende platformen waarop series te bekijken zijn, waar de ene wel bijhoudt wat de laatst bekeken aflevering was, en de andere niet. Op het moment dat je je browser geschiedenis en coockies verwijderd wordt het nog erger: nergens is meer terug te vinden waar je was, wat resulteert in minuten tot uren lange zoektochten om te vinden waar je was. 
+2. Het is ook super vervelend als je achterloopt met een serie kijken, en je vrienden, waar jij bij bent, over een aflevering gaan praten die je nog niet gezien hebt. Zonder dat je er om vraagt vliegen de spoilers om je hoofd.
 
 ## Doelgroep:
 De doelgroep is simpelweg iedereen die graag naar series kijkt en dat ook regelmatig doe. Echter biedt de app ook informatie aan over series, waardoor het een doelgroep die meer informatie over series wilt ook aanspreekt. Daarnaast is een andere doelgroep ook vriendengroepen die afleveringen van series niet willen spoilen aan de rest van de groep. Over het algemeen is de doelgroep dus mensen die actief series kijken. 
