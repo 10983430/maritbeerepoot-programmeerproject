@@ -32,18 +32,20 @@ De oplossing is een app die kan bijhouden wat de laatste aflevering is die je ge
 
 ## Data sources:
 De volgende twee APIs zullen worden gebruikt:
-- **OMDb API/The open movie database**: http://www.omdbapi.com/. Dit is een API die informatie bevat over series, seizoenen en episodes. Het bevat daarnaast ook informatie over films, maar ik ben niet van plan om die te gaan gebruiken.
-- **Jikan**: https://jikan.me/ Dit is een API die anime bevat. Niet alle animes staan in de andere API, waardoor deze API de app vollediger maakt.
+- **OMDb API/The open movie database**: http://www.omdbapi.com/  
+Dit is een API die informatie bevat over series, seizoenen en episodes. Het bevat daarnaast ook informatie over films, maar ik ben niet van plan om die te gaan gebruiken.
+- **Jikan**: https://jikan.me/   
+Dit is een API die anime bevat. Niet alle animes staan in de andere API, waardoor deze API de app vollediger maakt.
 
 ## External components:
 De volgende external components worden gebruikt:
 - Firebase
 
 ## Similar mobile apps:
-- **TV Time: TV Show Tracker:** https://www.tvtime.com/en 
+- **TV Time: TV Show Tracker:** https://www.tvtime.com/en   
 Deze app maakt het mogelijk om bij de houden bij welke aflevering van een serie je bent, maar is meer gericht op een planning. Het geeft namelijk een overzicht van welke series wanneer op tv komen en geeft een melding wanneer er een nieuwe aflevering wordt uitgezonden. Daarnaast heeft het een 'Explore' sectie, waar informatie te vinden is over series. Deze is spoiler vrij gemaakt. Ten slotte is het mogelijk om te delen wat je van een bepaalde aflevering vond met andere serie kijkers op het platform. 
 Om aan te geven of een aflevering gekeken is moet er worden ingelogd. Er wordt dus op basis van account opgeslagen welke afleveringen gekeken worden.
-- **Hobi:** http://www.hobiapp.com/
+- **Hobi:** http://www.hobiapp.com/  
 Hobi werkt vrijwel hetzelfde als TV Time. Het maakt het mogelijk om TV shows te volgen, af te tellen naar wanneer een aflevering op TV komt, stuurt notificaties wanneer afleveringen komen. Het verschil TV time is dat het niet mogelijk is om te delen wat je van een aflevering vond en dat het persoonlijke aanbevelingen geeft.
 
 #### Hoe kan ik dit gebruiken?
