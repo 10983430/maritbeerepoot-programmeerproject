@@ -21,7 +21,9 @@ Het helpt ook bij het zoeken naar nieuwe series om te kijken, omdat je onder and
 De oplossing is een app die kan bijhouden wat de laatste aflevering is die je gezien hebt van een bepaalde serie.
 
 #### Visual sketch
+De volgende wireflow geeft aan wat er gebeurd wanneer een user begint bij de serie database. Hij kan details zien over de serie en over de episodes van de serie.  
 ![](doc/Wireflow1.png)
+De volgende wireflow geeft weer hoe een gebruiker bij een user profile van een andere user kan komen. Dit kan door de user in de user database te vinden (bovenste wireflow) of te kijken bij het user profile van de ingelogde user naar wie hij volgt.  
 ![](doc/Wireflow2.png)
 
 #### Main features:
