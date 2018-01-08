@@ -57,6 +57,9 @@ Hobi werkt vrijwel hetzelfde als TV Time. Het maakt het mogelijk om TV shows te 
 #### Hoe kan ik dit gebruiken?
 Beide slaan account gebonden op welke afleveringen gekeken zijn. Dit kan ik ook realiseren via firebase. Echter zijn de andere functies, zoals meldingen geven wanneer een aflvering gaat worden uitgezonden en persoonsgebonden aanbevelingen geven, vrij complex en ben ik niet van plan dit te implementeren. 
 
+#### Waarin onderscheidt deze app zich van de bestaande?
+Deze app maakt het mogelijk om ook te zien waar vrienden zijn bij het kijken van een serie. Ik heb geen bestaande app kunnen vinden die dit ook doet.
+
 ## Hardest part:
 Het moeilijkste wordt om het mogelijk te maken om mensen elkaar te laten volgen. Daarnaast wordt het ook lastig om te zorgen dat een seizoen in een keer kan worden gemarkeerd als gezien.
 
