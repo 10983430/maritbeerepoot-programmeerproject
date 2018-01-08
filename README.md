@@ -21,7 +21,8 @@ Het helpt ook bij het zoeken naar nieuwe series om te kijken, omdat je onder and
 De oplossing is een app die kan bijhouden wat de laatste aflevering is die je gezien hebt van een bepaalde serie.
 
 #### Visual sketch
-
+![](doc/Wireflow1.png)
+![](doc/Wireflow2.png)
 
 #### Main features:
 - Database om series in te zoeken (**mvp**).
