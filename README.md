@@ -22,10 +22,11 @@ De oplossing is een app die kan bijhouden wat de laatste aflevering is die je ge
 #### Visual sketch
 De volgende wireflow geeft aan wat er gebeurd wanneer een user begint bij de serie database. Hij kan details zien over de serie en over de episodes van de serie.  
 ![](doc/Wireflow1.png)  
-De volgende wireflow geeft weer hoe een gebruiker bij een user profile van een andere user kan komen. Dit kan door de user in de user database te vinden (bovenste wireflow) of te kijken bij het user profile van de ingelogde user naar wie hij volgt.  
+De volgende wireflow geeft weer hoe een gebruiker bij een user profile van een andere user kan komen. Dit kan door de user in de user database te vinden (bovenste wireflow) of te kijken bij het user profile van de ingelogde user naar wie hij volgt. De episode nummers met het groene vierkant eromheen zijn episodes die de ingelogde gebruiker gezien heeft. De rode heeft de ingelogde gebruiker nog niet bekenen.  
 ![](doc/Wireflow2.png)  
 De volgende wireflow geeft weer hoe een user inlogt.  
 ![](doc/Wireflow3.png)  
+In de bovenstaande wireflows is het cijfer in de gele cirkel het IMDB cijfer. De checkboxen geven aan of een aflevering wel of niet bekeken is.
 
 #### Main features:
 - Database om series in te zoeken (**mvp**).
