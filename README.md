@@ -43,7 +43,8 @@ Dit is een API die anime bevat. Niet alle animes staan in de andere API, waardoo
 
 ## External components:
 De volgende external components worden gebruikt:
-- Firebase
+- Firebase (slaat bekeken afleveringen op en maakt volgen van gebruikers mogelijk).
+- Picasso (voor het inladen van de afbeeldingen van episodes en series).
 
 ## Similar mobile apps:
 - **TV Time: TV Show Tracker:** https://www.tvtime.com/en   
