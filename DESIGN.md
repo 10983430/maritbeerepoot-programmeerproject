@@ -20,6 +20,9 @@ Dit is een API die anime bevat. Niet alle animes staan in de andere API, waardoo
 De datasources zijn de APIs, OMDb & Jikan.
 
 ## Database tables and fields
+De database zal er zoals hieronder uitzien:  
+![](doc/Database.png)
+Er is te zien dat de email, de username, de users die een gebruiker volgt en de series die een user volgt opslaat. Bij de series die een gebruiker volgt wordt in de lijst van episodes opgeslagen welke gekeken zijn, per serie. Waar 'User' staat zal een door firebase gegenereerd ID komen te staan. Dit ID wordt gebruikt bij FollowUsers om bij te houden welke gebruikers user volgt.
 
 
 
