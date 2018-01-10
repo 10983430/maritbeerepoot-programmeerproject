@@ -7,6 +7,8 @@ Helaas verlaagd git de resolutie nogal, hier is een link naar een plaats met een
 ![](doc/Dataflows.png)
 
 ## Diagram of utility modules
+In het onderstaande plaatje is zijn de utility modules, classes en functions afgebeeld. Ik weet van bepaalde classen nog niet welke attributen ik ga gebruiken dus die heb ik leeg gelaten.  
+![](doc/Utility.png)
 
 ## List of APIs and frameworks/plugins
 - **OMDb API/The open movie database**: http://www.omdbapi.com/  
