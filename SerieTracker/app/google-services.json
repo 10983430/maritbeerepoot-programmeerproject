@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "789477937168",
+    "firebase_url": "https://serietracker-a33a9.firebaseio.com",
+    "project_id": "serietracker-a33a9",
+    "storage_bucket": "serietracker-a33a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789477937168:android:540e90898b286d8b",
+        "android_client_info": {
+          "package_name": "com.example.marit.serietracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789477937168-t5fadl2gff4ucn5990dem1tl5k48d5en.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.marit.serietracker",
+            "certificate_hash": "d12d32667986004fe1a8af31940fcfe1b57f1a01"
+          }
+        },
+        {
+          "client_id": "789477937168-vlai8ns76vtm7di93sknsfdhk0459fdo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjS8injmOKVaDAO0Crcf4xHCub7VY9D0g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789477937168-vlai8ns76vtm7di93sknsfdhk0459fdo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
