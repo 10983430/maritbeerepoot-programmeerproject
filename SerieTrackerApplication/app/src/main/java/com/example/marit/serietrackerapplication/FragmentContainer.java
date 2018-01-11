@@ -21,15 +21,14 @@ public class FragmentContainer extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_series:
-                    //mTextMessage.setText(R.string.title_home);
                     SeriesOverviewFragment fragment = new SeriesOverviewFragment();
                     fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
                     return true;
                 case R.id.navigation_users:
-                    //mTextMessage.setText(R.string.title_dashboard);
+                    UsersOverviewFragment fragmentusers = new UsersOverviewFragment();
+                    fragmentTransaction.replace(R.id.fragment_container, fragmentusers).addToBackStack(null).commit();
                     return true;
                 case R.id.navigation_profile:
-                    //mTextMessage.setText(R.string.title_notifications);
                     LoggedInUserProfileFragment loggedinfragment = new LoggedInUserProfileFragment();
                     fragmentTransaction.replace(R.id.fragment_container, loggedinfragment).addToBackStack(null).commit();
                     return true;

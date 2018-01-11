@@ -29,6 +29,8 @@ public class SeriesOverviewAdapter extends ArrayAdapter<SearchResult> {
         }
 
         TextView titleView = view.findViewById(R.id.nameView);
+        TextView hideen = view.findViewById(R.id.hidden);
+        hideen.setText(result.getImdbID());
         titleView.setText(result.getTitle());
         String url = result.getUrl();
         final ImageView imageview = view.findViewById(R.id.imageView);

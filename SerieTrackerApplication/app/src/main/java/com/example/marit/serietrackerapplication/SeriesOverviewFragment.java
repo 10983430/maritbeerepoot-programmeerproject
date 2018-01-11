@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 import com.android.volley.Request;
@@ -120,5 +122,22 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
     public void makeListView(ArrayList<SearchResult> items) {
         SeriesOverviewAdapter adapter = new SeriesOverviewAdapter(getContext(), items);
         this.setListAdapter(adapter);
+
+        getListView().setOnItemClickListener(new ClickDetails());
+    }
+
+    private class ClickDetails implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView adapterView, View view, int position, long l) {
+            TextView hidden = view.findViewById(R.id.hidden);
+            String imdbid = hidden.getText().toString();
+
+            SerieDetailsFragment fragment = new SerieDetailsFragment();
+            Bundle args = new Bundle();
+            args.putString("imdbid", imdbid);
+            fragment.setArguments(args);
+
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+        }
     }
 }

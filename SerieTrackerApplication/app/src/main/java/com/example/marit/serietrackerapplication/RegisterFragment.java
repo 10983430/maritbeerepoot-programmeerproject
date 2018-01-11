@@ -65,29 +65,26 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     }
 
     public void createAccount(String email, String password) {
-        Log.d("yyyyyyyyyyyyyyyyyyy", "2");
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        Log.d("yyyyyyyyyyyyyyyyyyy", "2");
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d("yyyyyyyyyyyyyyyyyyy", "3");
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("Loginstatus", "createUserWithEmail:success");
 
-                    // Add the username to Firebase and update UI
+                    // Add the username to Firebase and update UI updateUI(user);
                     user = mAuth.getCurrentUser();
                     String id = user.getUid();
                     EditText emailinput = getView().findViewById(R.id.emailreg);
                     userInformation(emailinput.getText().toString(), id);
-                    //updateUI(user);
+
                 }
                 else {
-                    // If sign in fails, display a message to the user.
+                    // If sign in fails, display a message to the user updateUI(null);
                     Log.w("Loginstatus", "createUserWithEmail:failure", task.getException());
                     Toast.makeText(getContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                    //updateUI(null);
+
                 }
             }
         });
