@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 import com.android.volley.Request;
@@ -27,20 +30,42 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SeriesOverviewFragment extends ListFragment {
+public class SeriesOverviewFragment extends ListFragment implements View.OnClickListener {
     private ArrayList<SearchResult> items = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_series_overview, container, false);
+        View view = inflater.inflate(R.layout.fragment_series_overview, container, false);
+        Button search = view.findViewById(R.id.buttonSearch);
+        search.setOnClickListener(this);
+        return view;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getData("http://www.omdbapi.com/?apikey=14f4cb52&type=series&s=robot");
+    }
+
+    @Override
+    public void onClick(View view){
+        switch (view.getId()) {
+            case R.id.buttonSearch:
+                EditText searchinputfield = getView().findViewById(R.id.editTextSearch);
+                String searchinput = searchinputfield.getText().toString();
+
+                // Put back the start list when searchinput is empty, but search is clicked
+                if (searchinput.length() != 0) {
+                    String url = "http://www.omdbapi.com/?apikey=14f4cb52&type=series&s=" + searchinput;
+                    items = new ArrayList<>();
+
+                    // Get the data
+                    getData(url);
+
+                }
+        }
     }
 
 
