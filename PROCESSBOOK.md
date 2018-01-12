@@ -25,3 +25,10 @@
 - Fragments toegevoegd
 - Begonnen aan fragments voor de episode details, user details, serie details
 - Prototype waardige app gemaakt door navigatie te fixen en data in te laden
+
+
+## Vrijdag 12 januari 2018
+- Vandaag niet veel meteen zichtbare veranderingen, maar idee en problemen uit prototype goed geanalyseerd
+- Layout veranderingen
+- Firebase structuur aangepast na feedback presentaties
+- Nagedacht en plan gemaakt over hoe het mogelijk wordt om mensen te volgen

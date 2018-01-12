@@ -17,9 +17,16 @@
             android:text="Username: Testertje" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Email: Test@test123.nl" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="series gevolgd" />
+
     </LinearLayout>
 
 </FrameLayout>
