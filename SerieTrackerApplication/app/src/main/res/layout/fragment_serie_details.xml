@@ -19,9 +19,14 @@
 
         <TextView
             android:id="@+id/textviewtje"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="..." />
+
+        <ExpandableListView
+            android:id="@+id/ExpandableListview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </FrameLayout>

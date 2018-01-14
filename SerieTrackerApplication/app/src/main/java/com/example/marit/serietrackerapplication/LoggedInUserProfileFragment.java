@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,12 +46,16 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LoginFragment loginfragment = new LoginFragment();
                 fragmentTransaction.replace(R.id.fragment_container, loginfragment).addToBackStack(null).commit();
+                break;
             case R.id.buttonRegister:
-                FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransactionregister = getFragmentManager().beginTransaction();
                 RegisterFragment registerFragment = new RegisterFragment();
-                fragmentTransaction1.replace(R.id.fragment_container, registerFragment).addToBackStack(null).commit();
+                fragmentTransactionregister.replace(R.id.fragment_container, registerFragment).addToBackStack(null).commit();
+                break;
             case R.id.buttonLogout:
                 FirebaseAuth.getInstance().signOut();
+                Toast.makeText(getContext(),"Logged out", Toast.LENGTH_SHORT ).show();
+                break;
                 }
         }
 

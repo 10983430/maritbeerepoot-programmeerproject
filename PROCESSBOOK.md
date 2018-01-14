@@ -32,3 +32,12 @@
 - Layout veranderingen
 - Firebase structuur aangepast na feedback presentaties
 - Nagedacht en plan gemaakt over hoe het mogelijk wordt om mensen te volgen
+
+## Zondag 14 januari 2018
+- Login bug gefixt
+- Bug gefixt dat het registerfragment en het login fragment 'achter elkaar' komen in plaats van 1 van de twee
+- Bug gefixt dat niet alle informatie in de listview komt
+- Episode Details pagina gemaakt, dus data opgehaald, geparsed en in een fragment geplaatst
+- Begonnen aan user database fragment en informatie uit Firebase halen
+- Begonnen aan expandable listview
+- Plan van aanpak voor komende week gemaakt
