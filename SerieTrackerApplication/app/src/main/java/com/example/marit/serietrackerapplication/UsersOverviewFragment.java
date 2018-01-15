@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -26,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class UsersOverviewFragment extends ListFragment {
-    private HashMap<String, String> UsernameUserid;
+public class UsersOverviewFragment extends ListFragment { //implements View.OnClickListener {
+    private HashMap<String, String> UsernameUserid = new HashMap<>();
     private ArrayList<UserInfoClass> allusers = new ArrayList<UserInfoClass>();
 
 
@@ -42,9 +44,6 @@ public class UsersOverviewFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String[] values = new String[]{"Testuser1", "TestUser", "Test"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
-        this.setListAdapter(adapter);
         getData();
     }
 
@@ -67,16 +66,17 @@ public class UsersOverviewFragment extends ListFragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     String userid = child.getKey();
+
                     String username = dataSnapshot.child(userid).child("username").getValue().toString();
                     String email = dataSnapshot.child(userid).child("email").getValue().toString();
+
                     HashMap<String, String> followseries = new HashMap<>();
                     HashMap<String, String> follususers = new HashMap<>();
-                    Log.d("yyyy", username);
-                    //String id, String username, HashMap followseries, HashMap followusers, String email)
+
                     UserInfoClass user = new UserInfoClass(userid, username, followseries, follususers, email);
 
                     allusers.add(user);
-                    UsernameUserid.put(username, userid);
+                    UsernameUserid.put(username, userid.toString());
                 }
                 makeListView(UsernameUserid);
             }
@@ -89,6 +89,8 @@ public class UsersOverviewFragment extends ListFragment {
     }
 
     public void makeListView(HashMap hashMap) {
-
+        ArrayList<String> users = new ArrayList<String>(hashMap.keySet());
+        Adapter adapter = new UsersOverviewAdapter(getActivity(), users);
+        this.setListAdapter((ListAdapter) adapter);
     }
 }

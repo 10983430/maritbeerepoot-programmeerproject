@@ -33,7 +33,7 @@
 - Firebase structuur aangepast na feedback presentaties
 - Nagedacht en plan gemaakt over hoe het mogelijk wordt om mensen te volgen
 
-## Zondag 14 januari 2018
+### Zondag 14 januari 2018
 - Login bug gefixt
 - Bug gefixt dat het registerfragment en het login fragment 'achter elkaar' komen in plaats van 1 van de twee
 - Bug gefixt dat niet alle informatie in de listview komt
@@ -41,3 +41,11 @@
 - Begonnen aan user database fragment en informatie uit Firebase halen
 - Begonnen aan expandable listview
 - Plan van aanpak voor komende week gemaakt
+
+## Week 2
+
+### Maandag 15 januari 2018
+- User database gemaakt aan de hand van username uit Firebase
+- Data API uitgelezen en geparsed voor de expandable list view
+- Toestenbord bug gefixt
+- Bug gefixt dat de listview weer clickable is na het terug gaan naar het fragment
