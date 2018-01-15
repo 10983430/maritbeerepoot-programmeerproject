@@ -5,7 +5,6 @@
 ### Maandag 8 januari 2018  
 - Werken aan propasal  
 
-
 ### Dinsdag 9 januari 2018  
 - Werken aan design document  
 
@@ -45,7 +44,8 @@
 ## Week 2
 
 ### Maandag 15 januari 2018
-- User database gemaakt aan de hand van username uit Firebase
-- Data API uitgelezen en geparsed voor de expandable list view
-- Toestenbord bug gefixt
+- User database gemaakt aan de hand van usernames uit Firebase
+- Data API uitgelezen en begonnen met parsen voor de expandable list view van de season nummers en episode nummers
+- Toestenbord bug gefixt bij de listview zoek functie
 - Bug gefixt dat de listview weer clickable is na het terug gaan naar het fragment
+- Opmaak row layout
