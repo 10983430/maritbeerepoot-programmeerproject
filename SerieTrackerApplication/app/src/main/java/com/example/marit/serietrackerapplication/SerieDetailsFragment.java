@@ -53,13 +53,10 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         }
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1);
-        Log.d("yyyyyyyyy", items.toString() + items.size());
         String url2 = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=1";
         getData(url2, 2);
-        Log.d("yyyyyyyyy", items.toString() + items.size());
         String url3 = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=2";
         getData(url3, 2);
-        Log.d("yyyyyyyyy", items.toString() + items.size());
     }
 
     @Override
@@ -125,8 +122,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 Integer episode = Integer.valueOf(data.getJSONObject(i).getString("Episode"));
                 double imdbrating = Double.parseDouble(data.getJSONObject(i).getString("imdbRating"));
                 String imdbid = data.getJSONObject(i).getString("imdbID").toString();
-                //String title, String released, Integer episode, double imdbrating, String imdbid
-                Log.d("yyyyyy",episode.toString());
+
                 Episode episodeinfo = new Episode(title, released, episode, imdbrating, imdbid);
                 items.add(episodeinfo);
             }
