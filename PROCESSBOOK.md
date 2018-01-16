@@ -15,7 +15,6 @@
 - Design document afgemaakt
 - Begonnen aan login & register
 
-
 ### Donderdag 11 januari 2018
 - Login en register mogelijk
 - Firebase opgezet
@@ -24,7 +23,6 @@
 - Fragments toegevoegd
 - Begonnen aan fragments voor de episode details, user details, serie details
 - Prototype waardige app gemaakt door navigatie te fixen en data in te laden
-
 
 ### Vrijdag 12 januari 2018
 - Vandaag niet veel meteen zichtbare veranderingen, maar idee en problemen uit prototype goed geanalyseerd
@@ -51,4 +49,6 @@
 - Opmaak row layout
 
 ### Dinsdag 16 januari 2018
-- Eindelijk voor elkaar gekregen om alle JSON data uit te lezen en te zorgen dat automatisch alle informatie van elke seizoenen te krijgen, zonder elke seizoen url te hardcoden.
+- Eindelijk voor elkaar gekregen om alle JSON data uit te lezen in classen en te zorgen dat automatisch alle informatie van elke seizoenen opgehaald wordt zonder elke seizoen url te hardcoden.
+- Expandable listview werkend gekregen. Echter nog niet met de goede data, seizoenen er wel al ingekregen, episodes nog niet. 
+![](doc/ProcessExpandablelistview1.png) 

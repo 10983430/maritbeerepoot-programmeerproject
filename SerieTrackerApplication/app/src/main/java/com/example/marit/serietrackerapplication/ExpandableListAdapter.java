@@ -79,9 +79,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         final String childie = (String) getChild(groupPosition, childPosition);
         if (convertView == null){
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.row_layout_users, null);
+            convertView = inflater.inflate(R.layout.row_layout_expandable_child, null);
         }
-        TextView viewtje = convertView.findViewById(R.id.usernameHolder);
+        TextView viewtje = convertView.findViewById(R.id.textholder);
         viewtje.setText(childie);
         return convertView;
     }

@@ -40,7 +40,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     private ArrayList<Episode> episodeitems = new ArrayList<>();
     private ExpandableListAdapter adapter;
     private ExpandableListView listview;
-    private List<String> listje;
+    private List<String> SeasonList;
     private HashMap<String, List<String>> hashMap;
 
     @Override
@@ -57,15 +57,13 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     private void makelistview(ExpandableListView viewtje) {
-        listje = new ArrayList<>();
-        hashMap = new HashMap<>();
-        listje.add("HOII");
-        listje.add("byeee");
+        //SeasonList = new ArrayList<>();
+        //hashMap = new HashMap<>();
+        //listje.add("HOII");
+        //listje.add("byeee");
         List<String> emtDev = new ArrayList<>();
         emtDev.add("listviewtje");
-        hashMap.put(listje.get(0), emtDev);
-        hashMap.put(listje.get(1), emtDev);
-        adapter =  new ExpandableListAdapter(getContext(), listje, hashMap);
+        adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap);
         //ExpandableListView listView = getView().findViewById(R.id.ExpandableListview);
         viewtje.setAdapter(adapter);
     }
@@ -75,7 +73,8 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
-
+        SeasonList = new ArrayList<>();
+        hashMap = new HashMap<>();
         // Get the imdbid from the serie that was clicked on
         if (bundle != null) {
             imdbid = bundle.getString("imdbid");
@@ -84,6 +83,8 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         // Get the data from the clicked serie
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
+
+
 
 
     }
@@ -153,11 +154,22 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 responsedata.getString("Language"), responsedata.getString("Country"), responsedata.getString("Awards"), responsedata.getString("Poster"),
                 responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"), responsedata.getInt("totalSeasons")) ;
 
-        for (int i = 1; i < serieinfo.getTotalSeasons() + 1; i++) {
+        for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
             Log.d("yyyyyxxxxx", url);
             getData(url, 2, i);
+            List<String> listje = new ArrayList<String>();
+            Log.d("testttt", "testt11");
+            listje.add("HOII");
+            listje.add("byeee");
+            Log.d("testttt", "testt22");
+            SeasonList.add("Season " + String.valueOf(i));
+            Log.d("testttt", "testt33");
+            hashMap.put("Season " + String.valueOf(i), listje );
+            Log.d("testttt", "testt44");
+
         };
+        Log.d("test5999", SeasonList.get(0));
 
         fillTextviews(serieinfo);
     } catch (JSONException e) {
