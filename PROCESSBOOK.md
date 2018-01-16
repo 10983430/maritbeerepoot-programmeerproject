@@ -51,4 +51,6 @@
 ### Dinsdag 16 januari 2018
 - Eindelijk voor elkaar gekregen om alle JSON data uit te lezen in classen en te zorgen dat automatisch alle informatie van elke seizoenen opgehaald wordt zonder elke seizoen url te hardcoden.
 - Expandable listview werkend gekregen. Echter nog niet met de goede data, seizoenen er wel al ingekregen, episodes nog niet. 
+
+
 ![](doc/ProcessExpandablelistview1.png) 
