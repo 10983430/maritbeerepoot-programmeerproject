@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -31,8 +36,12 @@ import java.util.ArrayList;
  */
 public class SerieDetailsFragment extends Fragment implements View.OnClickListener {
     String imdbid;
-    Serie serieinfo;
+    //Serie serieinfo;
     private ArrayList<Episode> episodeitems = new ArrayList<>();
+    private ExpandableListAdapter adapter;
+    private ExpandableListView listview;
+    private List<String> listje;
+    private HashMap<String, List<String>> hashMap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,8 +49,25 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_serie_details, container, false);
         Button search = view.findViewById(R.id.episodedetails);
+        ExpandableListView viewtje = view.findViewById(R.id.ExpandableListview);
+        makelistview(viewtje);
+
         search.setOnClickListener(this);
         return view;
+    }
+
+    private void makelistview(ExpandableListView viewtje) {
+        listje = new ArrayList<>();
+        hashMap = new HashMap<>();
+        listje.add("HOII");
+        listje.add("byeee");
+        List<String> emtDev = new ArrayList<>();
+        emtDev.add("listviewtje");
+        hashMap.put(listje.get(0), emtDev);
+        hashMap.put(listje.get(1), emtDev);
+        adapter =  new ExpandableListAdapter(getContext(), listje, hashMap);
+        //ExpandableListView listView = getView().findViewById(R.id.ExpandableListview);
+        viewtje.setAdapter(adapter);
     }
 
 
@@ -58,6 +84,8 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         // Get the data from the clicked serie
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
+
+
     }
 
     @Override
@@ -120,19 +148,25 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         Log.d("mmmmmm", response);
         JSONObject responsedata = new JSONObject(response);
 
-        serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"), responsedata.getString("Released"), responsedata.getString("Runtime"),
+        Serie serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"), responsedata.getString("Released"), responsedata.getString("Runtime"),
                 responsedata.getString("Genre"), responsedata.getString("Director"), responsedata.getString("Writer"), responsedata.getString("Plot"),
                 responsedata.getString("Language"), responsedata.getString("Country"), responsedata.getString("Awards"), responsedata.getString("Poster"),
                 responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"), responsedata.getInt("totalSeasons")) ;
+
         for (int i = 1; i < serieinfo.getTotalSeasons() + 1; i++) {
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
             Log.d("yyyyyxxxxx", url);
             getData(url, 2, i);
-
         };
+
+        fillTextviews(serieinfo);
     } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void fillTextviews(Serie serieinfo) {
+        Log.d("xxxxxxxooooo", serieinfo.getAwards());
     }
 
     /**
