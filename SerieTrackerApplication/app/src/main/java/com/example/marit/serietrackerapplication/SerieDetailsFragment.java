@@ -33,7 +33,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     String imdbid;
     Serie serieinfo;
     private ArrayList<Episode> episodeitems = new ArrayList<>();
-    private ArrayList<Serie> serieitems = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,17 +49,15 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
+
+        // Get the imdbid from the serie that was clicked on
         if (bundle != null) {
             imdbid = bundle.getString("imdbid");
-            Log.d("iiiii", imdbid);
         }
+
+        // Get the data from the clicked serie
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
-        //String url2 = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=1";
-        //getData(url2, 2, 1);
-        //String url3 = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=2";
-        //getData(url3, 2, 2);
-        Log.d("yyyyyy", "test");
     }
 
     @Override
@@ -122,24 +120,15 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         Log.d("mmmmmm", response);
         JSONObject responsedata = new JSONObject(response);
 
-        serieinfo = new Serie(responsedata.getString("Title"),
-                responsedata.getString("Year"),
-                responsedata.getString("Released"),
-                responsedata.getString("Runtime"),
-                responsedata.getString("Genre"),
-                responsedata.getString("Director"),
-                responsedata.getString("Writer"),
-                responsedata.getString("Plot"),
-                responsedata.getString("Language"),
-                responsedata.getString("Country"),
-                responsedata.getString("Awards"),
-                responsedata.getString("Poster"),
-                responsedata.getDouble("imdbRating"),
-                responsedata.getString("imdbVotes"),
-                responsedata.getInt("totalSeasons")) ;
-        for (int i = 0; i < serieinfo.getTotalSeasons(); i++) {
+        serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"), responsedata.getString("Released"), responsedata.getString("Runtime"),
+                responsedata.getString("Genre"), responsedata.getString("Director"), responsedata.getString("Writer"), responsedata.getString("Plot"),
+                responsedata.getString("Language"), responsedata.getString("Country"), responsedata.getString("Awards"), responsedata.getString("Poster"),
+                responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"), responsedata.getInt("totalSeasons")) ;
+        for (int i = 1; i < serieinfo.getTotalSeasons() + 1; i++) {
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
+            Log.d("yyyyyxxxxx", url);
             getData(url, 2, i);
+
         };
     } catch (JSONException e) {
             e.printStackTrace();
