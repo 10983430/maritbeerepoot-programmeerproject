@@ -31,7 +31,9 @@ import java.util.ArrayList;
  */
 public class SerieDetailsFragment extends Fragment implements View.OnClickListener {
     String imdbid;
-    private ArrayList<Episode> items = new ArrayList<>();
+    Serie serieinfo;
+    private ArrayList<Episode> episodeitems = new ArrayList<>();
+    private ArrayList<Serie> serieitems = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,11 +54,12 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
             Log.d("iiiii", imdbid);
         }
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-        getData(url, 1);
-        String url2 = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=1";
-        getData(url2, 2);
-        String url3 = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=2";
-        getData(url3, 2);
+        getData(url, 1, 0);
+        //String url2 = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=1";
+        //getData(url2, 2, 1);
+        //String url3 = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=2";
+        //getData(url3, 2, 2);
+        Log.d("yyyyyy", "test");
     }
 
     @Override
@@ -70,7 +73,13 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    public void getData(String url, Integer type) {
+    /**
+     * Sends an volley request to get the JSON response from the api
+     * @param url url that leads to the API
+     * @param type 1 for the serie information, 2 for the season information
+     * @param seasonnumber indicates the season number, 0 when general serie information is requested
+     */
+    public void getData(String url, Integer type, final Integer seasonnumber) {
         // Create new queue
         RequestQueue RQe = Volley.newRequestQueue(getContext());
         //
@@ -89,10 +98,8 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                                 parseJSONSeasonDetails(response);
                             }
                             else {
-                                parseJSONSeasons(response);
+                                parseJSONSeasons(response, seasonnumber);
                             }
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -106,29 +113,64 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         RQe.add(stringRequeset);
     }
 
+    /**
+     * Parses the data when requesting data about the serie, also sends requests for all the seasons
+     * @param response
+     */
     public void parseJSONSeasonDetails(String response) {
-        Log.d("yyyyyyyyyyyyyyyyyyyyyyy", response);
+    try{
+        Log.d("mmmmmm", response);
+        JSONObject responsedata = new JSONObject(response);
+
+        serieinfo = new Serie(responsedata.getString("Title"),
+                responsedata.getString("Year"),
+                responsedata.getString("Released"),
+                responsedata.getString("Runtime"),
+                responsedata.getString("Genre"),
+                responsedata.getString("Director"),
+                responsedata.getString("Writer"),
+                responsedata.getString("Plot"),
+                responsedata.getString("Language"),
+                responsedata.getString("Country"),
+                responsedata.getString("Awards"),
+                responsedata.getString("Poster"),
+                responsedata.getDouble("imdbRating"),
+                responsedata.getString("imdbVotes"),
+                responsedata.getInt("totalSeasons")) ;
+        for (int i = 0; i < serieinfo.getTotalSeasons(); i++) {
+            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
+            getData(url, 2, i);
+        };
+    } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void parseJSONSeasons(String response) {
-        Log.d("yyyyyy", response);
+    /**
+     * Parses the JSON respons when requesting details about an specifid season and puts
+     * all the episode information in an arraylist
+     */
+    public void parseJSONSeasons(String response, Integer seasonnumber) {
         try {
+            // Get the JSONArray with the episodes
             JSONObject responsedata = new JSONObject(response);
-            //JSONObject data = responsedata.getJSONObject("episodes");
             JSONArray data = responsedata.getJSONArray("Episodes");
+
+            // Get all the different characteristics of the episode
             for (int i = 0; i < data.length(); i++) {
-                String title = data.getJSONObject(i).getString("Title").toString();
-                String released = data.getJSONObject(i).getString("Released").toString();
+                String title = data.getJSONObject(i).getString("Title");
+                String released = data.getJSONObject(i).getString("Released");
                 Integer episode = Integer.valueOf(data.getJSONObject(i).getString("Episode"));
                 double imdbrating = Double.parseDouble(data.getJSONObject(i).getString("imdbRating"));
-                String imdbid = data.getJSONObject(i).getString("imdbID").toString();
+                String imdbid = data.getJSONObject(i).getString("imdbID");
 
-                Episode episodeinfo = new Episode(title, released, episode, imdbrating, imdbid);
-                items.add(episodeinfo);
+                // Make the information userfull by making an class object en put alle the episodes in the list
+                Episode episodeinfo = new Episode(title, released, episode, imdbrating, imdbid, seasonnumber);
+                episodeitems.add(episodeinfo);
             }
+            Log.d("yyyyyxxxxx", String.valueOf(episodeitems.size()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 }

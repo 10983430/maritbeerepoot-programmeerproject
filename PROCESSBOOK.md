@@ -49,3 +49,6 @@
 - Toestenbord bug gefixt bij de listview zoek functie
 - Bug gefixt dat de listview weer clickable is na het terug gaan naar het fragment
 - Opmaak row layout
+
+### Dinsdag 16 januari 2018
+- Eindelijk voor elkaar gekregen om alle JSON data uit te lezen en te zorgen dat automatisch alle informatie van elke seizoenen te krijgen, zonder elke seizoen url te hardcoden.
