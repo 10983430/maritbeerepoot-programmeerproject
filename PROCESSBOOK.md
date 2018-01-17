@@ -23,12 +23,14 @@
 - Fragments toegevoegd
 - Begonnen aan fragments voor de episode details, user details, serie details
 - Prototype waardige app gemaakt door navigatie te fixen en data in te laden
+- **Keuze:** Ik heb er voor gekozen om met fragments te werken zodat bottom navigatie mogelijk is.
 
 ### Vrijdag 12 januari 2018
 - Vandaag niet veel meteen zichtbare veranderingen, maar idee en problemen uit prototype goed geanalyseerd
 - Layout veranderingen
 - Firebase structuur aangepast na feedback presentaties
 - Nagedacht en plan gemaakt over hoe het mogelijk wordt om mensen te volgen
+- **Keuze:** Ik heb ervoor gekozen om 'vrienden' te kunnen volgen in plaats van als vriend te kunnen toevoegen op basis van een verzoek. Hier is voor gekozen zodat er in theorie bijvoorbeeld ook bekende mensen kunnen worden gevolgd, zonder dat deze persoon iedereen moet terug volgen.
 
 ### Zondag 14 januari 2018
 - Login bug gefixt
@@ -47,6 +49,7 @@
 - Toestenbord bug gefixt bij de listview zoek functie
 - Bug gefixt dat de listview weer clickable is na het terug gaan naar het fragment
 - Opmaak row layout
+- **Keuze**: Ik heb er voor gekozen om de episode nummers en seizoenen samen in een expandable listview te zetten. Dit zodat er niet nog een aparte seizoen fragment hoeft te zijn.
 
 ### Dinsdag 16 januari 2018
 - Eindelijk voor elkaar gekregen om alle JSON data uit te lezen in classen en te zorgen dat automatisch alle informatie van elke seizoenen opgehaald wordt zonder elke seizoen url te hardcoden.
