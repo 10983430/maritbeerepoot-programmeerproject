@@ -36,7 +36,6 @@ import java.util.List;
  */
 public class SerieDetailsFragment extends Fragment implements View.OnClickListener {
     String imdbid;
-    //Serie serieinfo;
     private ArrayList<Episode> episodeitems = new ArrayList<>();
     private ExpandableListAdapter adapter;
     private ExpandableListView listview;
@@ -49,25 +48,22 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_serie_details, container, false);
         Button search = view.findViewById(R.id.episodedetails);
+
+        // Create the expandable list view
         ExpandableListView viewtje = view.findViewById(R.id.ExpandableListview);
         makelistview(viewtje);
 
+        // Set a listener on the search button to make it operational
         search.setOnClickListener(this);
         return view;
     }
 
     private void makelistview(ExpandableListView viewtje) {
-        //SeasonList = new ArrayList<>();
-        //hashMap = new HashMap<>();
-        //listje.add("HOII");
-        //listje.add("byeee");
         List<String> emtDev = new ArrayList<>();
         emtDev.add("listviewtje");
         adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap);
-        //ExpandableListView listView = getView().findViewById(R.id.ExpandableListview);
         viewtje.setAdapter(adapter);
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,10 +79,6 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         // Get the data from the clicked serie
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
-
-
-
-
     }
 
     @Override

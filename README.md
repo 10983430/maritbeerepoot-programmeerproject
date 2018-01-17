@@ -36,11 +36,9 @@ In de bovenstaande wireflows is het cijfer in de gele cirkel het IMDB cijfer. De
 - Mogelijkheid om te zien wat de laatste aflevering is die een vriend/iemand die je volgt gezien heeft.
 
 ## Data sources:
-De volgende twee APIs zullen worden gebruikt:
+De volgende API zal worden gebruikt:
 - **OMDb API/The open movie database**: http://www.omdbapi.com/  
 Dit is een API die informatie bevat over series, seizoenen en episodes. Het bevat daarnaast ook informatie over films, maar ik ben niet van plan om die te gaan gebruiken.
-- **Jikan**: https://jikan.me/   
-Dit is een API die anime bevat. Niet alle animes staan in de andere API, waardoor deze API de app vollediger maakt.
 
 ## External components:
 De volgende external components worden gebruikt:
