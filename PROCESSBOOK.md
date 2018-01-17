@@ -54,3 +54,6 @@
 
 
 ![](doc/ProcessExpandablelistview1.png) 
+
+### Woensdag 17 januari 2018
+- Vandaag de hele dag bezig geweest met informatie in het goede format de expandable listview in krijgen. Dit lukte helaas niet heel goed, ik ben tegen heel veel bugs aangelopen. Momenteel heb ik de data in een Arraylist met class objecten gekregen. 

@@ -36,11 +36,13 @@ import java.util.List;
  */
 public class SerieDetailsFragment extends Fragment implements View.OnClickListener {
     String imdbid;
-    private ArrayList<Episode> episodeitems = new ArrayList<>();
+    private ArrayList<Episode> episodeitems = new ArrayList<Episode>();
     private ExpandableListAdapter adapter;
     private ExpandableListView listview;
     private List<String> SeasonList;
-    private HashMap<String, List<String>> hashMap;
+    private HashMap<String, List<Episode>> hashMap;
+    Integer totalseasons;
+    Integer count;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,12 +60,14 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
+
     private void makelistview(ExpandableListView viewtje) {
         List<String> emtDev = new ArrayList<>();
         emtDev.add("listviewtje");
         adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap);
         viewtje.setAdapter(adapter);
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +85,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         getData(url, 1, 0);
     }
 
+
     @Override
     public void onClick(View view){
         switch (view.getId()) {
@@ -92,6 +97,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         }
     }
 
+
     /**
      * Sends an volley request to get the JSON response from the api
      * @param url url that leads to the API
@@ -101,9 +107,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     public void getData(String url, Integer type, final Integer seasonnumber) {
         // Create new queue
         RequestQueue RQe = Volley.newRequestQueue(getContext());
-        //
-        final Integer type2;
-        type2 = type;
+        final Integer type2 = type;
         // Create new stringrequest (Volley)
         StringRequest stringRequeset = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -114,10 +118,14 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                                 TextView textviewtweje = getView().findViewById(R.id.textviewtje);
                                 String current = textviewtweje.getText().toString();
                                 textviewtweje.setText(current + response);
-                                parseJSONSeasonDetails(response);
+
+                                parseJSONSerieDetails(response);
                             }
                             else {
+                                count += 1;
                                 parseJSONSeasons(response, seasonnumber);
+                                Log.d("dsfsdfsdfsd", String.valueOf(episodeitems.size()));
+                                fixData();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -132,50 +140,12 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         RQe.add(stringRequeset);
     }
 
-    /**
-     * Parses the data when requesting data about the serie, also sends requests for all the seasons
-     * @param response
-     */
-    public void parseJSONSeasonDetails(String response) {
-    try{
-        Log.d("mmmmmm", response);
-        JSONObject responsedata = new JSONObject(response);
-
-        Serie serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
-                responsedata.getString("Released"), responsedata.getString("Runtime"),
-                responsedata.getString("Genre"), responsedata.getString("Director"),
-                responsedata.getString("Writer"), responsedata.getString("Plot"),
-                responsedata.getString("Language"), responsedata.getString("Country"),
-                responsedata.getString("Awards"), responsedata.getString("Poster"),
-                responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"),
-                responsedata.getInt("totalSeasons")) ;
-
-        for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
-            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
-            Log.d("yyyyyxxxxx", url);
-            getData(url, 2, i);
-            List<String> listje = new ArrayList<String>();
-            Log.d("testttt", "testt11");
-            listje.add("HOII");
-            listje.add("byeee");
-            Log.d("testttt", "testt22");
-            SeasonList.add("Season " + String.valueOf(i));
-            Log.d("testttt", "testt33");
-            hashMap.put("Season " + String.valueOf(i), listje );
-            Log.d("testttt", "testt44");
-
-        };
-        Log.d("test5999", SeasonList.get(0));
-
-        fillTextviews(serieinfo);
-    } catch (JSONException e) {
-            e.printStackTrace();
+    private void fixData() {
+        if (count == totalseasons) {
+            Log.d("dsfsuewirewpirpwe", String.valueOf(totalseasons) + "   " + String.valueOf(SeasonList.size()));
         }
     }
 
-    public void fillTextviews(Serie serieinfo) {
-        Log.d("xxxxxxxooooo", serieinfo.getAwards());
-    }
 
     /**
      * Parses the JSON respons when requesting details about an specifid season and puts
@@ -197,11 +167,56 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
 
                 // Make the information userfull by making an class object en put alle the episodes in the list
                 Episode episodeinfo = new Episode(title, released, episode, imdbrating, imdbid, seasonnumber);
-                episodeitems.add(episodeinfo);
+                addToEpisodes(episodeinfo);
             }
             Log.d("yyyyyxxxxx", String.valueOf(episodeitems.size()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("yyyyyxxxxx", String.valueOf(episodeitems.toString()));
     }
+
+ public void addToEpisodes(Episode episodeinfo){
+        Log.d("Tesstttttt", "oooo");
+        Log.d("Tesstttttt", episodeinfo.toString());
+        episodeitems.add(episodeinfo);
+        Log.d("Tesstttttt23423", String.valueOf(episodeitems.size()));
+    }
+    /**
+     * Parses the data when requesting data about the serie, also sends requests for all the seasons
+     * @param response
+     */
+    public void parseJSONSerieDetails(String response) {
+    try{
+        Log.d("mmmmmm", response);
+        JSONObject responsedata = new JSONObject(response);
+
+        Serie serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
+                responsedata.getString("Released"), responsedata.getString("Runtime"),
+                responsedata.getString("Genre"), responsedata.getString("Director"),
+                responsedata.getString("Writer"), responsedata.getString("Plot"),
+                responsedata.getString("Language"), responsedata.getString("Country"),
+                responsedata.getString("Awards"), responsedata.getString("Poster"),
+                responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"),
+                responsedata.getInt("totalSeasons")) ;
+        totalseasons = responsedata.getInt("totalSeasons");
+
+        for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
+            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
+            Log.d("yyyyyxxxxx", url);
+
+            getData(url, 2, i);
+            SeasonList.add("Season " + String.valueOf(i));
+        };
+        fillTextviews(serieinfo);
+    } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void fillTextviews(Serie serieinfo) {
+        Log.d("xxxxxxxooooo", serieinfo.getAwards());
+    }
+
+
 }

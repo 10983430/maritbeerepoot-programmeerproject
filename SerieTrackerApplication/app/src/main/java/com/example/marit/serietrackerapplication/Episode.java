@@ -22,6 +22,10 @@ public class Episode {
         this.seasonnumber = seasonnnumber;
     }
 
+    public Episode() {
+        
+    }
+
     public String getTitle() {
         return title;
     }
