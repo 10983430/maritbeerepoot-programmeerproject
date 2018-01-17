@@ -149,10 +149,14 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         Log.d("mmmmmm", response);
         JSONObject responsedata = new JSONObject(response);
 
-        Serie serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"), responsedata.getString("Released"), responsedata.getString("Runtime"),
-                responsedata.getString("Genre"), responsedata.getString("Director"), responsedata.getString("Writer"), responsedata.getString("Plot"),
-                responsedata.getString("Language"), responsedata.getString("Country"), responsedata.getString("Awards"), responsedata.getString("Poster"),
-                responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"), responsedata.getInt("totalSeasons")) ;
+        Serie serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
+                responsedata.getString("Released"), responsedata.getString("Runtime"),
+                responsedata.getString("Genre"), responsedata.getString("Director"),
+                responsedata.getString("Writer"), responsedata.getString("Plot"),
+                responsedata.getString("Language"), responsedata.getString("Country"),
+                responsedata.getString("Awards"), responsedata.getString("Poster"),
+                responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"),
+                responsedata.getInt("totalSeasons")) ;
 
         for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
