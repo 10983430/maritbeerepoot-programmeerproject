@@ -56,9 +56,9 @@ public class EpisodeDetailsFragment extends Fragment {
                         try {
                             // Parse JSON to a object and make set adapter
                             parseEpisodeJSON(response.toString());
-                            TextView textviewtje = getView().findViewById(R.id.textviewtje);
-                            String current = textviewtje.getText().toString();
-                            textviewtje.setText(current + response);
+                            //TextView textviewtje = getView().findViewById(R.id.textviewtje);
+                            //String current = textviewtje.getText().toString();
+                            //textviewtje.setText(current + response);
 
 
                         } catch (Exception e) {

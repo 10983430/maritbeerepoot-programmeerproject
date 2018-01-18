@@ -60,3 +60,8 @@
 
 ### Woensdag 17 januari 2018
 - Vandaag de hele dag bezig geweest met informatie in het goede format de expandable listview in krijgen. Dit lukte helaas niet heel goed, ik ben tegen heel veel bugs aangelopen. Momenteel heb ik de data in een Arraylist met class objecten gekregen. 
+
+### Donderdag 18 januari 2018
+- **Opmerking:** Ik heb helaas vandaag niet veel kunnen doen. Nadat het dak van de UvA afvloog heb ik er door de storm ongeveer 6.5 uur over gedaan om thuis te komen (ik was 18.00 pas thuis). Als je denkt dat de NS niet doet aan treinen laten aansluiten op elkaar heb je nog nooit met connexxion gereisd..
+- Kleine aanpassingen gedaan aan de serie overview pagina
+- Helaas tegen een bugg aangelopen dat de Expandable Listview niet altijd laadt

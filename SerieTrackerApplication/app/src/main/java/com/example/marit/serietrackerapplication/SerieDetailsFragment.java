@@ -43,6 +43,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     private HashMap<String, List<Episode>> hashMap;
     Integer totalseasons;
     Integer count;
+    Serie serieinfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,9 +116,9 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                     public void onResponse(String response) {
                         try {
                             if (type2 == 1) {
-                                TextView textviewtweje = getView().findViewById(R.id.textviewtje);
-                                String current = textviewtweje.getText().toString();
-                                textviewtweje.setText(current + response);
+                                //TextView textviewtweje = getView().findViewById(R.id.textviewtje);
+                                //String current = textviewtweje.getText().toString();
+                                //textviewtweje.setText(current + response);
 
                                 parseJSONSerieDetails(response);
                             }
@@ -126,6 +127,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                                 parseJSONSeasons(response, seasonnumber);
                                 Log.d("dsfsdfsdfsd", String.valueOf(episodeitems.size()));
                                 fixData();
+
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -191,7 +193,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         Log.d("mmmmmm", response);
         JSONObject responsedata = new JSONObject(response);
 
-        Serie serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
+         serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
                 responsedata.getString("Released"), responsedata.getString("Runtime"),
                 responsedata.getString("Genre"), responsedata.getString("Director"),
                 responsedata.getString("Writer"), responsedata.getString("Plot"),
@@ -200,6 +202,9 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"),
                 responsedata.getInt("totalSeasons")) ;
         totalseasons = responsedata.getInt("totalSeasons");
+
+
+
 
         for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
@@ -216,6 +221,10 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
 
     public void fillTextviews(Serie serieinfo) {
         Log.d("xxxxxxxooooo", serieinfo.getAwards());
+        TextView nameview = getView().findViewById(R.id.SerieNameInfo);
+        nameview.setText(serieinfo.getTitle());
+        TextView releaseview = getView().findViewById(R.id.SerieReleaseInfo);
+        releaseview.setText(serieinfo.getReleased());
     }
 
 
