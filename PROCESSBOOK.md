@@ -68,3 +68,4 @@
 
 ### Vrijdag 19 januari 2018
 - Helaas nogsteeds de expandable listview niet helemaal werkend gekregen. Loop ook tegen een bug aan dat de expandable listview niet tevoorschijn komt. Echter is deze wel te zien wanneer er naar een andere fragment wordt gegaan en vervolgens weer terug naar de serie details. Hard aan het werk aan dit te fixen.
+- Veel moeite gedaan om de hashmap werkend te krijgen, maar het is nog niet helemaal gelukt. Het gaat met baby stapjes.
