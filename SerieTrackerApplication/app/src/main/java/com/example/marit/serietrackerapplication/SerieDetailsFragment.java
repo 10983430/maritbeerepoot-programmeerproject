@@ -42,7 +42,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     private List<String> SeasonList;
     private HashMap<String, List<Episode>> hashMap;
     Integer totalseasons;
-    Integer count;
+    Integer count = 0;
     Serie serieinfo;
 
     @Override
@@ -116,17 +116,17 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                     public void onResponse(String response) {
                         try {
                             if (type2 == 1) {
-                                //TextView textviewtweje = getView().findViewById(R.id.textviewtje);
-                                //String current = textviewtweje.getText().toString();
-                                //textviewtweje.setText(current + response);
 
+                                Log.d("dsfsuewirewpirpwe", "hoiii1111");
                                 parseJSONSerieDetails(response);
                             }
                             else {
                                 count += 1;
+                                Log.d("dsfsuewirewpirpwe", "hoiii");
                                 parseJSONSeasons(response, seasonnumber);
                                 Log.d("dsfsdfsdfsd", String.valueOf(episodeitems.size()));
                                 fixData();
+                                //fillTextviews();
 
                             }
                         } catch (Exception e) {
@@ -143,8 +143,24 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     private void fixData() {
+        Log.d("dsfsuewirewpirpwe", count.toString());
         if (count == totalseasons) {
             Log.d("dsfsuewirewpirpwe", String.valueOf(totalseasons) + "   " + String.valueOf(SeasonList.size()));
+            for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
+                ArrayList<Episode> listje = new ArrayList<>();
+                for (int x = 1; x <= episodeitems.size(); i++) {
+                    Log.d("dsffffffffffffffffffffffffff", episodeitems.get(i).getTitle() + " " + episodeitems.get(i).getSeasonnumber());
+                    if (episodeitems.get(i).getSeasonnumber() == i) {
+                        Log.d("dsffffffffffffffffffffffffff","lol1111112222");
+                        listje.add(episodeitems.get(x));
+                        Log.d("dsffffffffffffffffffffffffff","lol111111");
+                    }
+                }
+                Log.d("dsffffffffffffffffffffffffff","lol2222222");
+                hashMap.put("Season " + i, listje);
+                Log.d("dsffffffffffffffffffffffffff","lol333333");
+            }
+            Log.d("dsffdfdfdfdfdfdfdfdfd",hashMap.toString());
         }
     }
 
@@ -178,22 +194,19 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         Log.d("yyyyyxxxxx", String.valueOf(episodeitems.toString()));
     }
 
- public void addToEpisodes(Episode episodeinfo){
-        Log.d("Tesstttttt", "oooo");
-        Log.d("Tesstttttt", episodeinfo.toString());
+    public void addToEpisodes(Episode episodeinfo){
         episodeitems.add(episodeinfo);
         Log.d("Tesstttttt23423", String.valueOf(episodeitems.size()));
     }
+
     /**
      * Parses the data when requesting data about the serie, also sends requests for all the seasons
      * @param response
      */
     public void parseJSONSerieDetails(String response) {
     try{
-        Log.d("mmmmmm", response);
         JSONObject responsedata = new JSONObject(response);
-
-         serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
+        serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
                 responsedata.getString("Released"), responsedata.getString("Runtime"),
                 responsedata.getString("Genre"), responsedata.getString("Director"),
                 responsedata.getString("Writer"), responsedata.getString("Plot"),
@@ -202,24 +215,18 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"),
                 responsedata.getInt("totalSeasons")) ;
         totalseasons = responsedata.getInt("totalSeasons");
-
-
-
-
         for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
-            Log.d("yyyyyxxxxx", url);
-
+            Log.d("dsfsuewirewpirpwe", "hoiii222");
             getData(url, 2, i);
             SeasonList.add("Season " + String.valueOf(i));
         };
-        fillTextviews(serieinfo);
     } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void fillTextviews(Serie serieinfo) {
+    public void fillTextviews() {
         Log.d("xxxxxxxooooo", serieinfo.getAwards());
         TextView nameview = getView().findViewById(R.id.SerieNameInfo);
         nameview.setText(serieinfo.getTitle());
