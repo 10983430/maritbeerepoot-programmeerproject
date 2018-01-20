@@ -143,23 +143,27 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     private void fixData() {
-        Log.d("dsfsuewirewpirpwe", count.toString());
+        Log.d("dsfsuewirewpcount", count.toString());
         if (count == totalseasons) {
             Log.d("dsfsuewirewpirpwe", String.valueOf(totalseasons) + "   " + String.valueOf(SeasonList.size()));
             for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
+                Log.d("dsfffflol", String.valueOf(serieinfo.getTotalSeasons()));
                 ArrayList<Episode> listje = new ArrayList<>();
-                for (int x = 1; x <= episodeitems.size(); i++) {
-                    Log.d("dsffffffffffffffffffffffffff", episodeitems.get(i).getTitle() + " " + episodeitems.get(i).getSeasonnumber());
-                    if (episodeitems.get(i).getSeasonnumber() == i) {
-                        Log.d("dsffffffffffffffffffffffffff","lol1111112222");
+                for (int x = 0; x < episodeitems.size(); x++) {
+                    Log.d("dsfffffffffffffffffff", i + " " + episodeitems.get(x).getSeasonnumber());
+
+                    if (episodeitems.get(x).getSeasonnumber() == i) {
+                        Log.d("dsfffffffffffffffffff","lol1111112222");
+                        Log.d("dsfffffffffffffffffff",String.valueOf(episodeitems.get(x).getSeasonnumber()) + " " + String.valueOf(i));
                         listje.add(episodeitems.get(x));
-                        Log.d("dsffffffffffffffffffffffffff","lol111111");
+                        Log.d("dsfffffffffffffffffff","lol111111");
                     }
                 }
-                Log.d("dsffffffffffffffffffffffffff","lol2222222");
+                Log.d("dsfffffffffffffffffff","lol2222222");
                 hashMap.put("Season " + i, listje);
-                Log.d("dsffffffffffffffffffffffffff","lol333333");
+                Log.d("dsfffffffffffffffff","lol333333");
             }
+            Log.d("dsfaaaaaaaaaaa", "test12");
             Log.d("dsffdfdfdfdfdfdfdfdfd",hashMap.toString());
         }
     }
@@ -180,6 +184,8 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 String title = data.getJSONObject(i).getString("Title");
                 String released = data.getJSONObject(i).getString("Released");
                 Integer episode = Integer.valueOf(data.getJSONObject(i).getString("Episode"));
+
+                // TO-DO: Dit moet een string worden want geeft double error als er geen rating is
                 double imdbrating = Double.parseDouble(data.getJSONObject(i).getString("imdbRating"));
                 String imdbid = data.getJSONObject(i).getString("imdbID");
 
