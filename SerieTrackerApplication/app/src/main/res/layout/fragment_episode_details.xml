@@ -15,6 +15,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <Button
+                android:id="@+id/FirebaseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I've seen this" />
+
             <ImageView
                 android:id="@+id/EpisodePoster"
                 android:layout_width="match_parent"

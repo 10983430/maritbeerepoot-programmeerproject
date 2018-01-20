@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,30 +18,57 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EpisodeDetailsFragment extends Fragment {
+public class EpisodeDetailsFragment extends Fragment implements View.OnClickListener {
+    private String imdbid;
+    private String title;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase fbdb;
+    private DatabaseReference dbref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_episode_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_episode_details, container, false);
+        Button search = view.findViewById(R.id.FirebaseButton);
+
+        // Set a listener on the search button to make it operational
+        search.setOnClickListener(this);
+        return view;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=tt4652838";
+        Bundle bundle = this.getArguments();
+        // Get the imdbid from the serie that was clicked on
+        if (bundle != null) {
+            title = bundle.getString("title");
+            imdbid = bundle.getString("imdbid");
+        }
+        String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url);
     }
 
@@ -56,10 +84,6 @@ public class EpisodeDetailsFragment extends Fragment {
                         try {
                             // Parse JSON to a object and make set adapter
                             parseEpisodeJSON(response.toString());
-                            //TextView textviewtje = getView().findViewById(R.id.textviewtje);
-                            //String current = textviewtje.getText().toString();
-                            //textviewtje.setText(current + response);
-
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -113,6 +137,46 @@ public class EpisodeDetailsFragment extends Fragment {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.FirebaseButton:
+                Log.d("proooooo", "hooooo");
+                if (user != null){
+                    fbdb = FirebaseDatabase.getInstance();
+                    String userid = user.getUid();
+                    dbref = fbdb.getReference("User/"+userid);
+
+                    dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            DataSnapshot value = dataSnapshot.child("SerieWatched");
+                            HashMap<String, ArrayList<String>> seen = (HashMap<String, ArrayList<String>>) value.getValue();
+
+                            if (seen == null) {
+                                seen = new HashMap<>();
+                            }
+                            ArrayList<String> probeersel = new ArrayList<>();
+                            probeersel.add("gekkies");
+                            seen.put(title, probeersel);
+                            try{
+                                dbref.child("SerieWatched").setValue(seen);
+                            }
+                            catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
         }
     }
 }

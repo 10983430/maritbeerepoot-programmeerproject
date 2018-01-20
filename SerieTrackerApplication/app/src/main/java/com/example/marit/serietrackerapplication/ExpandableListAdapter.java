@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -64,40 +65,41 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        // Get the season that should be in this position
         String title = (String) getGroup(groupPosition);
+
+        // Inflate view if there is no view yet
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.row_layout_users, null);
         }
+        convertView.setFocusable(false);
+        // Set the textview with the name of the season
         TextView viewtje = convertView.findViewById(R.id.usernameHolder);
         viewtje.setText(title);
-
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        //final String childie = (String) getChild(groupPosition, childPosition);
-        Log.d("Hoiii", "lol");
-        Object childie = getChild(groupPosition, childPosition);
-        //Episode child = getChild(groupPosition, childPosition);
-        Log.d("Hoiiiii", childie.toString());
-        //Episode lol = new Episode(childie);
-        //Episode lol = new Episode(childie);
-        Log.d("Hoiii", "lol");
-        Log.d("Hoi", getChild(groupPosition, childPosition).toString());
+        // Get the episode that should be in this position
+        Episode episode = (Episode) getChild(groupPosition, childPosition);
+
+        // Inflate view if there is no view yet
         if (convertView == null){
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.row_layout_expandable_child, null);
         }
-        TextView viewtje = convertView.findViewById(R.id.textholder);
-        //viewtje.setText(childie);
+        convertView.setFocusable(false);
+        //Set the textview with the title of the episode
+        TextView viewtje = convertView.findViewById(R.id.EpisodeTitleView);
+        viewtje.setText(episode.getTitle());
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-
         return true;
     }
+
 }

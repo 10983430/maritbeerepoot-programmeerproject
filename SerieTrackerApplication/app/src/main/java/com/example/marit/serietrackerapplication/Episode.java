@@ -8,12 +8,12 @@ public class Episode {
     private String title;
     private String released;
     private Integer episode;
-    private double imdbrating;
+    private String imdbrating;
     private String imdbid;
     private Integer seasonnumber;
 
 
-    public Episode(String title, String released, Integer episode, double imdbrating, String imdbid, Integer seasonnnumber) {
+    public Episode(String title, String released, Integer episode, String imdbrating, String imdbid, Integer seasonnnumber) {
         this.title = title;
         this.released = released;
         this.episode = episode;
@@ -38,7 +38,7 @@ public class Episode {
         return episode;
     }
 
-    public double getImdbrating() {
+    public String getImdbrating() {
         return imdbrating;
     }
 

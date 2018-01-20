@@ -69,3 +69,18 @@
 ### Vrijdag 19 januari 2018
 - Helaas nogsteeds de expandable listview niet helemaal werkend gekregen. Loop ook tegen een bug aan dat de expandable listview niet tevoorschijn komt. Echter is deze wel te zien wanneer er naar een andere fragment wordt gegaan en vervolgens weer terug naar de serie details. Hard aan het werk aan dit te fixen.
 - Veel moeite gedaan om de hashmap werkend te krijgen, maar het is nog niet helemaal gelukt. Het gaat met baby stapjes.
+
+### Zaterdag 20 januari 2018
+- Hashmap met data voor expandable listview gefixt
+- Data in expandable listview weergeven
+- **Keuze:** Elke episode heeft een imdbrating, maar bij sommige is de waarde "N/A". Er is hierom gekozen om hier toch maar een String van te maken in plaats van een double, aangezien er geen berekeningen met de rating zullen worden uitgevoerd.
+- Bug gefixt dat de expandable listview niet altijd tevoorschijn komt
+- Checkboxes aan de expandable listview toegevoegt
+- Expandable listview is clickable, er kan dus op een item in de listview geclickt worden en naar de episode details gegaan worden
+- **Problemen:** Hoe kan je zien in een expandable listview of er op een checkbox geklikt is?
+- Informatie over episodes die gezien zijn in Firebase gekregen   
+![](doc/Screenshot_1516462803.png)
+
+## Week 3
+
+## Week 4

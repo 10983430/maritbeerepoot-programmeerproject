@@ -5,15 +5,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -52,30 +56,17 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_serie_details, container, false);
         Button search = view.findViewById(R.id.episodedetails);
 
-        // Create the expandable list view
-        ExpandableListView viewtje = view.findViewById(R.id.ExpandableListview);
-        makelistview(viewtje);
-
         // Set a listener on the search button to make it operational
         search.setOnClickListener(this);
         return view;
     }
 
-
-    private void makelistview(ExpandableListView viewtje) {
-        List<String> emtDev = new ArrayList<>();
-        emtDev.add("listviewtje");
-        adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap);
-        viewtje.setAdapter(adapter);
-    }
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = this.getArguments();
         SeasonList = new ArrayList<>();
         hashMap = new HashMap<>();
+        Bundle bundle = this.getArguments();
         // Get the imdbid from the serie that was clicked on
         if (bundle != null) {
             imdbid = bundle.getString("imdbid");
@@ -126,7 +117,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                                 parseJSONSeasons(response, seasonnumber);
                                 Log.d("dsfsdfsdfsd", String.valueOf(episodeitems.size()));
                                 fixData();
-                                //fillTextviews();
+                                fillTextviews();
 
                             }
                         } catch (Exception e) {
@@ -142,30 +133,63 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         RQe.add(stringRequeset);
     }
 
+    public void checkboxClick(android.view.View sender) {
+        CheckBox box = (CheckBox) sender;
+        Log.d("CLICKJE", "lol");
+    }
+
     private void fixData() {
-        Log.d("dsfsuewirewpcount", count.toString());
         if (count == totalseasons) {
-            Log.d("dsfsuewirewpirpwe", String.valueOf(totalseasons) + "   " + String.valueOf(SeasonList.size()));
             for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
-                Log.d("dsfffflol", String.valueOf(serieinfo.getTotalSeasons()));
                 ArrayList<Episode> listje = new ArrayList<>();
                 for (int x = 0; x < episodeitems.size(); x++) {
-                    Log.d("dsfffffffffffffffffff", i + " " + episodeitems.get(x).getSeasonnumber());
-
                     if (episodeitems.get(x).getSeasonnumber() == i) {
-                        Log.d("dsfffffffffffffffffff","lol1111112222");
-                        Log.d("dsfffffffffffffffffff",String.valueOf(episodeitems.get(x).getSeasonnumber()) + " " + String.valueOf(i));
+
                         listje.add(episodeitems.get(x));
-                        Log.d("dsfffffffffffffffffff","lol111111");
                     }
                 }
-                Log.d("dsfffffffffffffffffff","lol2222222");
                 hashMap.put("Season " + i, listje);
-                Log.d("dsfffffffffffffffff","lol333333");
             }
-            Log.d("dsfaaaaaaaaaaa", "test12");
-            Log.d("dsffdfdfdfdfdfdfdfdfd",hashMap.toString());
         }
+        adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap);
+        ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
+        view.setAdapter(adapter);
+
+        // TO-DO: deze moet nog private!!
+
+        view.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                TextView episodetitleholder = v.findViewById(R.id.EpisodeTitleView);
+                String episodetitle = episodetitleholder.getText().toString();
+                String imdbid;
+                for (int x = 0; x < episodeitems.size(); x++) {
+                    if (episodeitems.get(x).getTitle() == episodetitle){
+                        imdbid = episodeitems.get(x).getImdbid();
+                        EpisodeDetailsFragment fragment = new EpisodeDetailsFragment();
+                        Bundle args = new Bundle();
+                        TextView lol = getView().findViewById(R.id.SerieNameInfo);
+                        args.putString("title", lol.getText().toString());
+                        args.putString("imdbid", imdbid);
+                        fragment.setArguments(args);
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    }
+                }
+                return true;
+
+                /*SerieDetailsFragment fragment = new SerieDetailsFragment();
+            Bundle args = new Bundle();
+            args.putString("imdbid", imdbid);
+            fragment.setArguments(args);
+
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();*/
+            }
+        });
+    }
+
+    // TO-DO: deze moet private worden
+    public class onChildClickListener{
+
     }
 
 
@@ -186,7 +210,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 Integer episode = Integer.valueOf(data.getJSONObject(i).getString("Episode"));
 
                 // TO-DO: Dit moet een string worden want geeft double error als er geen rating is
-                double imdbrating = Double.parseDouble(data.getJSONObject(i).getString("imdbRating"));
+                String imdbrating = data.getJSONObject(i).getString("imdbRating");
                 String imdbid = data.getJSONObject(i).getString("imdbID");
 
                 // Make the information userfull by making an class object en put alle the episodes in the list
