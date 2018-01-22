@@ -9,6 +9,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,11 +28,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> listData;
     private HashMap<String, List<Episode>> listHashMap;
+    private DataSnapshot dataSnapshot;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private String serieName;
+    private boolean seen = false;
 
-    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap) {
+    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieName) {
         this.context = context;
         this.listData = listData;
         this.listHashMap = listHashMap;
+        this.serieName = serieName;
     }
 
     @Override
@@ -94,7 +107,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //Set the textview with the title of the episode
         TextView viewtje = convertView.findViewById(R.id.EpisodeTitleView);
         viewtje.setText(episode.getTitle());
+        Log.d("lolzzz", episode.getTitle()+" "+String.valueOf(childPosition));
+        CheckBox checkBox = convertView.findViewById(R.id.checkBox);
+        checkBox.setChecked(false);
+        if (user != null) {
+            seen = checkIfSeen(episode, groupPosition);
+            Log.d("lolzzz", String.valueOf(seen));
+            checkBox.setChecked(seen);
+            seen = false;
+        }
         return convertView;
+
+
     }
 
     @Override
@@ -102,4 +126,42 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    public boolean checkIfSeen(final Episode episode, final Integer position) {
+        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        String userid = user.getUid();
+        DatabaseReference dbref = fbdb.getReference("User/"+userid);
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieName).child(listData.get(position));
+                HashMap<String, String> episodes = (HashMap<String, String>) value.getValue();
+                if (episodes == null) {
+                    seen = false;
+                }
+                else {
+                    for (String key : episodes.keySet()) {
+                        String[] parts = key.split("-");
+                        //Log.d("hiiiii", parts[1] + episode.getEpisode().toString());
+                        Log.d("hiiiiiiiiiiiiiiii", episode.getEpisode().toString());
+                        if (Integer.parseInt(parts[1]) == episode.getEpisode()) {
+                            Log.d("hiiiii", "YES");
+                            Log.d("hiiiii", parts[1] + episode.getEpisode().toString());
+                            seen = true;
+                            Log.d("hiiiii", String.valueOf(seen));
+                            Log.d("lolzzz", String.valueOf(seen) + " " + episode.getEpisode());
+                        } else {
+                            //seen = false;
+                            Log.d("hiiiii", "NOPE");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return seen;
+    }
 }

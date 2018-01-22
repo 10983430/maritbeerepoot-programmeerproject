@@ -25,6 +25,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +55,9 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     Integer totalseasons;
     Integer count = 0;
     Serie serieinfo;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    DataSnapshot watched;
+    String serieName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,14 +86,14 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
     }
-
+/*
     @Override
     public void onResume() {
         //OnSaveState?
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
         super.onResume();
-    }
+    }*/
 
     @Override
     public void onClick(View view){
@@ -158,7 +168,9 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 hashMap.put("Season " + i, listje);
             }
         }
-        adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap);
+
+
+        adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap, serieName);
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
 
@@ -183,13 +195,6 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                     }
                 }
                 return true;
-
-                /*SerieDetailsFragment fragment = new SerieDetailsFragment();
-            Bundle args = new Bundle();
-            args.putString("imdbid", imdbid);
-            fragment.setArguments(args);
-
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();*/
             }
         });
     }
@@ -252,6 +257,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"),
                 responsedata.getInt("totalSeasons")) ;
         totalseasons = responsedata.getInt("totalSeasons");
+        serieName = responsedata.getString("Title");
         for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
             Log.d("dsfsuewirewpirpwe", "hoiii222");

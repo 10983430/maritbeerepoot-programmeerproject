@@ -169,7 +169,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                 HashMap<String, HashMap<String, String>> season = new HashMap<>();
                                 HashMap<String, String> episodeHashmap = new HashMap<>();
                                 episodeHashmap.put("E-" + episode, episodetitle);
-                                season.put("S-" + seasonnumber, episodeHashmap);
+                                season.put("Season " + seasonnumber, episodeHashmap);
                                 seen.put(title, season);
                             }
                             else {
@@ -183,14 +183,14 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                     HashMap<String, HashMap<String, String>> season = new HashMap<>();
                                     HashMap<String, String> episodeHashmap = new HashMap<>();
                                     episodeHashmap.put("E-" + episode, episodetitle);
-                                    season.put("S-" + seasonnumber, episodeHashmap);
+                                    season.put("Season " + seasonnumber, episodeHashmap);
                                     seen.put(title, season);
                                 }
 
                                 else {
                                     // If there is a episode from a specific serie in the database,
                                     // check if there is already an episode added from the season
-                                    DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(title).child("S-" + seasonnumber);
+                                    DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(title).child("Season " + seasonnumber);
                                     HashMap<String, String> episodeHashmap = (HashMap<String, String>) seasontje.getValue();
 
                                     // If there isn't, add the season and the episode to the hashmap
@@ -198,7 +198,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                     if (episodeHashmap == null) {
                                         episodeHashmap = new HashMap<>();
                                         episodeHashmap.put("E-" + episode, episodetitle);
-                                        seriefb.put("S-" + seasonnumber, episodeHashmap);
+                                        seriefb.put("Season " + seasonnumber, episodeHashmap);
                                         seen.put(title, seriefb);
                                     }
 
@@ -206,7 +206,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                     // to the hashmap with watched episodes
                                     else {
                                         episodeHashmap.put("E-"+ episode, episodetitle);
-                                        seriefb.put("S-" + seasonnumber, episodeHashmap);
+                                        seriefb.put("Season " + seasonnumber, episodeHashmap);
                                         seen.put(title, seriefb);
                                     }
                                 }
