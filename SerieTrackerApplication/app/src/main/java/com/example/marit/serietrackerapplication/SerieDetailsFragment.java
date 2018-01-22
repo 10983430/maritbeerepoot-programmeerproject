@@ -77,6 +77,13 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         getData(url, 1, 0);
     }
 
+    @Override
+    public void onResume() {
+        //OnSaveState?
+        String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
+        getData(url, 1, 0);
+        super.onResume();
+    }
 
     @Override
     public void onClick(View view){
