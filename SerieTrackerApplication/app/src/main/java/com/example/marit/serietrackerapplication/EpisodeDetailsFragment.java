@@ -45,6 +45,9 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase fbdb;
     private DatabaseReference dbref;
+    private String episode;
+    private String seasonnumber;
+    private String episodetitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,13 +106,16 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
             JSONObject data = new JSONObject(response);
 
             TextView name = getView().findViewById(R.id.EpisodeNameInfo);
-            name.setText(data.getString("Title"));
+            episodetitle = data.getString("Title");
+            name.setText(episodetitle);
 
             TextView season = getView().findViewById(R.id.EpisodeSeasonInfo);
-            season.setText(data.getString("Season"));
+            seasonnumber = data.getString("Season");
+            season.setText(seasonnumber);
 
             TextView episodenumber = getView().findViewById(R.id.EpisodeNumberInfo);
-            episodenumber.setText(data.getString("Episode"));
+            episode = data.getString("Episode");
+            episodenumber.setText(episode);
 
             TextView releasedate = getView().findViewById(R.id.EpisodeReleaseInfo);
             releasedate.setText(data.getString("Released"));
@@ -154,15 +160,51 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             DataSnapshot value = dataSnapshot.child("SerieWatched");
-                            HashMap<String, ArrayList<String>> seen = (HashMap<String, ArrayList<String>>) value.getValue();
+                            HashMap<String, HashMap<String, HashMap<String, String>>> seen = (HashMap<String, HashMap<String, HashMap<String, String>>>) value.getValue();
 
+                            // If this is the first episode ever added to firebase, create a new hashmap
                             if (seen == null) {
                                 seen = new HashMap<>();
+                                HashMap<String, HashMap<String, String>> season = new HashMap<>();
+                                HashMap<String, String> episodeHashmap = new HashMap<>();
+                                episodeHashmap.put("E-" + episode, episodetitle);
+                                season.put("S-" + seasonnumber, episodeHashmap);
+                                seen.put(title, season);
                             }
-                            ArrayList<String> probeersel = new ArrayList<>();
-                            probeersel.add("gekkies");
-                            seen.put(title, probeersel);
+                            else {
+                                DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(title);
+                                //Log.d("loooooooo", serietitle.toString());
+                                //Log.d("testnameloooooo", serietitle.getValue().getClass().toString());
+
+                                HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serietitle.getValue();
+                                //Log.d("loooooooo", seriefb.toString());
+
+                                // Check if there is an episode of the serie that needs to be added
+                                // in the database
+                                if (seriefb == null) {
+                                    HashMap<String, HashMap<String, String>> season = new HashMap<>();
+                                    HashMap<String, String> episodeHashmap = new HashMap<>();
+                                    episodeHashmap.put("E-" + episode, episodetitle);
+                                    season.put("S-" + seasonnumber, episodeHashmap);
+                                    seen.put(title, season);
+                                }
+
+                                else {
+                                    // Check if there was already an episode from the season added
+                                    DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(title).child("S-" + seasonnumber);
+                                    HashMap<String, String> seasonsadded = (HashMap<String, String>) seasontje.getValue();
+                                    if (seasontje == null) {
+                                        seasonsadded.put("E-" + episode, episodetitle);
+                                        seriefb.put("S-" + seasonnumber, seasonsadded);
+                                        seen.put(title, seriefb);
+                                    }
+                                }
+                            }
+                            //HashMap<String, String> probeersel = new HashMap<>();
+                            //probeersel.put(episode, title);
+
                             try{
+
                                 dbref.child("SerieWatched").setValue(seen);
                             }
                             catch (Exception e){

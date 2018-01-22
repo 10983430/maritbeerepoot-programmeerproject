@@ -83,4 +83,9 @@
 
 ## Week 3
 
+### Maandag 22 januari 2018
+- Vandaag liep ik helaas tegen een database probleem aan. Wanneer er een season wordt geinput met de format "1", denkt Firebase dat dit deel uitmaakt van de arraylist en er dus een 0 mist (aangezien firebase zelf nummers gebruikt om waardes van arraylisten te weergeven in de webversie).
+Ik heb er hierom voor gekozen om seizoenen in Firebase te zetten met "S-[seizoennummer]" en "E-[episodenummer] (bijv. E-22 voor episode 22). Deze waarde kan dan met een regex split worden gescheiden van de letter die ervoor staat en daardoor later worden gebruikt bij het aangeven van welke episodes wel en niet gezien zijn. Het plaatje hieronder laat dit iets duidelijker zien.
+![](doc/databasefout22januari.png)
+
 ## Week 4
