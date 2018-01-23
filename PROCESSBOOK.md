@@ -89,4 +89,9 @@ Ik heb er hierom voor gekozen om seizoenen in Firebase te zetten met "S-[seizoen
 ![](doc/databasefout22januari.png)
 - Daarnaast ben ik bezig geweest met het aan de gebruiker laten zien welke episodes hij/zij al heeft gezien door middel van de checkboxes in de expandable listview. Dit is bijna gelukt, echter heeft het soms een bugg dat de verkeerde checkbox wordt aangevinkt. Tijdje bezig geweest met uitzoeken waarom maar ben er nog niet uitgekomen.
 
+### Dinsdag 23 januari 2018
+- De expandable listview laat nu zien welke episodes er gezien zijn. De bug is verholpen. Echter is er een nieuwe bij gekomen. De eerte keer dat een seizoen laadt wordt namelijk niet getoond welke episodes gezien zijn, maar na scrollen wel.
+- (volg functie)
+
+
 ## Week 4
