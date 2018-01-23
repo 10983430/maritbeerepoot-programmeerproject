@@ -140,6 +140,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 if (Integer.parseInt(seenEpisodes.get(i)) == episode.getEpisode()) {
                     Log.d("test20000o", episode.getEpisode().toString());
                     checkBox.setChecked(true);
+                    notifyDataSetChanged();
                 }
 
             }

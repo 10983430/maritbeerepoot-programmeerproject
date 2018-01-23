@@ -173,6 +173,8 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap, serieName);
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        view.invalidateViews();
 
         // TO-DO: deze moet nog private!!
 

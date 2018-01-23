@@ -70,6 +70,7 @@ public class UsersOverviewFragment extends ListFragment { //implements View.OnCl
                     String username = dataSnapshot.child(userid).child("username").getValue().toString();
                     String email = dataSnapshot.child(userid).child("email").getValue().toString();
 
+                    // TO-DO, dit klopt niet meer
                     HashMap<String, String> followseries = new HashMap<>();
                     HashMap<String, String> follususers = new HashMap<>();
 
