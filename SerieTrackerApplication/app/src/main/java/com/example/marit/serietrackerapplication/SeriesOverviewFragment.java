@@ -135,6 +135,7 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
     private class ClickDetails implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView adapterView, View view, int position, long l) {
+            //TO-DO dit kan echt niet
             TextView hidden = view.findViewById(R.id.hidden);
             String imdbid = hidden.getText().toString();
 

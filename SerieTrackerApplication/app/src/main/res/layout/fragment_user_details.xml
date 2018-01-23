@@ -10,6 +10,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/FollowButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/follow" />
+
         <TextView
             android:id="@+id/Username"
             android:layout_width="match_parent"
@@ -26,6 +32,28 @@
             android:textColor="@color/black"
             android:textSize="17sp" />
 
+        <TextView
+            android:id="@+id/WatchedSeries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="@string/serieswatched"/>
+
+        <TextView
+            android:id="@+id/Nonewatched"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:visibility="gone"
+            android:text="@string/nonewatched"/>
+
+        <ListView
+            android:id="@+id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </FrameLayout>

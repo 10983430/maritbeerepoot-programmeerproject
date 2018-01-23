@@ -90,8 +90,15 @@ Ik heb er hierom voor gekozen om seizoenen in Firebase te zetten met "S-[seizoen
 - Daarnaast ben ik bezig geweest met het aan de gebruiker laten zien welke episodes hij/zij al heeft gezien door middel van de checkboxes in de expandable listview. Dit is bijna gelukt, echter heeft het soms een bugg dat de verkeerde checkbox wordt aangevinkt. Tijdje bezig geweest met uitzoeken waarom maar ben er nog niet uitgekomen.
 
 ### Dinsdag 23 januari 2018
-- De expandable listview laat nu zien welke episodes er gezien zijn. De bug is verholpen. Echter is er een nieuwe bij gekomen. De eerte keer dat een seizoen laadt wordt namelijk niet getoond welke episodes gezien zijn, maar na scrollen wel.
-- (volg functie)
+- De expandable listview laat nu zien welke episodes er gezien zijn. De bug is verholpen. 
+Echter is er een nieuwe bij gekomen. De eerte keer dat een seizoen laadt wordt namelijk niet getoond welke episodes gezien zijn, maar na scrollen wel.
+Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt worden van andere seizoenen. Dit gebeurd wanneer alle seizoenen 'open geklapt' zijn en er dan gescrolld wordt.
+- Volg functionaliteit toegevoegd! Het is nu dus mogelijk om mensen te volgen (mensen die gevolgd worden staan nu in de database).
+- Hele code doorgekamt en TO-DO's toegevoegd
+- Database structuur nog iets aangepast (zie hieronder)
+
+
+![](doc/DatabaseStructuur.png)
 
 
 ## Week 4

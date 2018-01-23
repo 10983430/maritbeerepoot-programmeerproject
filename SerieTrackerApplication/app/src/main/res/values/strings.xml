@@ -21,4 +21,7 @@
     <string name="imdbrating">imdb rating:</string>
     <string name="season">Season:</string>
     <string name="episodenr">Episode number:</string>
+    <string name="serieswatched">Series watched:</string>
+    <string name="nonewatched">This user did not watch any series yet</string>
+    <string name="follow">Follow</string>
 </resources>

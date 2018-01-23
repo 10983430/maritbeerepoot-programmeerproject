@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,12 +50,18 @@ public class UsersOverviewFragment extends ListFragment { //implements View.OnCl
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l,v,position,id);
-            FragmentManager fragmentManager = getFragmentManager();
-            UserDetailsFragment fragment = new UserDetailsFragment();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment, "SeriesOverview");
-            fragmentTransaction.commit();
+        super.onListItemClick(l, v, position, id);
+        FragmentManager fragmentManager = getFragmentManager();
+        UserDetailsFragment fragment = new UserDetailsFragment();
+        // Get the userId by checking which username has which ID
+        TextView usernameHolder = v.findViewById(R.id.usernameHolder);
+        String username = usernameHolder.getText().toString();
+        Bundle args = new Bundle();
+        args.putString("userid", getUserId(username));
+        fragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment, "SeriesOverview");
+        fragmentTransaction.commit();
     }
 
     public void getData() {
@@ -74,6 +81,7 @@ public class UsersOverviewFragment extends ListFragment { //implements View.OnCl
                     HashMap<String, String> followseries = new HashMap<>();
                     HashMap<String, String> follususers = new HashMap<>();
 
+                    // TO-DO, opzich is dit ook niet nodig hier, aangezien je alleen ID en username nodig hebt, weghalen dus
                     UserInfoClass user = new UserInfoClass(userid, username, followseries, follususers, email);
 
                     allusers.add(user);
@@ -93,5 +101,15 @@ public class UsersOverviewFragment extends ListFragment { //implements View.OnCl
         ArrayList<String> users = new ArrayList<String>(hashMap.keySet());
         Adapter adapter = new UsersOverviewAdapter(getActivity(), users);
         this.setListAdapter((ListAdapter) adapter);
+    }
+
+    public String getUserId(String username){
+        for (String key : UsernameUserid.keySet()){
+            if (key == username) {
+                String value = UsernameUserid.get(key);
+                return value;
+            }
+        }
+        return null;
     }
 }
