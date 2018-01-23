@@ -109,12 +109,17 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         viewtje.setText(episode.getTitle());
         Log.d("lolzzz", episode.getTitle()+" "+String.valueOf(childPosition));
         CheckBox checkBox = convertView.findViewById(R.id.checkBox);
-        checkBox.setChecked(false);
+        Boolean hi;
         if (user != null) {
-            seen = checkIfSeen(episode, groupPosition);
-            Log.d("lolzzz", String.valueOf(seen));
-            checkBox.setChecked(seen);
-            seen = false;
+            if (episode.getEpisode() == 5 || episode.getEpisode() == 9) {
+                //hi = checkIfSeen(episode, groupPosition);
+                //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
+                checkBox.setChecked(true);
+            }
+            //seen = false;
+        }
+        else {
+            checkBox.setChecked(false);
         }
         return convertView;
 
@@ -150,7 +155,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                             Log.d("hiiiii", String.valueOf(seen));
                             Log.d("lolzzz", String.valueOf(seen) + " " + episode.getEpisode());
                         } else {
-                            //seen = false;
+                            seen = false;
                             Log.d("hiiiii", "NOPE");
                         }
                     }
