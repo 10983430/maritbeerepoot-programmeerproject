@@ -38,11 +38,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private boolean seen = false;
     private ArrayList<String> seenEpisodes = new ArrayList<>();
 
-    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieName) {
+    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieName, ArrayList seenEpisodes) {
         this.context = context;
         this.listData = listData;
         this.listHashMap = listHashMap;
         this.serieName = serieName;
+        this.seenEpisodes = seenEpisodes;
     }
 
     @Override
@@ -108,11 +109,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         seenEpisodes = findSeenEpisodes(title);
         Episode episode = (Episode) getChild(groupPosition, childPosition);
 
-        Log.d("test20000000000000", title);
-
-        Log.d("test20000000000000", seenEpisodes.toString());
-        // Inflate view if there is no view yet
-
         LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.row_layout_expandable_child, null);
 
@@ -120,18 +116,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //Set the textview with the title of the episode
         TextView viewtje = convertView.findViewById(R.id.EpisodeTitleView);
         viewtje.setText(episode.getTitle());
-        Log.d("lolzzz", episode.getTitle()+" "+String.valueOf(childPosition));
+        //Log.d("lolzzz", episode.getTitle()+" "+String.valueOf(childPosition));
         final CheckBox checkBox = convertView.findViewById(R.id.checkBox);
-        Boolean hi;
+        Log.d("test200000000", seenEpisodes.toString());
         //Log.d("testje32423324", episodes.toString());
         if (user != null) {
-            //if (episode.getEpisode() == 5 || episode.getEpisode() == 9) {
-            //hi = checkIfSeen(episode, groupPosition);
-            //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
-            //checkBox.setChecked(hi);
-            //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
-            //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
-            //checkBox.setChecked(hi);
+
             for (int i = 0; i < seenEpisodes.size(); i++) {
                 Log.d("test2000", seenEpisodes.get(i) + " " + episode.getEpisode());
                 Log.d("test2000", seenEpisodes.toString());
@@ -145,6 +135,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
             }
         }
+        //if (episode.getEpisode() == 5 || episode.getEpisode() == 9) {
+        //hi = checkIfSeen(episode, groupPosition);
+        //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
+        //checkBox.setChecked(hi);
+        //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
+        //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
+        //checkBox.setChecked(hi);
             //seen = false;
         //}
         else {
@@ -212,7 +209,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     seenEpisodes = new ArrayList<>();
                 }
                 else {
-                    Log.d("test2000000", episodes.toString());
+                    //Log.d("test2000000", episodes.toString());
                     seenEpisodes = new ArrayList<>();
                     for (String key : episodes.keySet()) {
                         String[] parts = key.split("-");

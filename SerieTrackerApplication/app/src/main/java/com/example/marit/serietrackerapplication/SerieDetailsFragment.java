@@ -58,6 +58,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DataSnapshot watched;
     String serieName;
+    private ArrayList seenEpisodes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +77,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
         SeasonList = new ArrayList<>();
         hashMap = new HashMap<>();
+        seenEpisodes = new ArrayList();
         Bundle bundle = this.getArguments();
         // Get the imdbid from the serie that was clicked on
         if (bundle != null) {
@@ -96,7 +98,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     }*/
 
     @Override
-    public void onClick(View view){
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.episodedetails:
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -109,8 +111,9 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
 
     /**
      * Sends an volley request to get the JSON response from the api
-     * @param url url that leads to the API
-     * @param type 1 for the serie information, 2 for the season information
+     *
+     * @param url          url that leads to the API
+     * @param type         1 for the serie information, 2 for the season information
      * @param seasonnumber indicates the season number, 0 when general serie information is requested
      */
     public void getData(String url, Integer type, final Integer seasonnumber) {
@@ -127,8 +130,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
 
                                 Log.d("dsfsuewirewpirpwe", "hoiii1111");
                                 parseJSONSerieDetails(response);
-                            }
-                            else {
+                            } else {
                                 count += 1;
                                 Log.d("dsfsuewirewpirpwe", "hoiii");
                                 parseJSONSeasons(response, seasonnumber);
@@ -137,6 +139,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                                 fillTextviews();
 
                             }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -167,10 +170,18 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 }
                 hashMap.put("Season " + i, listje);
             }
+            setAdapter();
         }
 
+    }
 
-        adapter =  new ExpandableListAdapter(getContext(), SeasonList, hashMap, serieName);
+    public void setAdapter() {
+        if (seenEpisodes == null) {
+            Log.d("kkkkkkkoooooooooo", "test");
+        }
+        //Log.d("kkkkkkkoooooooooo", seenEpisodes.toString());
+        adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, serieName, seenEpisodes);
+        //Log.d("kkkkkkkooo", "hoi");
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -185,7 +196,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 String episodetitle = episodetitleholder.getText().toString();
                 String imdbid;
                 for (int x = 0; x < episodeitems.size(); x++) {
-                    if (episodeitems.get(x).getTitle() == episodetitle){
+                    if (episodeitems.get(x).getTitle() == episodetitle) {
                         imdbid = episodeitems.get(x).getImdbid();
                         EpisodeDetailsFragment fragment = new EpisodeDetailsFragment();
                         Bundle args = new Bundle();
@@ -202,7 +213,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     // TO-DO: deze moet private worden
-    public class onChildClickListener{
+    public class onChildClickListener {
 
     }
 
@@ -238,17 +249,18 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         Log.d("yyyyyxxxxx", String.valueOf(episodeitems.toString()));
     }
 
-    public void addToEpisodes(Episode episodeinfo){
+    public void addToEpisodes(Episode episodeinfo) {
         episodeitems.add(episodeinfo);
         Log.d("Tesstttttt23423", String.valueOf(episodeitems.size()));
     }
 
     /**
      * Parses the data when requesting data about the serie, also sends requests for all the seasons
+     *
      * @param response
      */
     public void parseJSONSerieDetails(String response) {
-        try{
+        try {
             JSONObject responsedata = new JSONObject(response);
             serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
                     responsedata.getString("Released"), responsedata.getString("Runtime"),
@@ -257,15 +269,17 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                     responsedata.getString("Language"), responsedata.getString("Country"),
                     responsedata.getString("Awards"), responsedata.getString("Poster"),
                     responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"),
-                    responsedata.getInt("totalSeasons")) ;
+                    responsedata.getInt("totalSeasons"));
             totalseasons = responsedata.getInt("totalSeasons");
             serieName = responsedata.getString("Title");
+            seenEpisodes = findSeenEpisodes();
             for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
                 String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
                 Log.d("dsfsuewirewpirpwe", "hoiii222");
                 getData(url, 2, i);
                 SeasonList.add("Season " + String.valueOf(i));
-            };
+            }
+            ;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -279,5 +293,43 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         releaseview.setText(serieinfo.getReleased());
     }
 
+    public ArrayList findSeenEpisodes() {
+        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        String userid = user.getUid();
+        DatabaseReference dbref = fbdb.getReference("User/" + userid);
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieName);
+                HashMap<String, HashMap<String, String>> seasons = (HashMap<String, HashMap<String, String>>) value.getValue();
+                if (seasons == null) {
+                    seenEpisodes = new ArrayList<>();
+                } else {
+                    Log.d("test2000000", seasons.toString());
+                    seenEpisodes = new ArrayList<>();
+                    for (String key : seasons.keySet()) {
+                        Log.d("kkkkkkkkkkkk", key.toString());
+                        DataSnapshot value2 = dataSnapshot.child("SerieWatched").child(serieName).child(key);
+                        HashMap<String, String> episodes = (HashMap<String, String>) value2.getValue();
+                        for (String keyepisode : episodes.keySet()) {
+                            Log.d("kkkkkkkkkkkk", keyepisode.toString());
+                            String[] parts = keyepisode.split("-");
+                            seenEpisodes.add("S-" + key + "-E-" + parts[1]);
+                        }
+                        // Hier loopen door de lagere hashmap
+
+                    }
+                }
+                Log.d("kkkkkkkkkkkk", seenEpisodes.toString());
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return seenEpisodes;
+    }
 
 }

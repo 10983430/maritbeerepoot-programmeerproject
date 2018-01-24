@@ -25,6 +25,7 @@ public class FragmentContainer extends AppCompatActivity {
                     fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
                     return true;
                 case R.id.navigation_users:
+                    // TO-DO dit fixen
                     UsersOverviewFragment fragmentusers = new UsersOverviewFragment();
                     fragmentTransaction.replace(R.id.fragment_container, fragmentusers).addToBackStack(null).commit();
                     return true;
