@@ -41,7 +41,7 @@ import java.util.HashMap;
  */
 public class EpisodeDetailsFragment extends Fragment implements View.OnClickListener {
     private String imdbid;
-    private String title;
+    private String imdbidserie;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase fbdb;
     private DatabaseReference dbref;
@@ -68,7 +68,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         Bundle bundle = this.getArguments();
         // Get the imdbid from the serie that was clicked on
         if (bundle != null) {
-            title = bundle.getString("title");
+            imdbidserie = bundle.getString("imdbidserie");
             imdbid = bundle.getString("imdbid");
         }
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
@@ -170,12 +170,12 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                 HashMap<String, String> episodeHashmap = new HashMap<>();
                                 episodeHashmap.put("E-" + episode, episodetitle);
                                 season.put("Season " + seasonnumber, episodeHashmap);
-                                seen.put(title, season);
+                                seen.put(imdbidserie, season);
                             }
                             else {
                                 // Check if there is an episode of the serie that needs to be added
                                 // in the database, by checking if there is a key with the serie title
-                                DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(title);
+                                DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(imdbidserie);
                                 HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serietitle.getValue();
 
                                 // If not, create a new hashmap for the serie with the episode and season in it
@@ -184,13 +184,13 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                     HashMap<String, String> episodeHashmap = new HashMap<>();
                                     episodeHashmap.put("E-" + episode, episodetitle);
                                     season.put("Season " + seasonnumber, episodeHashmap);
-                                    seen.put(title, season);
+                                    seen.put(imdbidserie, season);
                                 }
 
                                 else {
                                     // If there is a episode from a specific serie in the database,
                                     // check if there is already an episode added from the season
-                                    DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(title).child("Season " + seasonnumber);
+                                    DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(imdbidserie).child("Season " + seasonnumber);
                                     HashMap<String, String> episodeHashmap = (HashMap<String, String>) seasontje.getValue();
 
                                     // If there isn't, add the season and the episode to the hashmap
@@ -199,7 +199,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                         episodeHashmap = new HashMap<>();
                                         episodeHashmap.put("E-" + episode, episodetitle);
                                         seriefb.put("Season " + seasonnumber, episodeHashmap);
-                                        seen.put(title, seriefb);
+                                        seen.put(imdbidserie, seriefb);
                                     }
 
                                     // If there is, add the episode to the hasmap of the season and
@@ -207,7 +207,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                     else {
                                         episodeHashmap.put("E-"+ episode, episodetitle);
                                         seriefb.put("Season " + seasonnumber, episodeHashmap);
-                                        seen.put(title, seriefb);
+                                        seen.put(imdbidserie, seriefb);
                                     }
                                 }
                             }

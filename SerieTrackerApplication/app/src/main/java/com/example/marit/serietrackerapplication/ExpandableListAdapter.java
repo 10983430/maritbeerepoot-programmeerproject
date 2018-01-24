@@ -34,16 +34,23 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private HashMap<String, List<Episode>> listHashMap;
     private DataSnapshot dataSnapshot;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private String serieName;
+    private String serieid;
     private boolean seen = false;
     private ArrayList<String> seenEpisodes = new ArrayList<>();
 
-    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieName, ArrayList seenEpisodes) {
+    /*public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieName, ArrayList seenEpisodes) {
         this.context = context;
         this.listData = listData;
         this.listHashMap = listHashMap;
         this.serieName = serieName;
         this.seenEpisodes = seenEpisodes;
+    }*/
+
+    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieid) {
+        this.context = context;
+        this.listData = listData;
+        this.listHashMap = listHashMap;
+        this.serieid = serieid;
     }
 
     @Override
@@ -164,7 +171,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieName).child(listData.get(position));
+                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieid).child(listData.get(position));
                 HashMap<String, String> episodes = (HashMap<String, String>) value.getValue();
                 if (episodes == null) {
                     seen = false;
@@ -203,7 +210,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieName).child(season);
+                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieid).child(season);
                 HashMap<String, String> episodes = (HashMap<String, String>) value.getValue();
                 if (episodes == null) {
                     seenEpisodes = new ArrayList<>();

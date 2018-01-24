@@ -100,5 +100,12 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 
 ![](doc/DatabaseStructuur.png)
 
+### Woensdag 24 januari 2018
+- Nogmaals geprobeerd de expandablelistview te fixen, nog niet helemaal gelukt
+- Bij UserDetailsFragment laten zien welke series iemand volgt en bij welke episode de persoon is
+- Database structuur nog iets aangepast, series worden nu opgeslagen op is in plaats van op season.
+- Wat fragments errors gefixt
+- Als er ingelogd is zijn de inlog en registreeer button niet meer zichtbaar, en als er niet is ingelogt is de uitlog button niet te zien
+- Volg functionaliteit werkt nu helemaal
 
 ## Week 4

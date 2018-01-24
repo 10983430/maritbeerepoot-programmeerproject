@@ -22,7 +22,7 @@ public class FragmentContainer extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_series:
                     SeriesOverviewFragment fragment = new SeriesOverviewFragment();
-                    fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    fragmentTransaction.replace(R.id.fragment_container, fragment).commit();
                     return true;
                 case R.id.navigation_users:
                     // TO-DO dit fixen

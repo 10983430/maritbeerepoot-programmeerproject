@@ -83,7 +83,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         if (bundle != null) {
             imdbid = bundle.getString("imdbid");
         }
-
+        //findSeenEpisodes();
         // Get the data from the clicked serie
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
@@ -153,11 +153,6 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         RQe.add(stringRequeset);
     }
 
-    public void checkboxClick(android.view.View sender) {
-        CheckBox box = (CheckBox) sender;
-        Log.d("CLICKJE", "lol");
-    }
-
     private void fixData() {
         if (count == totalseasons) {
             for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
@@ -176,12 +171,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     public void setAdapter() {
-        if (seenEpisodes == null) {
-            Log.d("kkkkkkkoooooooooo", "test");
-        }
-        //Log.d("kkkkkkkoooooooooo", seenEpisodes.toString());
-        adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, serieName, seenEpisodes);
-        //Log.d("kkkkkkkooo", "hoi");
+        adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -194,15 +184,14 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 TextView episodetitleholder = v.findViewById(R.id.EpisodeTitleView);
                 String episodetitle = episodetitleholder.getText().toString();
-                String imdbid;
                 for (int x = 0; x < episodeitems.size(); x++) {
                     if (episodeitems.get(x).getTitle() == episodetitle) {
-                        imdbid = episodeitems.get(x).getImdbid();
+                        String imdbidepisode = episodeitems.get(x).getImdbid();
                         EpisodeDetailsFragment fragment = new EpisodeDetailsFragment();
                         Bundle args = new Bundle();
-                        TextView lol = getView().findViewById(R.id.SerieNameInfo);
-                        args.putString("title", lol.getText().toString());
-                        args.putString("imdbid", imdbid);
+                        Log.d("testje1", imdbid.toString() + " " + imdbidepisode);
+                        args.putString("imdbidserie", imdbid);
+                        args.putString("imdbid", imdbidepisode);
                         fragment.setArguments(args);
                         getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
                     }
@@ -272,7 +261,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                     responsedata.getInt("totalSeasons"));
             totalseasons = responsedata.getInt("totalSeasons");
             serieName = responsedata.getString("Title");
-            seenEpisodes = findSeenEpisodes();
+            //seenEpisodes = findSeenEpisodes();
             for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
                 String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
                 Log.d("dsfsuewirewpirpwe", "hoiii222");
