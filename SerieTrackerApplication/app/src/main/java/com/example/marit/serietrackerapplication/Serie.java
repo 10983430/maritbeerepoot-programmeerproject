@@ -17,13 +17,13 @@ public class Serie {
     private String country;
     private String awards;
     private String poster;
-    private double imdbrating;
+    private String imdbrating;
     private String imdbvotes;
     private Integer totalSeasons;
 
 
 
-    public Serie(String title, String year, String released, String runtime, String genre, String director, String writer, String plot, String language, String country, String awards, String poster, double imdbrating, String imdbvotes, Integer totalSeasons) {
+    public Serie(String title, String year, String released, String runtime, String genre, String director, String writer, String plot, String language, String country, String awards, String poster, String imdbrating, String imdbvotes, Integer totalSeasons) {
         this.title = title;
         this.year = year;
         this.released = released;
@@ -89,7 +89,7 @@ public class Serie {
         return poster;
     }
 
-    public double getImdbrating() {
+    public String getImdbrating() {
         return imdbrating;
     }
 

@@ -66,11 +66,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             getUserData(user.getUid());
-        } else {
-            TextView loginmessage = getView().findViewById(R.id.DisplayLogout);
-            loginmessage.setVisibility(View.VISIBLE);
         }
-
     }
 
     /**
@@ -129,6 +125,14 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     public void updateWhenLoggedOut(View view) {
         Button logout = view.findViewById(R.id.buttonLogout);
         logout.setVisibility(View.GONE);
+        TextView loginmessage = view.findViewById(R.id.DisplayLogout);
+        loginmessage.setVisibility(View.VISIBLE);
+        TextView UserInformationView = view.findViewById(R.id.UserInformationView);
+        UserInformationView.setVisibility(View.GONE);
+        TextView seriesseen = view.findViewById(R.id.seriesseen);
+        seriesseen.setVisibility(View.GONE);
+        TextView following = view.findViewById(R.id.following);
+        following.setVisibility(View.GONE);
     }
 
     /**
@@ -154,6 +158,10 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                         getSerieData(key);
                     }
                 }
+                else {
+                    TextView seriesseen = view.findViewById(R.id.seriesseen);
+                    seriesseen.setText(seriesseen.getText() + "(None yet)");
+                }
                 HashMap<String, String> users = (HashMap<String, String>) dataSnapshot.child("UsersFollowed").getValue();
                 if (users != null) {
                     for (String key : users.keySet()) {
@@ -161,6 +169,10 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                     }
                     Log.d("ooooooo", "test2");
 
+                }
+                else {
+                    TextView following = view.findViewById(R.id.following);
+                    following.setText(following.getText() + "(None yet)");
                 }
 
             }

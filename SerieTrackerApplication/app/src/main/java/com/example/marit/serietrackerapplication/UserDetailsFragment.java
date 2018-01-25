@@ -46,11 +46,12 @@ import static android.view.View.GONE;
 public class UserDetailsFragment extends ListFragment implements View.OnClickListener {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String userID;
-    String currentuserid = user.getUid();
+
     private DatabaseReference dbref;
     String username;
     HashMap<String, String> titles = new HashMap<>();
     HashMap<String, String> highestepisode = new HashMap<>();
+    HashMap<String, String> highestepisodeloggedin = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +59,10 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_details, container, false);
         Button follow = view.findViewById(R.id.FollowButton);
+        Button unfollow = view.findViewById(R.id.UnfollowButton);
         follow.setOnClickListener(this);
+        unfollow.setOnClickListener(this);
+        updateUI(view);
         return view;
     }
 
@@ -72,13 +76,25 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
             Log.d("lollollll", userID);
             getUserData(userID);
         }
-
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.FollowButton:
                 putUserInDatabase();
+                // TO-DO bug fixen dat hij niet spaced bij het updaten
+                //updateUI(view);
+                break;
+            case R.id.UnfollowButton:
+                Log.d("lolllzzzo", "test2");
+                FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+                String userid = user.getUid();
+                DatabaseReference dbref = fbdb.getReference("User/" + userid + "/UsersFollowed/" + userID);
+                Log.d("lolllzzzo", "test3");
+                dbref.removeValue();
+                Log.d("lolllzzzo", "test4");
+                //updateUI(view);
+                break;
         }
     }
 
@@ -87,6 +103,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
      */
     public void putUserInDatabase() {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        String currentuserid = user.getUid();
         dbref = fbdb.getReference("User/" + currentuserid + "/UsersFollowed");
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -133,11 +150,12 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                     TextView nonewatched = getView().findViewById(R.id.Nonewatched);
                     nonewatched.setVisibility(View.VISIBLE);
                 } else {
+                    getLoggedInUserData(user.getUid());
                     Log.d("lollol", "hiii");
                     Log.d("lollol", info.keySet().toString());
                     //ArrayList<String> keyset = (ArrayList<String>) info.keySet();
                     for (String key : info.keySet()) {
-                        getSerieData(key);
+                        getSerieData(key, 1);
                         // TO-DO hier opdelen?
                         DataSnapshot serieinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key);
                         HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieinfodatasnapshot.getValue();
@@ -170,11 +188,58 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         });
     }
 
+    public void getLoggedInUserData(String userID) {
+        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        DatabaseReference dbref = fbdb.getReference("User/" + userID);
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, HashMap<String, HashMap<String, String>>> info =
+                        (HashMap<String, HashMap<String, HashMap<String, String>>>) dataSnapshot.child("SerieWatched").getValue();
+                if (info == null) {
+                    highestepisodeloggedin = new HashMap<>();
+                }
+                else {
+                    for (String key : info.keySet()) {
+                        //getSerieData(key, 2);
+                        // TO-DO hier opdelen?
+                        DataSnapshot serieinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key);
+                        HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieinfodatasnapshot.getValue();
+                        ArrayList<Integer> seasons = new ArrayList<>();
+                        for (String key2 : serieinfo.keySet()) {
+                            String[] parts = key2.split(" ");
+                            seasons.add(Integer.parseInt(parts[1]));
+                        }
+                        String highestseason = String.valueOf(Collections.max(seasons));
+                        DataSnapshot episodeinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key).child("Season " + highestseason);
+                        HashMap<String, String> episodeinfo = (HashMap<String, String>) episodeinfodatasnapshot.getValue();
+                        ArrayList<Integer> episodes = new ArrayList<>();
+                        for (String key3 : episodeinfo.keySet()) {
+                            String[] parts = key3.split("-");
+                            episodes.add(Integer.parseInt(parts[1]));
+                        }
+                        String highestEpisode = String.valueOf(Collections.max(episodes));
+                        Log.d("lolllzzzorr", highestEpisode);
+
+                        highestepisodeloggedin.put(key, "S" + highestseason + "E" + highestEpisode);
+                    }
+                    Log.d("lolllzzzorr", highestepisodeloggedin.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     /**
      * Requests the data for imdbid, so the title can be parsed to create a listview with the
      * title and the last episode from a serie someone saw
      */
-    public void getSerieData(final String key) {
+
+    public void getSerieData(final String key, final int parameter) {
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + key;
         // Create new queue
         RequestQueue RequestQueue = Volley.newRequestQueue(getContext());
@@ -184,11 +249,17 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                     @Override
                     public void onResponse(String reaction) {
                         try {
-                            // Parse JSON to a object and make set adapter
-                            Log.d("oooooo", key);
-                            parseJSON(reaction.toString(), key);
-                            Log.d("lollol", titles.toString());
-                            makeListView();
+                            if (parameter == 1) {
+                                // Parse JSON to a object and make set adapter
+                                Log.d("oooooo", key);
+                                parseJSON(reaction.toString(), key);
+                                Log.d("lollol", titles.toString());
+
+                                makeListView();
+                            }
+                            else {
+                                parseJSON(reaction.toString(), key);
+                            }
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -221,11 +292,14 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
      */
     public void makeListView() {
         HashMap<String, String> highestepontitle = new HashMap<>();
+        HashMap<String, String> seenepisodes = new HashMap<>();
         if (titles.size() == highestepisode.size()) {
             for (String imdbid : titles.keySet()) {
                 highestepontitle.put(titles.get(imdbid), highestepisode.get(imdbid));
+                seenepisodes.put(titles.get(imdbid), highestepisodeloggedin.get(imdbid));
             }
-            ListAdapter adapter = new LastEpisodeSeenAdapter(highestepontitle);
+            Log.d("lolllzzzorrloll2", seenepisodes.toString());
+            ListAdapter adapter = new LastEpisodeSeenAdapter(highestepontitle, seenepisodes);
             getListView().setAdapter(adapter);
         }
     }
@@ -234,6 +308,57 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         TextView view = v.findViewById(R.id.Seriename);
+        String hoi = view.getText().toString();
+        Log.d("lolzzzz", hoi);
+        String imdbid = new String();
+        for (String key : titles.keySet()) {
+            if (titles.get(key) == hoi) {
+                imdbid = key;
+            }
+        }
+        SerieDetailsFragment fragment = new SerieDetailsFragment();
+        Bundle args = new Bundle();
+        args.putString("imdbid", imdbid);
+        fragment.setArguments(args);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+    }
+
+    public void updateUI(final View view) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String currentuser = user.getUid();
+            // Make it impossible to follow yourself
+            if (userID.equals(currentuser)) {
+                Button follow = view.findViewById(R.id.FollowButton);
+                follow.setVisibility(GONE);
+            }
+            // Check if the button should be for following or unfollowing
+            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+            String userid = user.getUid();
+            DatabaseReference dbref = fbdb.getReference("User/" + userid);
+            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot dataSnapshot1 = dataSnapshot.child("UsersFollowed").child(userID);
+
+                    Log.d("lolzzz", dataSnapshot1.toString());
+                    if (dataSnapshot1.getValue() != null) {
+                        String user = dataSnapshot1.getValue().toString();
+                        Button unfollow = view.findViewById(R.id.UnfollowButton);
+                        unfollow.setVisibility(View.VISIBLE);
+                        Button follow = view.findViewById(R.id.FollowButton);
+                        follow.setVisibility(GONE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }
+
 

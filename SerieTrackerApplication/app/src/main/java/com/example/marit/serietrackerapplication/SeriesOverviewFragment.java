@@ -105,6 +105,8 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
      */
     public void parseJSON(String respons) throws JSONException {
         try {
+            TextView NoResultsMessage = getView().findViewById(R.id.NoResultsMessage);
+            NoResultsMessage.setVisibility(View.GONE);
             JSONObject data = new JSONObject(respons);
             JSONArray results = data.getJSONArray("Search");
             for (int i = 0; i < results.length(); i++) {
@@ -115,6 +117,8 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
             }
         }
         catch (JSONException e) {
+            TextView NoResultsMessage = getView().findViewById(R.id.NoResultsMessage);
+            NoResultsMessage.setVisibility(View.VISIBLE);
             e.printStackTrace();
         }
     }

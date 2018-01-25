@@ -1,5 +1,7 @@
 package com.example.marit.serietrackerapplication;
 
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +18,12 @@ import java.util.Map;
 
 public class LastEpisodeSeenAdapter extends BaseAdapter {
     private final ArrayList mData;
+    private HashMap<String, String> highestepisodeloggedin;
 
-    public LastEpisodeSeenAdapter(HashMap<String, String> map) {
+    public LastEpisodeSeenAdapter(HashMap<String, String> map, HashMap<String, String> highestepisodeloggedin) {
         mData = new ArrayList();
         mData.addAll(map.entrySet());
+        this.highestepisodeloggedin = highestepisodeloggedin;
     }
 
     @Override
@@ -49,9 +53,37 @@ public class LastEpisodeSeenAdapter extends BaseAdapter {
 
         Map.Entry<String, String> item = getItem(position);
 
-        // TODO replace findViewById by ViewHolder
         ((TextView) result.findViewById(R.id.Seriename)).setText(item.getKey());
-        ((TextView) result.findViewById(R.id.Highestep)).setText(item.getValue());
+        TextView highestep = result.findViewById(R.id.Highestep);
+        highestep.setText(item.getValue());
+
+        for (String key : highestepisodeloggedin.keySet()) {
+            //Log.d("lolllzzzorrlol", key + " " + item.getKey());
+            if (key == item.getKey()) {
+                String[] partsuser = item.getValue().split("S");
+                if (highestepisodeloggedin.get(key) != null) {
+                    String[] partslog = highestepisodeloggedin.get(key).split("S");
+                    String[] partsuserall = partsuser[1].split("E");
+                    String[] partslogall = partslog[1].split("E");
+                    if (Integer.parseInt(partslogall[0]) > Integer.parseInt(partsuserall[0])) {
+                        highestep.setTextColor(Color.RED);
+                    }
+                    if (Integer.parseInt(partslogall[0]) == Integer.parseInt(partsuserall[0])) {
+                        if (Integer.parseInt(partslogall[1]) > Integer.parseInt(partsuserall[1])) {
+                            highestep.setTextColor(Color.RED);
+                        }
+                        if (Integer.parseInt(partslogall[1]) <= Integer.parseInt(partsuserall[1])) {
+                            highestep.setTextColor(Color.GREEN);
+                        }
+
+                    }
+                    else {
+                        highestep.setTextColor(Color.GREEN);
+                    }
+                }
+
+            }
+        }
 
         return result;
     }

@@ -73,7 +73,7 @@ public class UsersOverviewFragment extends ListFragment { //implements View.OnCl
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     String userid = child.getKey();
-
+                    Log.d("testertje", dataSnapshot.child(userid).child("username").toString());
                     String username = dataSnapshot.child(userid).child("username").getValue().toString();
                     String email = dataSnapshot.child(userid).child("email").getValue().toString();
 

@@ -32,6 +32,14 @@
                 android:text="Search" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/NoResultsMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Results!"
+            android:textColor="@color/black"
+            android:visibility="gone"/>
+
         <ListView
             android:id="@+id/android:list"
             android:layout_width="match_parent"

@@ -87,6 +87,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                         try {
                             // Parse JSON to a object and make set adapter
                             parseEpisodeJSON(response.toString());
+                            getFollowInfo();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -146,15 +147,51 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         }
     }
 
+    public void getFollowInfo() {
+        if (user != null) {
+            fbdb = FirebaseDatabase.getInstance();
+            final String userid = user.getUid();
+            dbref = fbdb.getReference("User/");
+            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot snapshot = dataSnapshot.child(userid).child("UsersFollowed");
+                    HashMap<String, String> followed = (HashMap<String, String>) snapshot.getValue();
+                    if (followed != null) {
+                        for (String key : followed.keySet()) {
+                            Log.d("lolllzzzo", key);
+                            DataSnapshot lol2 = dataSnapshot.child(key).child("username");
+                            String username = lol2.getValue().toString();
+                            DataSnapshot lol23 = dataSnapshot.child(key).child("SerieWatched").child(imdbidserie).child("Season " + seasonnumber).child("E-" + episode);
+
+                            if (lol23.getValue() == null) {
+                                TextView lol = getView().findViewById(R.id.FollowersInfo);
+                                lol.setText(lol.getText().toString() + username + " didn't watch this episode yet!\n");
+                            } else {
+                                TextView lol = getView().findViewById(R.id.FollowersInfo);
+                                lol.setText(lol.getText().toString() + username + " did watch this episode!\n");
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.FirebaseButton:
                 Log.d("proooooo", "hooooo");
-                if (user != null){
+                if (user != null) {
                     fbdb = FirebaseDatabase.getInstance();
                     String userid = user.getUid();
-                    dbref = fbdb.getReference("User/"+userid);
+                    dbref = fbdb.getReference("User/" + userid);
 
                     dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -171,8 +208,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                 episodeHashmap.put("E-" + episode, episodetitle);
                                 season.put("Season " + seasonnumber, episodeHashmap);
                                 seen.put(imdbidserie, season);
-                            }
-                            else {
+                            } else {
                                 // Check if there is an episode of the serie that needs to be added
                                 // in the database, by checking if there is a key with the serie title
                                 DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(imdbidserie);
@@ -185,9 +221,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                     episodeHashmap.put("E-" + episode, episodetitle);
                                     season.put("Season " + seasonnumber, episodeHashmap);
                                     seen.put(imdbidserie, season);
-                                }
-
-                                else {
+                                } else {
                                     // If there is a episode from a specific serie in the database,
                                     // check if there is already an episode added from the season
                                     DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(imdbidserie).child("Season " + seasonnumber);
@@ -205,7 +239,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                                     // If there is, add the episode to the hasmap of the season and
                                     // to the hashmap with watched episodes
                                     else {
-                                        episodeHashmap.put("E-"+ episode, episodetitle);
+                                        episodeHashmap.put("E-" + episode, episodetitle);
                                         seriefb.put("Season " + seasonnumber, episodeHashmap);
                                         seen.put(imdbidserie, seriefb);
                                     }
@@ -213,10 +247,9 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                             }
 
                             // Update the database by inserting the hashmap with watched episodes
-                            try{
+                            try {
                                 dbref.child("SerieWatched").setValue(seen);
-                            }
-                            catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }

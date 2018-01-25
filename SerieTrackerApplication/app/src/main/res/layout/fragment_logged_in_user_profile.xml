@@ -28,6 +28,7 @@
         android:id="@+id/DisplayLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:text="Please log in to see your user details"
         android:visibility="gone"/>
 
@@ -58,11 +59,31 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/seriesseen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Series seen"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="4dp"/>
+
         <ListView
             android:id="@+id/serielistview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2" />
+
+        <TextView
+            android:id="@+id/following"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Following"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="4dp"/>
 
         <ListView
             android:id="@+id/userslistview"

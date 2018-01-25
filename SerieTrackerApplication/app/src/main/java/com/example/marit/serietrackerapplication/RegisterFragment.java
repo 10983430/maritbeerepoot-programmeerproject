@@ -65,6 +65,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     }
 
     public void createAccount(String email, String password) {
+        Log.d("lols", password);
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
@@ -78,7 +79,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                     String id = user.getUid();
                     EditText emailinput = getView().findViewById(R.id.emailreg);
                     userInformation(emailinput.getText().toString(), id);
-
+                    LoggedInUserProfileFragment fragment = new LoggedInUserProfileFragment();
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 }
                 else {
                     // If sign in fails, display a message to the user updateUI(null);

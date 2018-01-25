@@ -1,7 +1,9 @@
 package com.example.marit.serietrackerapplication;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -41,6 +43,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +62,7 @@ public class SerieDetailsFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DataSnapshot watched;
     String serieName;
+    Parcelable state;
     private ArrayList seenEpisodes;
 
     @Override
@@ -79,7 +84,7 @@ public class SerieDetailsFragment extends Fragment {
         if (bundle != null) {
             imdbid = bundle.getString("imdbid");
         }
-        synchronized(this) {
+        synchronized (this) {
             findSeenEpisodes();
             // Get the data from the clicked serie
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
@@ -88,6 +93,27 @@ public class SerieDetailsFragment extends Fragment {
 
     }
 
+    /**
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences prefs = getContext().getSharedPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        prefsEditor.putString("lol", serieinfo);
+        prefsEditor.putString("name", value);
+        prefsEditor.apply();
+    }*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        synchronized (this) {
+            findSeenEpisodes();
+            // Get the data from the clicked serie
+            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
+            getData(url, 1, 0);
+        }
+    }
 
     /**
      * Sends an volley request to get the JSON response from the api
@@ -177,10 +203,123 @@ public class SerieDetailsFragment extends Fragment {
                 return true;
             }
         });
+
+        view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                    int childPosition = ExpandableListView.getPackedPositionChild(id);
+                    CheckBox checkBox = view.findViewById(R.id.checkBox);
+                    TextView episodetitleholder = view.findViewById(R.id.EpisodeTitleView);
+                    String episodetitle = episodetitleholder.getText().toString();
+                    for (int x = 0; x < episodeitems.size(); x++) {
+                        if (episodeitems.get(x).getTitle() == episodetitle) {
+                            String imdbidepisode = episodeitems.get(x).getImdbid();
+                            String seasonnumber = episodeitems.get(x).getSeasonnumber().toString();
+                            String episodenumber = episodeitems.get(x).getEpisode().toString();
+                            if (checkBox.isChecked()) {
+                                deleteEpisodeFromFirebase(episodetitle, seasonnumber, episodenumber);
+                                Toast.makeText(getContext(), "Marked as not seen", Toast.LENGTH_SHORT).show();
+                                checkBox.setChecked(false);
+                            } else {
+                                markAsSeen(episodetitle, seasonnumber, episodenumber);
+                                checkBox.setChecked(true);
+                                Toast.makeText(getContext(), "Marked as seen", Toast.LENGTH_SHORT).show();
+
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+        });
     }
 
-    // TO-DO: deze moet private worden
-    public class onChildClickListener {
+    public void deleteEpisodeFromFirebase(final String episodetitle, final String seasonnumber, final String episodenumber) {
+        if (user != null) {
+            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+            String userid = user.getUid();
+            DatabaseReference dbref = fbdb.getReference("User/" + userid + "/SerieWatched/" + imdbid + "/Season " + seasonnumber + "/E-" + episodenumber);
+            dbref.removeValue();
+        }
+    }
+
+    // TO-DO dit moet een helper functie worden want dubbele code
+    public void markAsSeen(final String episodetitle, final String seasonnumber, final String episodenumber) {
+        if (user != null) {
+            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+            String userid = user.getUid();
+            final DatabaseReference dbref = fbdb.getReference("User/" + userid);
+
+            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot value = dataSnapshot.child("SerieWatched");
+                    HashMap<String, HashMap<String, HashMap<String, String>>> seen = (HashMap<String, HashMap<String, HashMap<String, String>>>) value.getValue();
+
+                    // If this is the first episode ever added to firebase, create a new
+                    // new hashmap for all the episodes
+                    if (seen == null) {
+                        seen = new HashMap<>();
+                        HashMap<String, HashMap<String, String>> season = new HashMap<>();
+                        HashMap<String, String> episodeHashmap = new HashMap<>();
+                        episodeHashmap.put("E-" + episodenumber, episodetitle);
+                        season.put("Season " + seasonnumber, episodeHashmap);
+                        seen.put(imdbid, season);
+                    } else {
+                        // Check if there is an episode of the serie that needs to be added
+                        // in the database, by checking if there is a key with the serie title
+                        DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(imdbid);
+                        HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serietitle.getValue();
+
+                        // If not, create a new hashmap for the serie with the episode and season in it
+                        if (seriefb == null) {
+                            HashMap<String, HashMap<String, String>> season = new HashMap<>();
+                            HashMap<String, String> episodeHashmap = new HashMap<>();
+                            episodeHashmap.put("E-" + episodenumber, episodetitle);
+                            season.put("Season " + seasonnumber, episodeHashmap);
+                            seen.put(imdbid, season);
+                        } else {
+                            // If there is a episode from a specific serie in the database,
+                            // check if there is already an episode added from the season
+                            DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(imdbid).child("Season " + seasonnumber);
+                            HashMap<String, String> episodeHashmap = (HashMap<String, String>) seasontje.getValue();
+
+                            // If there isn't, add the season and the episode to the hashmap
+                            // with watched episodes
+                            if (episodeHashmap == null) {
+                                episodeHashmap = new HashMap<>();
+                                episodeHashmap.put("E-" + episodenumber, episodetitle);
+                                seriefb.put("Season " + seasonnumber, episodeHashmap);
+                                seen.put(imdbid, seriefb);
+                            }
+
+                            // If there is, add the episode to the hasmap of the season and
+                            // to the hashmap with watched episodes
+                            else {
+                                episodeHashmap.put("E-" + episodenumber, episodetitle);
+                                seriefb.put("Season " + seasonnumber, episodeHashmap);
+                                seen.put(imdbid, seriefb);
+                            }
+                        }
+                    }
+
+                    // Update the database by inserting the hashmap with watched episodes
+                    try {
+                        dbref.child("SerieWatched").setValue(seen);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
 
     }
 
@@ -218,7 +357,7 @@ public class SerieDetailsFragment extends Fragment {
 
     public void addToEpisodes(Episode episodeinfo) {
         episodeitems.add(episodeinfo);
-        Log.d("Tesstttttt23423", String.valueOf(episodeitems.size()));
+        //Log.d("Tesstttttt23423", String.valueOf(episodeitems.size()));
     }
 
     /**
@@ -235,7 +374,7 @@ public class SerieDetailsFragment extends Fragment {
                     responsedata.getString("Writer"), responsedata.getString("Plot"),
                     responsedata.getString("Language"), responsedata.getString("Country"),
                     responsedata.getString("Awards"), responsedata.getString("Poster"),
-                    responsedata.getDouble("imdbRating"), responsedata.getString("imdbVotes"),
+                    responsedata.getString("imdbRating"), responsedata.getString("imdbVotes"),
                     responsedata.getInt("totalSeasons"));
             totalseasons = responsedata.getInt("totalSeasons");
             serieName = responsedata.getString("Title");
