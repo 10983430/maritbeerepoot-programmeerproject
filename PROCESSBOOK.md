@@ -110,6 +110,19 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 - **Problemen:** Feedback geven of de ingelogde user de episodes van de op geklikte user wel of niet heeft gezien
 
 ### Donderdag 25 januari 2018
+- Expandable listview bug gefixt! Eindelijk!
+- Nu mogelijk om met een long click op een episode in de expandable listview aan te geven of je een episode gezien hebt, en om een episode als niet gezien te markeren.
+- LoggedInUserInfo afgemaakt
+- Mogelijkheid om episodes uit Firebase te verwijderen en om mensen te ontvolgen
+- Bij elke user nu aangegeven of je wel of niet kan praten over de laatste episode die je hebt gezien (in de userdetails, rood betekent dat je verder bent dat de geklikte user en groen betekent dat je net zo ver bent of de geklikte user verder is, waar je dus de episode mee kan bespreken).
+- Elke listview heeft nu een listener en stuurt je door naar het goede fragment
+- Login bug opgelost (soms werd er niet ingelogd)
+- Bij episodedetails wordt aangegeven welke vrienden de episode wel en niet hebben gezien
+- Er wordt aangegeven als er geen zoenresultaten zijn op een opdracht
+- Bezig geweest met zorgen dat bij het 'back pressen' alle informatie weer wordt geladen, zitten nog enkele kleine buggs in.
+- Verder nog aardig wat kleine buggs gefixt om de beta zo compleet mogelijk te maken!
+
+
 
 
 ## Week 4
