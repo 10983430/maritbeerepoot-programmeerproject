@@ -37,21 +37,23 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private String serieid;
     private boolean seen = false;
     private ArrayList<String> seenEpisodes = new ArrayList<>();
+    private ArrayList<String> episodesseen = new ArrayList<>();
+    private View viewtje;
 
-    /*public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieid, ArrayList seenEpisodes) {
+    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieid, ArrayList episodesseen) {
         this.context = context;
         this.listData = listData;
         this.listHashMap = listHashMap;
         this.serieid = serieid;
-        this.seenEpisodes = seenEpisodes;
-    }*/
-
-    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieid) {
-        this.context = context;
-        this.listData = listData;
-        this.listHashMap = listHashMap;
-        this.serieid = serieid;
+        this.episodesseen = episodesseen;
     }
+
+    /*public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieid) {
+        this.context = context;
+        this.listData = listData;
+        this.listHashMap = listHashMap;
+        this.serieid = serieid;
+    }*/
 
     @Override
     public int getGroupCount() {
@@ -93,8 +95,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         // Get the season that should be in this position
         String title = (String) getGroup(groupPosition);
-        //seenEpisodes = new ArrayList<>();
-        //seenEpisodes = findSeenEpisodes(title);
 
         // Inflate view if there is no view yet
         if (convertView == null) {
@@ -113,28 +113,64 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // Get the episode that should be in this position
         String title = (String) getGroup(groupPosition);
-        seenEpisodes = findSeenEpisodes(title);
-        Episode episode = (Episode) getChild(groupPosition, childPosition);
-
         LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.row_layout_expandable_child, null);
+        Episode episode = (Episode) getChild(groupPosition, childPosition);
 
         convertView.setFocusable(false);
         //Set the textview with the title of the episode
         TextView viewtje = convertView.findViewById(R.id.EpisodeTitleView);
         viewtje.setText(episode.getTitle());
-        //Log.d("lolzzz", episode.getTitle()+" "+String.valueOf(childPosition));
-        final CheckBox checkBox = convertView.findViewById(R.id.checkBox);
-        Log.d("test200000000", seenEpisodes.toString());
+        findSeenEpisodes(title, groupPosition, childPosition, convertView);
 
-        if (user != null) {
+        //convertView = helperfunction(groupPosition, childPosition, convertView);
 
-            for (int i = 0; i < seenEpisodes.size(); i++) {
-                Log.d("test2000", seenEpisodes.get(i) + " " + episode.getEpisode());
-                Log.d("test2000", seenEpisodes.toString());
+        return convertView;
+    }
 
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
 
-                if (Integer.parseInt(seenEpisodes.get(i)) == episode.getEpisode()) {
+//    public View helperfunction(int groupPosition, int childPosition, View convertView) {
+//        Episode episode = (Episode) getChild(groupPosition, childPosition);
+//        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        convertView = inflater.inflate(R.layout.row_layout_expandable_child, null);
+//
+//
+//        convertView.setFocusable(false);
+//        //Set the textview with the title of the episode
+//        TextView viewtje = convertView.findViewById(R.id.EpisodeTitleView);
+//        viewtje.setText(episode.getTitle());
+//
+//        CheckBox checkBox = convertView.findViewById(R.id.checkBox);
+//        Log.d("test200000000", seenEpisodes.toString());
+//        //Log.d("test20000000000", episodesseen.toString());
+//        if (user != null) {
+//
+//            for (int i = 0; i < seenEpisodes.size(); i++) {
+//                Log.d("test2000", seenEpisodes.get(i) + " " + episode.getEpisode());
+//                Log.d("test2000", seenEpisodes.toString());
+//
+//
+//                if (Integer.parseInt(seenEpisodes.get(i)) == episode.getEpisode()) {
+//                    Log.d("test20000o", episode.getEpisode().toString());
+//                    checkBox.setChecked(true);
+//                    //notifyDataSetChanged();
+//                }
+//
+//            }
+//        }
+//        return convertView;
+        /*if (user != null) {
+
+            for (int i = 0; i < episodesseen.size(); i++) {
+                Log.d("test2000", episodesseen.toString());
+
+                String[] parts = episodesseen.get(i).split("-");
+                Log.d("test200004444444", parts[3] + " " + episode.getEpisode() + " " + parts[1] + " " + title);
+                if (parts[3] == String.valueOf(episode.getEpisode()) && parts[1] == title) {
                     Log.d("test20000o", episode.getEpisode().toString());
                     checkBox.setChecked(true);
                     notifyDataSetChanged();
@@ -144,16 +180,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
         else {
             checkBox.setChecked(false);
-        }
-        return convertView;
-    }
+        }*/
+//    }
 
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
-
-    public boolean checkIfSeen(final Episode episode, final Integer position) {
+    /*public boolean checkIfSeen(final Episode episode, final Integer position) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         String userid = user.getUid();
         DatabaseReference dbref = fbdb.getReference("User/" + userid);
@@ -189,9 +219,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             }
         });
         return seen;
-    }
+    }*/
 
-    public ArrayList findSeenEpisodes(final String season) {
+    public void findSeenEpisodes(final String season, final int groupPosition, final int childPosition, final View convertView) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         String userid = user.getUid();
         DatabaseReference dbref = fbdb.getReference("User/" + userid);
@@ -209,6 +239,28 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                         String[] parts = key.split("-");
                         seenEpisodes.add(parts[1]);
                     }
+//                    viewtje = helperfunction(groupPosition, childPosition, convertView);
+                    Episode episode = (Episode) getChild(groupPosition, childPosition);
+
+
+                    CheckBox checkBox = convertView.findViewById(R.id.checkBox);
+                    Log.d("test200000000", seenEpisodes.toString());
+                    //Log.d("test20000000000", episodesseen.toString());
+                    if (user != null) {
+
+                        for (int i = 0; i < seenEpisodes.size(); i++) {
+                            Log.d("test2000", seenEpisodes.get(i) + " " + episode.getEpisode());
+                            Log.d("test2000", seenEpisodes.toString());
+
+
+                            if (Integer.parseInt(seenEpisodes.get(i)) == episode.getEpisode()) {
+                                Log.d("test20000o", episode.getEpisode().toString());
+                                checkBox.setChecked(true);
+                                //notifyDataSetChanged();
+                            }
+
+                        }
+                    }
                 }
             }
 
@@ -217,6 +269,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
             }
         });
-        return seenEpisodes;
+
     }
 }

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -109,7 +110,6 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
             }
         });
     }
-
 
 
     // TO-DO deze functie korter maken lol
@@ -225,9 +225,15 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
             for (String imdbid : titles.keySet()) {
                 highestepontitle.put(titles.get(imdbid), highestepisode.get(imdbid));
             }
-                ListAdapter adapter = new LastEpisodeSeenAdapter(highestepontitle);
-                getListView().setAdapter(adapter);
-            }
+            ListAdapter adapter = new LastEpisodeSeenAdapter(highestepontitle);
+            getListView().setAdapter(adapter);
         }
     }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        TextView view = v.findViewById(R.id.Seriename);
+    }
+}
 

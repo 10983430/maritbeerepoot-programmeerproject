@@ -81,10 +81,11 @@ public class SerieDetailsFragment extends Fragment {
         }
         synchronized(this) {
             findSeenEpisodes();
+            // Get the data from the clicked serie
+            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
+            getData(url, 1, 0);
         }
-        // Get the data from the clicked serie
-        String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-        getData(url, 1, 0);
+
     }
 
 
@@ -106,14 +107,10 @@ public class SerieDetailsFragment extends Fragment {
                     public void onResponse(String response) {
                         try {
                             if (type2 == 1) {
-
-                                Log.d("dsfsuewirewpirpwe", "hoiii1111");
                                 parseJSONSerieDetails(response);
                             } else {
                                 count += 1;
-                                Log.d("dsfsuewirewpirpwe", "hoiii");
                                 parseJSONSeasons(response, seasonnumber);
-                                Log.d("dsfsdfsdfsd", String.valueOf(episodeitems.size()));
                                 fixData();
                                 fillTextviews();
 
@@ -144,15 +141,15 @@ public class SerieDetailsFragment extends Fragment {
                 }
                 hashMap.put("Season " + i, listje);
             }
-            Log.d("kkkkkkkkkkkkoooooo", seenEpisodes.toString());
             setAdapter();
         }
 
     }
 
     public void setAdapter() {
-        adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
-        //adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid, seenEpisodes);
+        Log.d("kkkkkkkkkkkkoooooo", seenEpisodes.toString());
+        //adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
+        adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid, seenEpisodes);
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
