@@ -25,14 +25,53 @@
         android:text="Register" />
 
     <TextView
+        android:id="@+id/DisplayLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username: Tester21" />
+        android:text="Please log in to see your user details"
+        android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/UserInformationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Email: test@tester.nl" />
+        android:text="@string/yourinformation"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/usernameLogged"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/useremailLogged"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/serielistview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <ListView
+            android:id="@+id/userslistview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+        </ListView>
+
+    </LinearLayout>
 
 </LinearLayout>

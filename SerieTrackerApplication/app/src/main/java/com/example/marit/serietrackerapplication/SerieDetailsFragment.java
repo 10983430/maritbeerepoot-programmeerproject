@@ -45,7 +45,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SerieDetailsFragment extends Fragment implements View.OnClickListener {
+public class SerieDetailsFragment extends Fragment {
     String imdbid;
     private ArrayList<Episode> episodeitems = new ArrayList<Episode>();
     private ExpandableListAdapter adapter;
@@ -65,10 +65,6 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_serie_details, container, false);
-        Button search = view.findViewById(R.id.episodedetails);
-
-        // Set a listener on the search button to make it operational
-        search.setOnClickListener(this);
         return view;
     }
 
@@ -83,29 +79,12 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         if (bundle != null) {
             imdbid = bundle.getString("imdbid");
         }
-        //findSeenEpisodes();
+        synchronized(this) {
+            findSeenEpisodes();
+        }
         // Get the data from the clicked serie
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
-    }
-/*
-    @Override
-    public void onResume() {
-        //OnSaveState?
-        String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-        getData(url, 1, 0);
-        super.onResume();
-    }*/
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.episodedetails:
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                EpisodeDetailsFragment frag = new EpisodeDetailsFragment();
-                fragmentTransaction.replace(R.id.fragment_container, frag).addToBackStack(null).commit();
-
-        }
     }
 
 
@@ -165,6 +144,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                 }
                 hashMap.put("Season " + i, listje);
             }
+            Log.d("kkkkkkkkkkkkoooooo", seenEpisodes.toString());
             setAdapter();
         }
 
@@ -172,6 +152,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
 
     public void setAdapter() {
         adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
+        //adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid, seenEpisodes);
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -275,11 +256,16 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     public void fillTextviews() {
-        Log.d("xxxxxxxooooo", serieinfo.getAwards());
         TextView nameview = getView().findViewById(R.id.SerieNameInfo);
         nameview.setText(serieinfo.getTitle());
         TextView releaseview = getView().findViewById(R.id.SerieReleaseInfo);
         releaseview.setText(serieinfo.getReleased());
+        TextView plotview = getView().findViewById(R.id.PlotInfo);
+        plotview.setText(serieinfo.getPlot());
+        TextView imdbratingview = getView().findViewById(R.id.imdbratinginfo);
+        imdbratingview.setText(serieinfo.getImdbrating() + " based on " + serieinfo.getImdbvotes() + " votes");
+        TextView awardsview = getView().findViewById(R.id.AwardsInfo);
+        awardsview.setText(serieinfo.getAwards());
     }
 
     public ArrayList findSeenEpisodes() {
@@ -289,16 +275,16 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieName);
+                DataSnapshot value = dataSnapshot.child("SerieWatched").child(imdbid);
                 HashMap<String, HashMap<String, String>> seasons = (HashMap<String, HashMap<String, String>>) value.getValue();
                 if (seasons == null) {
                     seenEpisodes = new ArrayList<>();
                 } else {
-                    Log.d("test2000000", seasons.toString());
+                    //Log.d("test2000000", seasons.toString());
                     seenEpisodes = new ArrayList<>();
                     for (String key : seasons.keySet()) {
                         Log.d("kkkkkkkkkkkk", key.toString());
-                        DataSnapshot value2 = dataSnapshot.child("SerieWatched").child(serieName).child(key);
+                        DataSnapshot value2 = dataSnapshot.child("SerieWatched").child(imdbid).child(key);
                         HashMap<String, String> episodes = (HashMap<String, String>) value2.getValue();
                         for (String keyepisode : episodes.keySet()) {
                             Log.d("kkkkkkkkkkkk", keyepisode.toString());
@@ -310,7 +296,7 @@ public class SerieDetailsFragment extends Fragment implements View.OnClickListen
                     }
                 }
                 Log.d("kkkkkkkkkkkk", seenEpisodes.toString());
-                adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
             }
 
             @Override

@@ -24,4 +24,7 @@
     <string name="serieswatched">Series watched:</string>
     <string name="nonewatched">This user did not watch any series yet</string>
     <string name="follow">Follow</string>
+    <string name="usernameplaceholder">Username: </string>
+    <string name="useremailplaceholder">Email: </string>
+    <string name="yourinformation">Your information</string>
 </resources>

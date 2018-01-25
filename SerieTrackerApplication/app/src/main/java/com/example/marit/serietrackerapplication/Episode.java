@@ -22,6 +22,7 @@ public class Episode {
         this.seasonnumber = seasonnnumber;
     }
 
+    // TO-DO setters maken
     public Episode() {
         
     }

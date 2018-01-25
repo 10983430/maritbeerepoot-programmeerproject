@@ -107,5 +107,9 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 - Wat fragments errors gefixt
 - Als er ingelogd is zijn de inlog en registreeer button niet meer zichtbaar, en als er niet is ingelogt is de uitlog button niet te zien
 - Volg functionaliteit werkt nu helemaal
+- **Problemen:** Feedback geven of de ingelogde user de episodes van de op geklikte user wel of niet heeft gezien
+
+### Donderdag 25 januari 2018
+
 
 ## Week 4

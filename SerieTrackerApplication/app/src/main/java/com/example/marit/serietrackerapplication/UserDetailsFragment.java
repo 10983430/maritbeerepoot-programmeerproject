@@ -61,6 +61,19 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         return view;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        // Get the imdbid from the serie that was clicked on
+        if (bundle != null) {
+            userID = bundle.getString("userid");
+            Log.d("lollollll", userID);
+            getUserData(userID);
+        }
+
+    }
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.FollowButton:
@@ -97,18 +110,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         });
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle bundle = this.getArguments();
-        // Get the imdbid from the serie that was clicked on
-        if (bundle != null) {
-            userID = bundle.getString("userid");
-            Log.d("lollollll", userID);
-            getUserData(userID);
-        }
 
-    }
 
     // TO-DO deze functie korter maken lol
 
@@ -136,6 +138,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                     //ArrayList<String> keyset = (ArrayList<String>) info.keySet();
                     for (String key : info.keySet()) {
                         getSerieData(key);
+                        // TO-DO hier opdelen?
                         DataSnapshot serieinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key);
                         HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieinfodatasnapshot.getValue();
                         ArrayList<Integer> seasons = new ArrayList<>();

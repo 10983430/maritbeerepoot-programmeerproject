@@ -38,11 +38,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private boolean seen = false;
     private ArrayList<String> seenEpisodes = new ArrayList<>();
 
-    /*public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieName, ArrayList seenEpisodes) {
+    /*public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieid, ArrayList seenEpisodes) {
         this.context = context;
         this.listData = listData;
         this.listHashMap = listHashMap;
-        this.serieName = serieName;
+        this.serieid = serieid;
         this.seenEpisodes = seenEpisodes;
     }*/
 
@@ -126,7 +126,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //Log.d("lolzzz", episode.getTitle()+" "+String.valueOf(childPosition));
         final CheckBox checkBox = convertView.findViewById(R.id.checkBox);
         Log.d("test200000000", seenEpisodes.toString());
-        //Log.d("testje32423324", episodes.toString());
+
         if (user != null) {
 
             for (int i = 0; i < seenEpisodes.size(); i++) {
@@ -142,21 +142,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
             }
         }
-        //if (episode.getEpisode() == 5 || episode.getEpisode() == 9) {
-        //hi = checkIfSeen(episode, groupPosition);
-        //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
-        //checkBox.setChecked(hi);
-        //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
-        //Log.d("hiii", String.valueOf(hi) + " " + episode.getEpisode());
-        //checkBox.setChecked(hi);
-            //seen = false;
-        //}
         else {
             checkBox.setChecked(false);
         }
         return convertView;
-
-
     }
 
     @Override
@@ -167,7 +156,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean checkIfSeen(final Episode episode, final Integer position) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         String userid = user.getUid();
-        DatabaseReference dbref = fbdb.getReference("User/"+userid);
+        DatabaseReference dbref = fbdb.getReference("User/" + userid);
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -175,8 +164,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 HashMap<String, String> episodes = (HashMap<String, String>) value.getValue();
                 if (episodes == null) {
                     seen = false;
-                }
-                else {
+                } else {
                     for (String key : episodes.keySet()) {
                         String[] parts = key.split("-");
                         //Log.d("hiiiii", parts[1] + episode.getEpisode().toString());
@@ -206,7 +194,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public ArrayList findSeenEpisodes(final String season) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         String userid = user.getUid();
-        DatabaseReference dbref = fbdb.getReference("User/"+userid);
+        DatabaseReference dbref = fbdb.getReference("User/" + userid);
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -214,8 +202,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 HashMap<String, String> episodes = (HashMap<String, String>) value.getValue();
                 if (episodes == null) {
                     seenEpisodes = new ArrayList<>();
-                }
-                else {
+                } else {
                     //Log.d("test2000000", episodes.toString());
                     seenEpisodes = new ArrayList<>();
                     for (String key : episodes.keySet()) {

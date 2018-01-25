@@ -11,35 +11,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/episodedetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Go to episode details"
-            />
-
-        <TextView
-            android:id="@+id/SerieName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:text="@string/name"/>
-
         <TextView
             android:id="@+id/SerieNameInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="17sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/SerieRelease"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="17sp"
+            android:textSize="13sp"
             android:textStyle="bold"
             android:text="@string/relaeased"/>
 
@@ -48,7 +32,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="17sp" />
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/Plot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:text="Plot:"/>
+
+        <TextView
+            android:id="@+id/PlotInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/imdbrating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:text="imdb Rating:"/>
+
+        <TextView
+            android:id="@+id/imdbratinginfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/Awards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:text="Awards:"/>
+
+        <TextView
+            android:id="@+id/AwardsInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
 
 
         <ExpandableListView
