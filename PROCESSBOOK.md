@@ -122,7 +122,10 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 - Bezig geweest met zorgen dat bij het 'back pressen' alle informatie weer wordt geladen, zitten nog enkele kleine buggs in.
 - Verder nog aardig wat kleine buggs gefixt om de beta zo compleet mogelijk te maken!
 
-
+### Vrijdag 26 januari 2018
+- Bezig geweest met layout verbeteren
+- Enkele bugs gefixt
+- Alle bugs tot nu toe geinventariseerd, zodat deze gefixt kunnen worden komende week
 
 
 ## Week 4

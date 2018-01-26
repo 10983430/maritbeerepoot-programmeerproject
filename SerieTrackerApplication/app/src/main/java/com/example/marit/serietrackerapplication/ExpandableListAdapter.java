@@ -99,7 +99,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         // Inflate view if there is no view yet
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.row_layout_users, null);
+            convertView = inflater.inflate(R.layout.row_layout_expandable_parent, null);
         }
 
         convertView.setFocusable(false);

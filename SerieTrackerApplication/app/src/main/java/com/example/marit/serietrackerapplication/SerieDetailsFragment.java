@@ -89,30 +89,49 @@ public class SerieDetailsFragment extends Fragment {
             // Get the data from the clicked serie
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
             getData(url, 1, 0);
+
         }
 
     }
 
     /**
-    @Override
-    public void onPause() {
-        super.onPause();
-        SharedPreferences prefs = getContext().getSharedPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = prefs.edit();
-        prefsEditor.putString("lol", serieinfo);
-        prefsEditor.putString("name", value);
-        prefsEditor.apply();
-    }*/
+     * @Override public void onPause() {
+     * super.onPause();
+     * SharedPreferences prefs = getContext().getSharedPreferences(MODE_PRIVATE);
+     * SharedPreferences.Editor prefsEditor = prefs.edit();
+     * prefsEditor.putString("lol", serieinfo);
+     * prefsEditor.putString("name", value);
+     * prefsEditor.apply();
+     * }
+     */
+
 
     @Override
     public void onResume() {
         super.onResume();
-        synchronized (this) {
-            findSeenEpisodes();
-            // Get the data from the clicked serie
-            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-            getData(url, 1, 0);
-        }
+        SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
+        String title = prefs.getString("title", "Default");
+        String plot = prefs.getString("plot", "Default");
+        //String s = prefs.getString("name", "defaultValue");
+        Log.d("Test", title);
+        TextView view1 = getView().findViewById(R.id.SerieNameInfo);
+        TextView view2 = getView().findViewById(R.id.PlotInfo);
+        view1.setText(title);
+        view2.setText(plot);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        //prefsEditor.putInt("name", value);
+        TextView view1 = getView().findViewById(R.id.SerieNameInfo);
+        TextView view2 = getView().findViewById(R.id.PlotInfo);
+        prefsEditor.putString("title", view1.getText().toString());
+        prefsEditor.putString("plot", view2.getText().toString());
+        prefsEditor.apply();
     }
 
     /**

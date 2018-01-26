@@ -15,17 +15,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/FollowersInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/FirebaseButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="I've seen this" />
-
             <ImageView
                 android:id="@+id/EpisodePoster"
                 android:layout_width="match_parent"
@@ -33,24 +22,56 @@
                 android:contentDescription="@string/imgagedescription" />
 
             <TextView
-                android:id="@+id/EpisodeName"
-                android:layout_width="match_parent"
+                android:id="@+id/FollowersInfo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:text="@string/name"/>
+                android:layout_gravity="center"
+                android:paddingLeft="10dp"
+                android:textColor="@color/black"/>
 
-            <TextView
-                android:id="@+id/EpisodeNameInfo"
-                android:layout_width="match_parent"
+
+            <Button
+                android:id="@+id/FirebaseButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:text="I've seen this"
+                android:layout_gravity="center"/>
 
-            <TextView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:id="@+id/EpisodeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/EpisodeNameInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:paddingLeft="10dp"/>
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+        <TextView
                 android:id="@+id/EpisodeSeason"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -59,14 +80,23 @@
 
             <TextView
                 android:id="@+id/EpisodeSeasonInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/EpisodeNumber"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -75,30 +105,50 @@
 
             <TextView
                 android:id="@+id/EpisodeNumberInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/EpisodeRelease"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:textStyle="bold"
                 android:text="@string/relaeased"/>
 
+
             <TextView
                 android:id="@+id/EpisodeReleaseInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/EpisodeRating"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -107,14 +157,23 @@
 
             <TextView
                 android:id="@+id/EpisodeRatingInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/EpisodeGenre"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -123,14 +182,23 @@
 
             <TextView
                 android:id="@+id/EpisodeGenreInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/EpisodeDirector"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -139,14 +207,23 @@
 
             <TextView
                 android:id="@+id/EpisodeDirectorInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/EpisodeWriter"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -155,14 +232,23 @@
 
             <TextView
                 android:id="@+id/EpisodeWriterInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/EpisodePlot"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -171,14 +257,23 @@
 
             <TextView
                 android:id="@+id/EpisodePlotInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/EpisodeLanguage"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -187,10 +282,12 @@
 
             <TextView
                 android:id="@+id/EpisodeLanguageInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

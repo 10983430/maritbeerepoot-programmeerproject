@@ -9,52 +9,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/Email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/email" />
-
         <EditText
             android:id="@+id/emailreg"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
-
-        <TextView
-            android:id="@+id/usernametext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/username" />
+            android:inputType="textEmailAddress"
+            android:layout_gravity="center"/>
 
         <EditText
             android:id="@+id/usernamereg"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/username"
-            android:inputType="textPersonName" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/password" />
+            android:inputType="textPersonName"
+            android:layout_gravity="center"/>
 
         <EditText
             android:id="@+id/passwordreg"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:layout_gravity="center"/>
 
         <Button
             android:id="@+id/butRegister"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/register" />
     </LinearLayout>
 </FrameLayout>
