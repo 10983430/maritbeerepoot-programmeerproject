@@ -10,7 +10,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/emailreg"
+            android:id="@+id/RegistrationEmailField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -19,7 +19,7 @@
             android:layout_gravity="center"/>
 
         <EditText
-            android:id="@+id/usernamereg"
+            android:id="@+id/RegistrationUsernameField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -28,7 +28,7 @@
             android:layout_gravity="center"/>
 
         <EditText
-            android:id="@+id/passwordreg"
+            android:id="@+id/RegistrationPasswordField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -37,7 +37,7 @@
             android:layout_gravity="center"/>
 
         <Button
-            android:id="@+id/butRegister"
+            android:id="@+id/RegisterButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

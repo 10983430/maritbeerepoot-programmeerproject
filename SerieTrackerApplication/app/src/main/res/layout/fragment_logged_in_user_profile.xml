@@ -6,7 +6,6 @@
     android:background="@color/white"
     tools:context="com.example.marit.serietrackerapplication.LoggedInUserProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="wrap_content"

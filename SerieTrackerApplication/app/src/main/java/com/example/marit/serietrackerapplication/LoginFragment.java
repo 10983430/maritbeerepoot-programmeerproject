@@ -52,7 +52,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     public void SignIn(String email, String password) {
         // mAuth is final, because it needs to be accessed from the inner class
-        // and won't be changed
+        // and won't be changed after this
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
