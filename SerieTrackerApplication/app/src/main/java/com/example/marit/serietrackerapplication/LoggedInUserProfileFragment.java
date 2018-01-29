@@ -1,5 +1,7 @@
 package com.example.marit.serietrackerapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -42,6 +44,8 @@ import java.util.HashMap;
 public class LoggedInUserProfileFragment extends Fragment implements View.OnClickListener {
     HashMap<String, String> titles = new HashMap<>();
     HashMap<String, String> userdata = new HashMap<>();
+    ArrayList<String> usernames;
+    ArrayList<String> serienames;
     public View view;
 
     @Override
@@ -67,6 +71,19 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
         if (user != null) {
             getUserData(user.getUid());
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences prefs = getContext().getSharedPreferences("LoggedInUserInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        //prefsEditor.putStringSet("usernames", usernames);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     /**
@@ -236,7 +253,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
 
     public void makeListView() {
         ListView serielistview = view.findViewById(R.id.serielistview);
-        ArrayList<String> serienames = new ArrayList<>();
+        serienames = new ArrayList<>();
         for (String key : titles.keySet()) {
             serienames.add(titles.get(key));
         }
@@ -269,7 +286,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
 
     public void makeUsersListview() {
         ListView userslistview = view.findViewById(R.id.userslistview);
-        ArrayList<String> usernames = new ArrayList<>();
+        usernames = new ArrayList<>();
         for (String key : userdata.keySet()) {
             usernames.add(userdata.get(key));
         }

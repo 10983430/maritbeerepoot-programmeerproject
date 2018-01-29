@@ -1,6 +1,8 @@
 package com.example.marit.serietrackerapplication;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -31,15 +33,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.GONE;
 
 
@@ -68,6 +75,9 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         follow.setOnClickListener(this);
         unfollow.setOnClickListener(this);
         updateUI(view);
+
+        ;
+
         return view;
     }
 
@@ -78,10 +88,127 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         // Get the imdbid from the serie that was clicked on
         if (bundle != null) {
             userID = bundle.getString("userid");
-            Log.d("lollollll", userID);
+            Log.d("kkkkkkkkkkkkkkkkkkkkkkkk", userID);
+            getUserData(userID);
+        }
+
+        if (savedInstanceState != null) {
+            Log.d("kkkkkkkkkkkkkkkkkkkkkkkkkk", "o");
+            userID = savedInstanceState.getString("id");
+            Log.d("kkkkkkkkkkkkkkkkkkkkkkkkkk", "id" + "   save");
             getUserData(userID);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("userid", userID);
+    }
+
+    /**@Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
+        SharedPreferences.Editor prefseditor = prefs.edit();
+        prefseditor.putString("id", userID);
+        prefseditor.commit();
+    }*/
+
+    /*@Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
+        String id = prefs.getString("id", "Default");
+        if (id.equals("Default")) {
+
+        } else {
+            getUserData(id);
+        }
+    }*/
+
+
+
+
+    /**@Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String id = savedInstanceState.getString("userid");
+        getUserData(id);
+    }*/
+
+/**@Override public void onPause() {
+    super.onPause();
+    SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
+    SharedPreferences.Editor prefseditor = prefs.edit();
+
+    // Hashmap can't directly be saved in sharedprefs, so convert it to a JSON string
+    String stringTitles = hashMapToString(titles);
+    String stringHighestEp = hashMapToString(highestepisode);
+    String stringHighestEpLogin = hashMapToString(highestepisodeloggedin);
+
+    // Save all info in shared prefs
+    prefseditor.putString("titles", stringTitles);
+    prefseditor.putString("highestepisode", stringHighestEp);
+    prefseditor.putString("highestepisodelogin", stringHighestEpLogin);
+    prefseditor.putString("username", username);
+    prefseditor.commit();
+
+    }*/
+
+    /**@Override public void onBackPressed() {
+    if (getFragmentManager().getBackStackEntryCount() > 0) {
+    getFragmentManager().popBackStack();
+    } else {
+    super.onBackPressed();
+    }
+    }*/
+
+
+    /**
+     * Converts an HashMap to a String, by using Gson
+     */
+    public String hashMapToString(HashMap hashMap) {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.enableComplexMapKeySerialization().setPrettyPrinting().create();
+        Type type = new TypeToken<HashMap<String, String>>() {
+        }.getType();
+        String json = gson.toJson(hashMap, type);
+        return json;
+    }
+
+    /*@Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
+
+        username = prefs.getString("username", "Default");
+        TextView view1 = getView().findViewById(R.id.UsernameInfo);
+        view1.setText(username);
+
+        String stringTitles = prefs.getString("titles", "Default");
+        String stringHighestEp = prefs.getString("titles", "Default");
+        String stringHighestEpLogin = prefs.getString("titles", "Default");
+        Log.d("ssssssssssssssss", stringTitles + stringHighestEp + stringHighestEpLogin);
+
+        if (stringTitles.equals("Default") || stringHighestEp.equals("Default") ||
+                stringHighestEpLogin.equals("Default")) {
+            Log.d("ssssssssssssssss", "innnnnnn");
+
+        } else {
+            titles = new Gson().fromJson(stringTitles, new TypeToken<HashMap<String, String>>(){}.getType());
+            highestepisode = new Gson().fromJson(stringHighestEp, new TypeToken<HashMap<String, String>>(){}.getType());
+            highestepisodeloggedin = new Gson().fromJson(stringHighestEpLogin, new TypeToken<HashMap<String, String>>(){}.getType());
+            Log.d("ssssssssssssssss", titles.toString() + " " + highestepisode.toString() + " " + highestepisodeloggedin.toString());
+            makeListView();
+        }
+    }*/
+
 
     public void onClick(View view) {
         switch (view.getId()) {
@@ -208,8 +335,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                         (HashMap<String, HashMap<String, HashMap<String, String>>>) dataSnapshot.child("SerieWatched").getValue();
                 if (info == null) {
                     highestepisodeloggedin = new HashMap<>();
-                }
-                else {
+                } else {
                     for (String key : info.keySet()) {
                         //getSerieData(key, 2);
                         // TO-DO hier opdelen?
@@ -266,8 +392,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                                 Log.d("lollol", titles.toString());
 
                                 makeListView();
-                            }
-                            else {
+                            } else {
                                 parseJSON(reaction.toString(), key);
                             }
 
@@ -370,9 +495,10 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         }
     }
 
-    public void openFragment (View v) {
+    public void openFragment(View v) {
         Log.d("Hoiiiii", "lollzz");
     }
+
 
 }
 

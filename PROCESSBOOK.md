@@ -131,7 +131,22 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 ## Week 4
 
 ### Maandag 29 januari 2018
-- Uit de feedback van vrijdag bleek dat het niet helemaal duidelijk is wat de kleuren aangeven in het user details fragment. Daarom is er een dialogfragment toegevoegd die dat uitleggen. Ik zie dit niet echt als een toevoeging van functionaliteit, het is alleen een toevoeging die het iets duidelijker maakt als een user vergeet wat de kleuren betekenen.
+- Uit de feedback van vrijdag bleek dat het niet helemaal duidelijk is wat de kleuren aangeven in het user details fragment. Daarom is er een dialogfragment toegevoegd die dat uitleggen. Ik zie dit niet echt als een toevoeging van functionaliteit, het is alleen een toevoeging die het iets duidelijker maakt als een user vergeet wat de kleuren betekenen. Zie hieronder.  
+![](doc/dialogfragment.png)
+- Checkbox error in de child van de explandble listview opgelost
+- Interactie design verbeterd
+- Geprobeerd om de navigatie tussen fragments te fixen, maar dat is niet helemaal gelukt..
+- Code opgeschoond in de volgende files (status: 3/18 java files gedaan):
+1. LoginFragment
+2. ColorInformationDialogFragment
+3. RegisterFragment
+
+### Dinsdag 30 januari 2018:
+- Code opgeschoond in de volgende files (status: 3/18 java files gedaan):
+
+### Woensdag 31 januari 2018:
+
+### Donderdag 1 februari 2018:
 
 
 

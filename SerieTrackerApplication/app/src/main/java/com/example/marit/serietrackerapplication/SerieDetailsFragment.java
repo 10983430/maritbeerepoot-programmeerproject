@@ -81,11 +81,12 @@ public class SerieDetailsFragment extends Fragment {
         seenEpisodes = new ArrayList();
         Bundle bundle = this.getArguments();
         // Get the imdbid from the serie that was clicked on
+        Log.d("sdsfsddsf", bundle.toString());
         if (bundle != null) {
+
             imdbid = bundle.getString("imdbid");
         }
         synchronized (this) {
-            findSeenEpisodes();
             // Get the data from the clicked serie
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
             getData(url, 1, 0);
@@ -93,18 +94,6 @@ public class SerieDetailsFragment extends Fragment {
         }
 
     }
-
-    /**
-     * @Override public void onPause() {
-     * super.onPause();
-     * SharedPreferences prefs = getContext().getSharedPreferences(MODE_PRIVATE);
-     * SharedPreferences.Editor prefsEditor = prefs.edit();
-     * prefsEditor.putString("lol", serieinfo);
-     * prefsEditor.putString("name", value);
-     * prefsEditor.apply();
-     * }
-     */
-
 
     @Override
     public void onResume() {
@@ -126,11 +115,11 @@ public class SerieDetailsFragment extends Fragment {
         super.onPause();
         SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = prefs.edit();
-        //prefsEditor.putInt("name", value);
         TextView view1 = getView().findViewById(R.id.SerieNameInfo);
         TextView view2 = getView().findViewById(R.id.PlotInfo);
         prefsEditor.putString("title", view1.getText().toString());
         prefsEditor.putString("plot", view2.getText().toString());
+        //prefsEditor.put
         prefsEditor.apply();
     }
 
@@ -413,53 +402,18 @@ public class SerieDetailsFragment extends Fragment {
     public void fillTextviews() {
         TextView nameview = getView().findViewById(R.id.SerieNameInfo);
         nameview.setText(serieinfo.getTitle());
+
         TextView releaseview = getView().findViewById(R.id.SerieReleaseInfo);
         releaseview.setText(serieinfo.getReleased());
+
         TextView plotview = getView().findViewById(R.id.PlotInfo);
         plotview.setText(serieinfo.getPlot());
+
         TextView imdbratingview = getView().findViewById(R.id.imdbratinginfo);
         imdbratingview.setText(serieinfo.getImdbrating() + " based on " + serieinfo.getImdbvotes() + " votes");
+
         TextView awardsview = getView().findViewById(R.id.AwardsInfo);
         awardsview.setText(serieinfo.getAwards());
-    }
-
-    public ArrayList findSeenEpisodes() {
-        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-        String userid = user.getUid();
-        DatabaseReference dbref = fbdb.getReference("User/" + userid);
-        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot value = dataSnapshot.child("SerieWatched").child(imdbid);
-                HashMap<String, HashMap<String, String>> seasons = (HashMap<String, HashMap<String, String>>) value.getValue();
-                if (seasons == null) {
-                    seenEpisodes = new ArrayList<>();
-                } else {
-                    //Log.d("test2000000", seasons.toString());
-                    seenEpisodes = new ArrayList<>();
-                    for (String key : seasons.keySet()) {
-                        Log.d("kkkkkkkkkkkk", key.toString());
-                        DataSnapshot value2 = dataSnapshot.child("SerieWatched").child(imdbid).child(key);
-                        HashMap<String, String> episodes = (HashMap<String, String>) value2.getValue();
-                        for (String keyepisode : episodes.keySet()) {
-                            Log.d("kkkkkkkkkkkk", keyepisode.toString());
-                            String[] parts = keyepisode.split("-");
-                            seenEpisodes.add("S-" + key + "-E-" + parts[1]);
-                        }
-                        // Hier loopen door de lagere hashmap
-
-                    }
-                }
-                Log.d("kkkkkkkkkkkk", seenEpisodes.toString());
-                //adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return seenEpisodes;
     }
 
 }

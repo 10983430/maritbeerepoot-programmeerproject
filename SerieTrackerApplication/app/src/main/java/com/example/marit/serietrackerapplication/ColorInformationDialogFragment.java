@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 /**
- * Created by Marit on 29-1-2018.
+ * This class inflates a dialogfragment that contains information about what the different colours
+ * in the UserDetailsFragment mean
  */
 
 public class ColorInformationDialogFragment extends DialogFragment implements View.OnClickListener {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate layout and put a listener on the close button
         View rootView = inflater.inflate(R.layout.dialog_fragment, container, false);
         Button closeDialog = rootView.findViewById(R.id.CloseDialog);
         closeDialog.setOnClickListener(this);
@@ -25,6 +28,7 @@ public class ColorInformationDialogFragment extends DialogFragment implements Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.CloseDialog:
+                // Close dialogfragment when the button is pressed
                 Fragment prev = getFragmentManager().findFragmentByTag("Explanation colors");
                 if (prev != null) {
                     DialogFragment df = (DialogFragment) prev;
