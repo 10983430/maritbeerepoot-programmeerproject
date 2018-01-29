@@ -129,3 +129,11 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 
 
 ## Week 4
+
+### Maandag 29 januari 2018
+- Uit de feedback van vrijdag bleek dat het niet helemaal duidelijk is wat de kleuren aangeven in het user details fragment. Daarom is er een dialogfragment toegevoegd die dat uitleggen. Ik zie dit niet echt als een toevoeging van functionaliteit, het is alleen een toevoeging die het iets duidelijker maakt als een user vergeet wat de kleuren betekenen.
+
+
+
+
+

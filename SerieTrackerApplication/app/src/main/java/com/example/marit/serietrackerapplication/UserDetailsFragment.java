@@ -3,7 +3,9 @@ package com.example.marit.serietrackerapplication;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,6 +63,8 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         View view = inflater.inflate(R.layout.fragment_user_details, container, false);
         Button follow = view.findViewById(R.id.FollowButton);
         Button unfollow = view.findViewById(R.id.UnfollowButton);
+        ImageButton imageButton = view.findViewById(R.id.imageView2);
+        imageButton.setOnClickListener(this);
         follow.setOnClickListener(this);
         unfollow.setOnClickListener(this);
         updateUI(view);
@@ -95,6 +100,11 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                 Log.d("lolllzzzo", "test4");
                 //updateUI(view);
                 break;
+            case R.id.imageView2:
+                Log.d("hoiiii", "lollzz");
+                FragmentManager fm = getFragmentManager();
+                ColorInformationDialogFragment dialogFragment = new ColorInformationDialogFragment();
+                dialogFragment.show(fm, "Explanation colors");
         }
     }
 
@@ -359,6 +369,13 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
             });
         }
     }
+
+    public void openFragment (View v) {
+        Log.d("Hoiiiii", "lollzz");
+    }
+
 }
+
+
 
 
