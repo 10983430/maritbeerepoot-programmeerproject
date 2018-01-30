@@ -13,7 +13,7 @@ android:background="@color/white">
     android:layout_weight="1">
 
     <TextView
-        android:id="@+id/nameView"
+        android:id="@+id/NameSerieView"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_marginBottom="8dp"
@@ -26,14 +26,6 @@ android:background="@color/white">
         app:layout_constraintTop_toTopOf="parent"
         android:focusable="false"/>
 
-    <TextView
-        android:id="@+id/hidden"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:visibility="gone"
-        android:focusable="false"/>
-
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
@@ -42,7 +34,7 @@ android:background="@color/white">
         app:layout_constraintGuide_begin="61dp" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ImageSerieView"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginEnd="8dp"

@@ -100,10 +100,10 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         }
     }
 
-    @Override
+    /*@Override
     public void onResume() {
         super.onResume();
-    }
+    }*/
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -111,16 +111,16 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         outState.putString("userid", userID);
     }
 
-    /**@Override
+    @Override
     public void onPause() {
         super.onPause();
         SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
         SharedPreferences.Editor prefseditor = prefs.edit();
         prefseditor.putString("id", userID);
         prefseditor.commit();
-    }*/
+    }
 
-    /*@Override
+    @Override
     public void onResume() {
         super.onResume();
         SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
@@ -130,10 +130,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         } else {
             getUserData(id);
         }
-    }*/
-
-
-
+    }
 
     /**@Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -142,24 +139,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         getUserData(id);
     }*/
 
-/**@Override public void onPause() {
-    super.onPause();
-    SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
-    SharedPreferences.Editor prefseditor = prefs.edit();
 
-    // Hashmap can't directly be saved in sharedprefs, so convert it to a JSON string
-    String stringTitles = hashMapToString(titles);
-    String stringHighestEp = hashMapToString(highestepisode);
-    String stringHighestEpLogin = hashMapToString(highestepisodeloggedin);
-
-    // Save all info in shared prefs
-    prefseditor.putString("titles", stringTitles);
-    prefseditor.putString("highestepisode", stringHighestEp);
-    prefseditor.putString("highestepisodelogin", stringHighestEpLogin);
-    prefseditor.putString("username", username);
-    prefseditor.commit();
-
-    }*/
 
     /**@Override public void onBackPressed() {
     if (getFragmentManager().getBackStackEntryCount() > 0) {
@@ -182,7 +162,27 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         return json;
     }
 
-    /*@Override
+    /*
+    @Override public void onPause() {
+    super.onPause();
+    SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
+    SharedPreferences.Editor prefseditor = prefs.edit();
+
+    // Hashmap can't directly be saved in sharedprefs, so convert it to a JSON string
+    String stringTitles = hashMapToString(titles);
+    String stringHighestEp = hashMapToString(highestepisode);
+    String stringHighestEpLogin = hashMapToString(highestepisodeloggedin);
+
+    // Save all info in shared prefs
+    prefseditor.putString("titles", stringTitles);
+    prefseditor.putString("highestepisode", stringHighestEp);
+    prefseditor.putString("highestepisodelogin", stringHighestEpLogin);
+    prefseditor.putString("username", username);
+    prefseditor.commit();
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
@@ -207,28 +207,24 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
             Log.d("ssssssssssssssss", titles.toString() + " " + highestepisode.toString() + " " + highestepisodeloggedin.toString());
             makeListView();
         }
-    }*/
+    }
+    */
 
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.FollowButton:
                 putUserInDatabase();
-                // TO-DO bug fixen dat hij niet spaced bij het updaten
+                // TODO bug fixen dat hij niet spaced bij het updaten
                 //updateUI(view);
                 break;
             case R.id.UnfollowButton:
-                Log.d("lolllzzzo", "test2");
                 FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
                 String userid = user.getUid();
                 DatabaseReference dbref = fbdb.getReference("User/" + userid + "/UsersFollowed/" + userID);
-                Log.d("lolllzzzo", "test3");
                 dbref.removeValue();
-                Log.d("lolllzzzo", "test4");
-                //updateUI(view);
                 break;
             case R.id.imageView2:
-                Log.d("hoiiii", "lollzz");
                 FragmentManager fm = getFragmentManager();
                 ColorInformationDialogFragment dialogFragment = new ColorInformationDialogFragment();
                 dialogFragment.show(fm, "Explanation colors");

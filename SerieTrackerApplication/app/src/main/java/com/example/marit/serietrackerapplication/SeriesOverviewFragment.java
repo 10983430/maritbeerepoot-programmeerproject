@@ -4,6 +4,7 @@ package com.example.marit.serietrackerapplication;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,15 +140,15 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
     private class ClickDetails implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-            //TO-DO dit kan echt niet
-            TextView hidden = view.findViewById(R.id.hidden);
-            String imdbid = hidden.getText().toString();
+            // Get the ID of the clicked item
+            SearchResult clickedItem = (SearchResult) adapterView.getAdapter().getItem(position);
+            String imdbid = clickedItem.getImdbID();
 
+            // Put the ID in the bundle and get the next fragment
             SerieDetailsFragment fragment = new SerieDetailsFragment();
             Bundle args = new Bundle();
             args.putString("imdbid", imdbid);
             fragment.setArguments(args);
-
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
         }
     }

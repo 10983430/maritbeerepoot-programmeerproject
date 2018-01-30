@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
- * Created by Marit on 11-1-2018.
+ * Creates a custom list adapter that shows the name of a show and the image of the show
  */
 
 public class SeriesOverviewAdapter extends ArrayAdapter<SearchResult> {
@@ -22,18 +24,19 @@ public class SeriesOverviewAdapter extends ArrayAdapter<SearchResult> {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+        // Inflate the layout and get the data that belongs to the row
         SearchResult result = getItem(position);
-
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, viewGroup, false);
         }
 
-        TextView titleView = view.findViewById(R.id.nameView);
-        TextView hideen = view.findViewById(R.id.hidden);
-        hideen.setText(result.getImdbID());
+        // Set textview
+        TextView titleView = view.findViewById(R.id.NameSerieView);
         titleView.setText(result.getTitle());
+
+        // Set the imageview
         String url = result.getUrl();
-        final ImageView imageview = view.findViewById(R.id.imageView);
+        final ImageView imageview = view.findViewById(R.id.ImageSerieView);
         Picasso.with(getContext()).load(url).into(imageview);
 
         return view;

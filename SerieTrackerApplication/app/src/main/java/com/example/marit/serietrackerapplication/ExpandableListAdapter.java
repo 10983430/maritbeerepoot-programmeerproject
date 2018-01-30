@@ -25,35 +25,23 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Marit on 16-1-2018.
+ * Creates a custom expandable listview adapter that makes it possible to show the seasons as a
+ * parent and the episodes as a child
  */
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> listData;
     private HashMap<String, List<Episode>> listHashMap;
-    private DataSnapshot dataSnapshot;
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private String serieid;
-    private boolean seen = false;
+    private String serieId;
     private ArrayList<String> seenEpisodes = new ArrayList<>();
-    private ArrayList<String> episodesseen = new ArrayList<>();
-    private View viewtje;
 
-    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieid, ArrayList episodesseen) {
+    public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieId) {
         this.context = context;
         this.listData = listData;
         this.listHashMap = listHashMap;
-        this.serieid = serieid;
-        this.episodesseen = episodesseen;
+        this.serieId = serieId;
     }
-
-    /*public ExpandableListAdapter(Context context, List<String> listData, HashMap<String, List<Episode>> listHashMap, String serieid) {
-        this.context = context;
-        this.listData = listData;
-        this.listHashMap = listHashMap;
-        this.serieid = serieid;
-    }*/
 
     @Override
     public int getGroupCount() {
@@ -101,8 +89,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.row_layout_expandable_parent, null);
         }
-
         convertView.setFocusable(false);
+
         // Set the textview with the name of the season
         TextView viewtje = convertView.findViewById(R.id.usernameHolder);
         viewtje.setText(title);
@@ -111,19 +99,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        // Get the episode that should be in this position
-        String title = (String) getGroup(groupPosition);
+        // Inflate the layout
         LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.row_layout_expandable_child, null);
+        convertView.setFocusable(false);
+
+        // Get the episode that should be in this position
         Episode episode = (Episode) getChild(groupPosition, childPosition);
 
-        convertView.setFocusable(false);
         //Set the textview with the title of the episode
         TextView viewtje = convertView.findViewById(R.id.EpisodeTitleView);
         viewtje.setText(episode.getTitle());
-        findSeenEpisodes(title, groupPosition, childPosition, convertView);
 
-        //convertView = helperfunction(groupPosition, childPosition, convertView);
+        // Find the episodes that are already seen and check the checkboxes of those
+        String title = (String) getGroup(groupPosition);
+        findSeenEpisodes(title, groupPosition, childPosition, convertView);
 
         return convertView;
     }
@@ -133,132 +123,49 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-//    public View helperfunction(int groupPosition, int childPosition, View convertView) {
-//        Episode episode = (Episode) getChild(groupPosition, childPosition);
-//        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        convertView = inflater.inflate(R.layout.row_layout_expandable_child, null);
-//
-//
-//        convertView.setFocusable(false);
-//        //Set the textview with the title of the episode
-//        TextView viewtje = convertView.findViewById(R.id.EpisodeTitleView);
-//        viewtje.setText(episode.getTitle());
-//
-//        CheckBox checkBox = convertView.findViewById(R.id.checkBox);
-//        Log.d("test200000000", seenEpisodes.toString());
-//        //Log.d("test20000000000", episodesseen.toString());
-//        if (user != null) {
-//
-//            for (int i = 0; i < seenEpisodes.size(); i++) {
-//                Log.d("test2000", seenEpisodes.get(i) + " " + episode.getEpisode());
-//                Log.d("test2000", seenEpisodes.toString());
-//
-//
-//                if (Integer.parseInt(seenEpisodes.get(i)) == episode.getEpisode()) {
-//                    Log.d("test20000o", episode.getEpisode().toString());
-//                    checkBox.setChecked(true);
-//                    //notifyDataSetChanged();
-//                }
-//
-//            }
-//        }
-//        return convertView;
-        /*if (user != null) {
-
-            for (int i = 0; i < episodesseen.size(); i++) {
-                Log.d("test2000", episodesseen.toString());
-
-                String[] parts = episodesseen.get(i).split("-");
-                Log.d("test200004444444", parts[3] + " " + episode.getEpisode() + " " + parts[1] + " " + title);
-                if (parts[3] == String.valueOf(episode.getEpisode()) && parts[1] == title) {
-                    Log.d("test20000o", episode.getEpisode().toString());
-                    checkBox.setChecked(true);
-                    notifyDataSetChanged();
-                }
-
-            }
-        }
-        else {
-            checkBox.setChecked(false);
-        }*/
-//    }
-
-    /*public boolean checkIfSeen(final Episode episode, final Integer position) {
-        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-        String userid = user.getUid();
-        DatabaseReference dbref = fbdb.getReference("User/" + userid);
-        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieid).child(listData.get(position));
-                HashMap<String, String> episodes = (HashMap<String, String>) value.getValue();
-                if (episodes == null) {
-                    seen = false;
-                } else {
-                    for (String key : episodes.keySet()) {
-                        String[] parts = key.split("-");
-                        //Log.d("hiiiii", parts[1] + episode.getEpisode().toString());
-                        Log.d("hiiiiiiiiiiiiiiii", episode.getEpisode().toString());
-                        if (Integer.parseInt(parts[1]) == episode.getEpisode()) {
-                            Log.d("hiiiii", "YES");
-                            Log.d("hiiiii", parts[1] + episode.getEpisode().toString());
-                            seen = true;
-                            Log.d("hiiiii", String.valueOf(seen));
-                            Log.d("lolzzz", String.valueOf(seen) + " " + episode.getEpisode());
-                        } else {
-                            seen = false;
-                            Log.d("hiiiii", "NOPE");
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return seen;
-    }*/
-
+    /**
+     * Gets the information from the serie from the database and when an episode in in Firebase,
+     * it checked the episode, because that means the episode is seen
+     * TODO is dit duidelijk
+     * All the variables are final, because they can't be changed during the process of setting
+     * the checkboxes checked
+     */
     public void findSeenEpisodes(final String season, final int groupPosition, final int childPosition, final View convertView) {
-        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userid = user.getUid();
+
+        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         DatabaseReference dbref = fbdb.getReference("User/" + userid);
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieid).child(season);
+                // Gets the information of the serie and the specific season that
+                // is expanded in the listview
+                DataSnapshot value = dataSnapshot.child("SerieWatched").child(serieId).child(season);
                 HashMap<String, String> episodes = (HashMap<String, String>) value.getValue();
+
                 if (episodes == null) {
+                    // If there are no episodes in Firebase it means that the user didn't watch
+                    // an episode from the serie yet, so create an empty list
                     seenEpisodes = new ArrayList<>();
                 } else {
-                    //Log.d("test2000000", episodes.toString());
+                    // If there are entries for a specific season and serie in Firebase, get the
+                    // episode, parse the string with regex and add it to the seenEpisodes list
                     seenEpisodes = new ArrayList<>();
                     for (String key : episodes.keySet()) {
                         String[] parts = key.split("-");
                         seenEpisodes.add(parts[1]);
                     }
-//                    viewtje = helperfunction(groupPosition, childPosition, convertView);
+                    // After the list for a season is made, check the boxes of
+                    // the episodes that are in the list
                     Episode episode = (Episode) getChild(groupPosition, childPosition);
-
-
                     CheckBox checkBox = convertView.findViewById(R.id.checkBox);
-                    Log.d("test200000000", seenEpisodes.toString());
-                    //Log.d("test20000000000", episodesseen.toString());
                     if (user != null) {
-
                         for (int i = 0; i < seenEpisodes.size(); i++) {
-                            Log.d("test2000", seenEpisodes.get(i) + " " + episode.getEpisode());
-                            Log.d("test2000", seenEpisodes.toString());
-
-
                             if (Integer.parseInt(seenEpisodes.get(i)) == episode.getEpisode()) {
-                                Log.d("test20000o", episode.getEpisode().toString());
                                 checkBox.setChecked(true);
-                                //notifyDataSetChanged();
                             }
-
                         }
                     }
                 }
@@ -271,4 +178,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         });
 
     }
+
+
 }

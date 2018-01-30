@@ -182,8 +182,8 @@ public class SerieDetailsFragment extends Fragment {
 
     public void setAdapter() {
         Log.d("kkkkkkkkkkkkoooooo", seenEpisodes.toString());
-        //adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
-        adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid, seenEpisodes);
+        adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
+        //adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid, seenEpisodes);
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
