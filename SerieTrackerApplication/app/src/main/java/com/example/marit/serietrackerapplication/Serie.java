@@ -19,7 +19,7 @@ public class Serie {
     private String poster;
     private String imdbrating;
     private String imdbvotes;
-    private Integer totalSeasons;
+    private String totalSeasons;
 
     /**public Serie(String title, String year, String released, String runtime, String genre, String director, String writer, String plot, String language, String country, String awards, String poster, String imdbrating, String imdbvotes, Integer totalSeasons) {
         this.title = title;
@@ -99,7 +99,7 @@ public class Serie {
         return imdbvotes;
     }
 
-    public Integer getTotalSeasons() {
+    public String getTotalSeasons() {
         return totalSeasons;
     }
 
@@ -159,7 +159,7 @@ public class Serie {
         this.imdbvotes = imdbvotes;
     }
 
-    public void setTotalSeasons(Integer totalSeasons) {
+    public void setTotalSeasons(String totalSeasons) {
         this.totalSeasons = totalSeasons;
     }
 }

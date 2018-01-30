@@ -101,24 +101,13 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         }
     }
 
-    /*@Override
-    public void onResume() {
-        super.onResume();
-    }*/
-
-    /**@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("userid", userID);
-    }*/
-
     @Override
     public void onPause() {
         super.onPause();
         SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
         SharedPreferences.Editor prefseditor = prefs.edit();
         prefseditor.putString("id", userID);
-        prefseditor.commit();
+        prefseditor.apply();
     }
 
     @Override
@@ -133,24 +122,6 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         }
     }
 
-    /**@Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        String id = savedInstanceState.getString("userid");
-        getUserData(id);
-    }*/
-
-
-
-    /**@Override public void onBackPressed() {
-    if (getFragmentManager().getBackStackEntryCount() > 0) {
-    getFragmentManager().popBackStack();
-    } else {
-    super.onBackPressed();
-    }
-    }*/
-
-
     /**
      * Converts an HashMap to a String, by using Gson
      */
@@ -162,55 +133,6 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         String json = gson.toJson(hashMap, type);
         return json;
     }
-
-    /*
-    @Override public void onPause() {
-    super.onPause();
-    SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
-    SharedPreferences.Editor prefseditor = prefs.edit();
-
-    // Hashmap can't directly be saved in sharedprefs, so convert it to a JSON string
-    String stringTitles = hashMapToString(titles);
-    String stringHighestEp = hashMapToString(highestepisode);
-    String stringHighestEpLogin = hashMapToString(highestepisodeloggedin);
-
-    // Save all info in shared prefs
-    prefseditor.putString("titles", stringTitles);
-    prefseditor.putString("highestepisode", stringHighestEp);
-    prefseditor.putString("highestepisodelogin", stringHighestEpLogin);
-    prefseditor.putString("username", username);
-    prefseditor.commit();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
-
-        username = prefs.getString("username", "Default");
-        TextView view1 = getView().findViewById(R.id.UsernameInfo);
-        view1.setText(username);
-
-        String stringTitles = prefs.getString("titles", "Default");
-        String stringHighestEp = prefs.getString("titles", "Default");
-        String stringHighestEpLogin = prefs.getString("titles", "Default");
-        Log.d("ssssssssssssssss", stringTitles + stringHighestEp + stringHighestEpLogin);
-
-        if (stringTitles.equals("Default") || stringHighestEp.equals("Default") ||
-                stringHighestEpLogin.equals("Default")) {
-            Log.d("ssssssssssssssss", "innnnnnn");
-
-        } else {
-            titles = new Gson().fromJson(stringTitles, new TypeToken<HashMap<String, String>>(){}.getType());
-            highestepisode = new Gson().fromJson(stringHighestEp, new TypeToken<HashMap<String, String>>(){}.getType());
-            highestepisodeloggedin = new Gson().fromJson(stringHighestEpLogin, new TypeToken<HashMap<String, String>>(){}.getType());
-            Log.d("ssssssssssssssss", titles.toString() + " " + highestepisode.toString() + " " + highestepisodeloggedin.toString());
-            makeListView();
-        }
-    }
-    */
-
 
     public void onClick(View view) {
         switch (view.getId()) {
@@ -281,10 +203,15 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                 HashMap<String, HashMap<String, HashMap<String, String>>> info =
                         (HashMap<String, HashMap<String, HashMap<String, String>>>) dataSnapshot.child("SerieWatched").getValue();
                 if (info == null) {
-                    TextView nonewatched = getView().findViewById(R.id.Nonewatched);
+                    TextView nonewatched = getView().findViewById(R.id.NoneWatched);
                     nonewatched.setVisibility(View.VISIBLE);
+                    TextView serieswatched = getView().findViewById(R.id.WatchedSeries);
+                    serieswatched.setVisibility(View.GONE);
                 } else {
-                    getLoggedInUserData(user.getUid());
+                    // zorg dat UI klopt als niemand ingelogd
+                    if (user != null) {
+                        getLoggedInUserData(user.getUid());
+                    }
                     Log.d("lollol", "hiii");
                     Log.d("lollol", info.keySet().toString());
                     //ArrayList<String> keyset = (ArrayList<String>) info.keySet();
@@ -489,6 +416,9 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
 
                 }
             });
+        } else {
+            Button follow = view.findViewById(R.id.FollowButton);
+            follow.setVisibility(GONE);
         }
     }
 

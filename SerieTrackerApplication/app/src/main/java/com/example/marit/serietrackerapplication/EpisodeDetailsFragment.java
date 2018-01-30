@@ -46,6 +46,10 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_episode_details, container, false);
         Button search = view.findViewById(R.id.FirebaseButton);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            search.setVisibility(View.GONE);
+        }
         // Set a listener on the search button to make it operational
         search.setOnClickListener(this);
         return view;

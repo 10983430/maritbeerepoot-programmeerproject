@@ -6,52 +6,84 @@
     android:background="@color/white"
     tools:context="com.example.marit.serietrackerapplication.LoggedInUserProfileFragment">
 
-    <Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log out" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp">
 
-    <Button
-        android:id="@+id/buttonRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register" />
+            <TextView
+                android:id="@+id/UserInformationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/yourinformation"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/usernameLogged"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/useremailLogged"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="2.5"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Log out" />
+
+
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/DisplayLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="Please log in to see your user details"
-        android:visibility="gone"/>
+        android:text="Please log in or register to see your user details"
+        android:visibility="gone"
+        android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/UserInformationView"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/yourinformation"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:text="Register"
+        android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/usernameLogged"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black" />
+        android:text="Login"
+        android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/useremailLogged"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black" />
+
 
 
     <LinearLayout
@@ -67,7 +99,8 @@
             android:text="Series seen"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:paddingTop="4dp"/>
+            android:paddingTop="4dp"
+            android:layout_marginLeft="10dp"/>
 
         <ListView
             android:id="@+id/serielistview"
@@ -83,7 +116,8 @@
             android:text="Following"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:paddingTop="4dp"/>
+            android:paddingTop="4dp"
+            android:layout_marginLeft="10dp"/>
 
         <ListView
             android:id="@+id/userslistview"
@@ -94,5 +128,9 @@
         </ListView>
 
     </LinearLayout>
+
+
+
+
 
 </LinearLayout>

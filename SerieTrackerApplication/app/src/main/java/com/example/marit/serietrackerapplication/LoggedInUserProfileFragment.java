@@ -76,14 +76,19 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     @Override
     public void onPause() {
         super.onPause();
-        SharedPreferences prefs = getContext().getSharedPreferences("LoggedInUserInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = prefs.edit();
-        //prefsEditor.putStringSet("usernames", usernames);
+        //SharedPreferences prefs = getContext().getSharedPreferences("LoggedInUserInfo", Context.MODE_PRIVATE);
+        //SharedPreferences.Editor prefsEditor = prefs.edit();
+        //prefsEditor.putString("usernames", usernames);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            getUserData(user.getUid());
+        }
+        updateUI(getView());
     }
 
     /**
@@ -174,8 +179,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                     for (String key : series.keySet()) {
                         getSerieData(key);
                     }
-                }
-                else {
+                } else {
                     TextView seriesseen = view.findViewById(R.id.seriesseen);
                     seriesseen.setText(seriesseen.getText() + "(None yet)");
                 }
@@ -186,8 +190,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                     }
                     Log.d("ooooooo", "test2");
 
-                }
-                else {
+                } else {
                     TextView following = view.findViewById(R.id.following);
                     following.setText(following.getText() + "(None yet)");
                 }
@@ -204,9 +207,9 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
 
     public void setTextviews(String username, String email) {
         TextView usernameLogged = view.findViewById(R.id.usernameLogged);
-        usernameLogged.setText(getString(R.string.usernameplaceholder) + username);
+        usernameLogged.setText(getString(R.string.usernameplaceholder) + " " + username);
         TextView useremailLogged = view.findViewById(R.id.useremailLogged);
-        useremailLogged.setText(getString(R.string.useremailplaceholder) + email + " (Only you can see your email!)");
+        useremailLogged.setText(getString(R.string.useremailplaceholder) + " " + email + " (Only you can see your email!)");
     }
 
     public void getSerieData(final String key) {
@@ -299,11 +302,11 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     private class ClickDetailsSeries implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-            TextView hidden = view.findViewById(R.id.usernameHolder);
+            TextView hidden = view.findViewById(R.id.UserNameHolder);
             String serietitle = hidden.getText().toString();
             String imdbid = new String();
             for (String key : titles.keySet()) {
-                if (titles.get(key) == serietitle) {
+                if (titles.get(key).equals(serietitle)) {
                     imdbid = key;
                 }
             }
@@ -318,11 +321,12 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     private class ClickDetailsUsers implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-            TextView hidden = view.findViewById(R.id.usernameHolder);
+            // TODO position ophalen
+            TextView hidden = view.findViewById(R.id.UserNameHolder);
             String username = hidden.getText().toString();
             String userid = new String();
             for (String key : userdata.keySet()) {
-                if (userdata.get(key) == username) {
+                if (userdata.get(key).equals(username)) {
                     userid = key;
                 }
             }

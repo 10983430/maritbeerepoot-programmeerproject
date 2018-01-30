@@ -165,7 +165,7 @@ public class SerieDetailsFragment extends Fragment {
 
     private void fixData() {
         if (count == totalseasons) {
-            for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
+            for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
                 ArrayList<Episode> listje = new ArrayList<>();
                 for (int x = 0; x < episodeitems.size(); x++) {
                     if (episodeitems.get(x).getSeasonnumber() == i) {
@@ -221,23 +221,28 @@ public class SerieDetailsFragment extends Fragment {
                     CheckBox checkBox = view.findViewById(R.id.checkBox);
                     TextView episodetitleholder = view.findViewById(R.id.EpisodeTitleView);
                     String episodetitle = episodetitleholder.getText().toString();
-                    for (int x = 0; x < episodeitems.size(); x++) {
-                        if (episodeitems.get(x).getTitle() == episodetitle) {
-                            String imdbidepisode = episodeitems.get(x).getImdbid();
-                            String seasonnumber = episodeitems.get(x).getSeasonnumber().toString();
-                            String episodenumber = episodeitems.get(x).getEpisode().toString();
-                            if (checkBox.isChecked()) {
-                                deleteEpisodeFromFirebase(episodetitle, seasonnumber, episodenumber);
-                                Toast.makeText(getContext(), "Marked as not seen", Toast.LENGTH_SHORT).show();
-                                checkBox.setChecked(false);
-                            } else {
-                                markAsSeen(episodetitle, seasonnumber, episodenumber);
-                                checkBox.setChecked(true);
-                                Toast.makeText(getContext(), "Marked as seen", Toast.LENGTH_SHORT).show();
+                    if (user != null) {
+                        for (int x = 0; x < episodeitems.size(); x++) {
+                            if (episodeitems.get(x).getTitle() == episodetitle) {
+                                String imdbidepisode = episodeitems.get(x).getImdbid();
+                                String seasonnumber = episodeitems.get(x).getSeasonnumber().toString();
+                                String episodenumber = episodeitems.get(x).getEpisode().toString();
+                                if (checkBox.isChecked()) {
+                                    deleteEpisodeFromFirebase(episodetitle, seasonnumber, episodenumber);
+                                    Toast.makeText(getContext(), "Marked as not seen", Toast.LENGTH_SHORT).show();
+                                    checkBox.setChecked(false);
+                                } else {
+                                    markAsSeen(episodetitle, seasonnumber, episodenumber);
+                                    checkBox.setChecked(true);
+                                    Toast.makeText(getContext(), "Marked as seen", Toast.LENGTH_SHORT).show();
 
-                                return true;
+                                    return true;
+                                }
                             }
                         }
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Please log in to mark episodes as seen", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return false;
@@ -375,24 +380,19 @@ public class SerieDetailsFragment extends Fragment {
         try {
             JSONObject responsedata = new JSONObject(response);
             serieinfo = setSettersSerieClass(responsedata);
-            /**serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
-                    responsedata.getString("Released"), responsedata.getString("Runtime"),
-                    responsedata.getString("Genre"), responsedata.getString("Director"),
-                    responsedata.getString("Writer"), responsedata.getString("Plot"),
-                    responsedata.getString("Language"), responsedata.getString("Country"),
-                    responsedata.getString("Awards"), responsedata.getString("Poster"),
-                    responsedata.getString("imdbRating"), responsedata.getString("imdbVotes"),
-                    responsedata.getInt("totalSeasons"));*/
-            totalseasons = responsedata.getInt("totalSeasons");
             serieName = responsedata.getString("Title");
-            //seenEpisodes = findSeenEpisodes();
-            for (int i = 1; i <= serieinfo.getTotalSeasons(); i++) {
-                String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
-                Log.d("dsfsuewirewpirpwe", "hoiii222");
-                getData(url, 2, i);
-                SeasonList.add("Season " + String.valueOf(i));
+            if (!responsedata.getString("totalSeasons").equals("N/A")) {
+                totalseasons = Integer.parseInt(responsedata.getString("totalSeasons"));
+                for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
+                    String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
+                    Log.d("dsfsuewirewpirpwe", "hoiii222");
+                    getData(url, 2, i);
+                    SeasonList.add("Season " + String.valueOf(i));
+                }
             }
-            ;
+            else {
+                fillTextviews();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -415,9 +415,8 @@ public class SerieDetailsFragment extends Fragment {
             serieinfo.setPoster(responsedata.getString("Poster"));
             serieinfo.setImdbrating(responsedata.getString("imdbRating"));
             serieinfo.setImdbvotes(responsedata.getString("imdbVotes"));
-            serieinfo.setTotalSeasons(responsedata.getInt("totalSeasons"));
-        }
-        catch (JSONException e) {
+            serieinfo.setTotalSeasons(responsedata.getString("totalSeasons"));
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return serieinfo;

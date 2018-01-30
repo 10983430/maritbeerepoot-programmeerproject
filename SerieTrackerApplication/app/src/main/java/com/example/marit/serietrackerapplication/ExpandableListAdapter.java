@@ -113,7 +113,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         // Find the episodes that are already seen and check the checkboxes of those
         String title = (String) getGroup(groupPosition);
-        findSeenEpisodes(title, groupPosition, childPosition, convertView);
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            findSeenEpisodes(title, groupPosition, childPosition, convertView);
+        }
+        else {
+            CheckBox checkBox = convertView.findViewById(R.id.checkBox);
+            checkBox.setVisibility(View.GONE);
+        }
 
         return convertView;
     }
