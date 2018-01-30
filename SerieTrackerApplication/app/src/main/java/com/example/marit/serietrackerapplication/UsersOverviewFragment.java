@@ -54,7 +54,7 @@ public class UsersOverviewFragment extends ListFragment { //implements View.OnCl
         FragmentManager fragmentManager = getFragmentManager();
         UserDetailsFragment fragment = new UserDetailsFragment();
         // Get the userId by checking which username has which ID
-        TextView usernameHolder = v.findViewById(R.id.usernameHolder);
+        TextView usernameHolder = v.findViewById(R.id.UserNameHolder);
         String username = usernameHolder.getText().toString();
         Bundle args = new Bundle();
         args.putString("userid", getUserId(username));

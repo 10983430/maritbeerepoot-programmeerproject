@@ -11,14 +11,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Creates a custom listview adapter for an array with the usernames in it
+ * Creates a custom adapter for listview with the usernames in it
  */
 
 public class UsersOverviewAdapter extends ArrayAdapter<String> {
-
     private Context context;
     private ArrayList<String> user;
 
+    //TODO style deze
     public UsersOverviewAdapter(Context context, ArrayList<String> listofusers) {
         super(context, 0, listofusers);
         this.context = context;
@@ -27,10 +27,12 @@ public class UsersOverviewAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View view, ViewGroup group) {
-        //Inflate the layout and set the views with information from the array
+        // Inflate the layout and set the views with information from the array
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.row_layout_users, null);
-        TextView username = view.findViewById(R.id.usernameHolder);
+
+        // Set the textview
+        TextView username = view.findViewById(R.id.UserNameHolder);
         username.setText(user.get(position));
 
         return view;

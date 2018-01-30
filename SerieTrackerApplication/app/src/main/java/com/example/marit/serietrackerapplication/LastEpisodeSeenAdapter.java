@@ -58,7 +58,6 @@ public class LastEpisodeSeenAdapter extends BaseAdapter {
         highestep.setText(item.getValue());
 
         for (String key : highestepisodeloggedin.keySet()) {
-            //Log.d("lolllzzzorrlol", key + " " + item.getKey());
             if (key == item.getKey()) {
                 String[] partsuser = item.getValue().split("S");
                 if (highestepisodeloggedin.get(key) != null) {

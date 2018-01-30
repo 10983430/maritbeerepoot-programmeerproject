@@ -113,8 +113,7 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
             for (int i = 0; i < results.length(); i++) {
                 items.add(new SearchResult(results.getJSONObject(i).getString("Title"),
                                             results.getJSONObject(i).getString("Poster"),
-                                            results.getJSONObject(i).getString("imdbID"),
-                                            results.getJSONObject(i).getString("Year")));
+                                            results.getJSONObject(i).getString("imdbID")));
             }
         }
         catch (JSONException e) {

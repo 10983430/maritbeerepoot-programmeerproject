@@ -75,9 +75,6 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         follow.setOnClickListener(this);
         unfollow.setOnClickListener(this);
         updateUI(view);
-
-        ;
-
         return view;
     }
 
@@ -89,6 +86,10 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         if (bundle != null) {
             userID = bundle.getString("userid");
             Log.d("kkkkkkkkkkkkkkkkkkkkkkkk", userID);
+            SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
+            SharedPreferences.Editor prefseditor = prefs.edit();
+            prefseditor.putString("id", userID);
+            prefseditor.commit();
             getUserData(userID);
         }
 
@@ -105,11 +106,11 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         super.onResume();
     }*/
 
-    @Override
+    /**@Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("userid", userID);
-    }
+    }*/
 
     @Override
     public void onPause() {

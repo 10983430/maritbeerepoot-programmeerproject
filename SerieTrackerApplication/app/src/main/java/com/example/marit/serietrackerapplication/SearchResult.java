@@ -1,20 +1,18 @@
 package com.example.marit.serietrackerapplication;
 
 /**
- * Created by Marit on 11-1-2018.
+ * Stores the basic information about a searchresult
  */
 
 public class SearchResult {
     private String title;
     private String url;
     private String imdbID;
-    private String year;
 
-    public SearchResult (String title, String url, String imdbID, String year) {
+    public SearchResult(String title, String url, String imdbID) {
         this.title = title;
         this.url = url;
         this.imdbID = imdbID;
-        this.year = year;
     }
 
     public String getTitle() {
@@ -27,10 +25,6 @@ public class SearchResult {
 
     public String getImdbID() {
         return imdbID;
-    }
-
-    public String getYear() {
-        return year;
     }
 }
 

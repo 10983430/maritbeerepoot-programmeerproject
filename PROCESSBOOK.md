@@ -142,7 +142,11 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 3. RegisterFragment
 
 ### Dinsdag 30 januari 2018:
-- Code opgeschoond in de volgende files (status: 3/18 java files gedaan):
+- Code opgeschoond in de volgende files (status: 6/18 java files gedaan):
+4. ExpandableListAdapter
+5. SeriesOverviewAdapter
+6. UsersOverviewAdapter
+7. SearchResult
 
 - Code Review gedaan met Jessy, de volgende punten kwamen eruit:
 1. Switch met één case
