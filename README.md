@@ -59,7 +59,7 @@ Beide slaan account gebonden op welke afleveringen gekeken zijn. Dit kan ik ook 
 Deze app maakt het mogelijk om ook te zien waar vrienden zijn bij het kijken van een serie. Ik heb geen bestaande app kunnen vinden die dit ook doet.
 
 ## Hardest part:
-Het moeilijkste wordt om het mogelijk te maken om mensen elkaar te laten volgen. Daarnaast wordt het ook lastig om te zorgen dat een seizoen in een keer kan worden gemarkeerd als gezien.
+Het moeilijkste wordt om het mogelijk te maken om mensen elkaar te laten volgen. 
 
 ## Better code hub:
 [![BCH compliance](https://bettercodehub.com/edge/badge/10983430/maritbeerepoot-programmeerproject?branch=master)](https://bettercodehub.com/)
