@@ -144,6 +144,18 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 ### Dinsdag 30 januari 2018:
 - Code opgeschoond in de volgende files (status: 3/18 java files gedaan):
 
+- Code Review gedaan met Jessy, de volgende punten kwamen eruit:
+1. Switch met één case
+-Nesting voorkomen waar mogelijk
+
+2. Enters tussen code als je aan een nieuw onderdeel begint
+
+3. Lege functie
+
+4. Lange class omvormen naar JSONObject
+5. Comments nog niet compleet
+6. Dubbele en lange code
+
 ### Woensdag 31 januari 2018:
 
 ### Donderdag 1 februari 2018:

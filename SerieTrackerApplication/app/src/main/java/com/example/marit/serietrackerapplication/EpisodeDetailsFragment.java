@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,25 +25,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Displays the details about an episode in de UI
  */
 public class EpisodeDetailsFragment extends Fragment implements View.OnClickListener {
     private String imdbid;
     private String imdbidserie;
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private FirebaseDatabase fbdb;
-    private DatabaseReference dbref;
     private String episode;
     private String seasonnumber;
     private String episodetitle;
@@ -55,7 +46,6 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_episode_details, container, false);
         Button search = view.findViewById(R.id.FirebaseButton);
-
         // Set a listener on the search button to make it operational
         search.setOnClickListener(this);
         return view;
@@ -64,19 +54,20 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle bundle = this.getArguments();
-        // Get the imdbid from the serie that was clicked on
-        if (bundle != null) {
-            imdbidserie = bundle.getString("imdbidserie");
-            imdbid = bundle.getString("imdbid");
+        // Get the imdbid from the serie that was clicked on from the bundle
+        Bundle imdbidbundle = this.getArguments();
+        if (imdbidbundle != null) {
+            imdbidserie = imdbidbundle.getString("imdbidserie");
+            imdbid = imdbidbundle.getString("imdbid");
         }
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-        getData(url);
+        getEpisodeData(url);
     }
 
-
-    public void getData(String url) {
+    /**
+     * Gets the episode data from the api
+     */
+    public void getEpisodeData(String url) {
         // Create new queue
         RequestQueue RQ = Volley.newRequestQueue(getContext());
         // Create new stringrequest (Volley)
@@ -88,7 +79,6 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                             // Parse JSON to a object and make set adapter
                             parseEpisodeJSON(response.toString());
                             getFollowInfo();
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -102,6 +92,9 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         RQ.add(stringRequest);
     }
 
+    /**
+     * Parses the JSON and puts the information into the textviews
+     */
     public void parseEpisodeJSON(String response) {
         try {
             JSONObject data = new JSONObject(response);
@@ -143,8 +136,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
             // Hide the imageview if there is no image available
             if (data.getString("Poster").equals("N/A")) {
                 imageview.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 Picasso.with(getContext()).load(data.getString("Poster")).into(imageview);
             }
         } catch (JSONException e) {
@@ -152,11 +144,15 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         }
     }
 
+    /**
+     * Gets information about if a user that is followed has already seen this episode from Firebase
+     */
     public void getFollowInfo() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            fbdb = FirebaseDatabase.getInstance();
             final String userid = user.getUid();
-            dbref = fbdb.getReference("User/");
+            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+            DatabaseReference dbref = fbdb.getReference("User/");
             dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -192,81 +188,85 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.FirebaseButton:
-                Log.d("proooooo", "hooooo");
-                if (user != null) {
-                    fbdb = FirebaseDatabase.getInstance();
-                    String userid = user.getUid();
-                    dbref = fbdb.getReference("User/" + userid);
-
-                    dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            DataSnapshot value = dataSnapshot.child("SerieWatched");
-                            HashMap<String, HashMap<String, HashMap<String, String>>> seen = (HashMap<String, HashMap<String, HashMap<String, String>>>) value.getValue();
-
-                            // If this is the first episode ever added to firebase, create a new
-                            // new hashmap for all the episodes
-                            if (seen == null) {
-                                seen = new HashMap<>();
-                                HashMap<String, HashMap<String, String>> season = new HashMap<>();
-                                HashMap<String, String> episodeHashmap = new HashMap<>();
-                                episodeHashmap.put("E-" + episode, episodetitle);
-                                season.put("Season " + seasonnumber, episodeHashmap);
-                                seen.put(imdbidserie, season);
-                            } else {
-                                // Check if there is an episode of the serie that needs to be added
-                                // in the database, by checking if there is a key with the serie title
-                                DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(imdbidserie);
-                                HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serietitle.getValue();
-
-                                // If not, create a new hashmap for the serie with the episode and season in it
-                                if (seriefb == null) {
-                                    HashMap<String, HashMap<String, String>> season = new HashMap<>();
-                                    HashMap<String, String> episodeHashmap = new HashMap<>();
-                                    episodeHashmap.put("E-" + episode, episodetitle);
-                                    season.put("Season " + seasonnumber, episodeHashmap);
-                                    seen.put(imdbidserie, season);
-                                } else {
-                                    // If there is a episode from a specific serie in the database,
-                                    // check if there is already an episode added from the season
-                                    DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(imdbidserie).child("Season " + seasonnumber);
-                                    HashMap<String, String> episodeHashmap = (HashMap<String, String>) seasontje.getValue();
-
-                                    // If there isn't, add the season and the episode to the hashmap
-                                    // with watched episodes
-                                    if (episodeHashmap == null) {
-                                        episodeHashmap = new HashMap<>();
-                                        episodeHashmap.put("E-" + episode, episodetitle);
-                                        seriefb.put("Season " + seasonnumber, episodeHashmap);
-                                        seen.put(imdbidserie, seriefb);
-                                    }
-
-                                    // If there is, add the episode to the hasmap of the season and
-                                    // to the hashmap with watched episodes
-                                    else {
-                                        episodeHashmap.put("E-" + episode, episodetitle);
-                                        seriefb.put("Season " + seasonnumber, episodeHashmap);
-                                        seen.put(imdbidserie, seriefb);
-                                    }
-                                }
-                            }
-
-                            // Update the database by inserting the hashmap with watched episodes
-                            try {
-                                dbref.child("SerieWatched").setValue(seen);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-
+                markAsSeen();
         }
     }
 
+    /**
+     * Saves the episode in Firebase, to mark it as seen
+     */
+    public void markAsSeen() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+            String userid = user.getUid();
+            // dbref needs to be final because it needs to be accessed from the inner class
+            // TODO of niet? Even checken
+            final DatabaseReference dbref = fbdb.getReference("User/" + userid);
+            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot value = dataSnapshot.child("SerieWatched");
+                    HashMap<String, HashMap<String, HashMap<String, String>>> seen = (HashMap<String, HashMap<String, HashMap<String, String>>>) value.getValue();
+
+                    // If this is the first episode ever added to firebase, create a new
+                    // new hashmap for all the episodes
+                    if (seen == null) {
+                        seen = new HashMap<>();
+                        HashMap<String, HashMap<String, String>> season = new HashMap<>();
+                        HashMap<String, String> episodeHashmap = new HashMap<>();
+                        episodeHashmap.put("E-" + episode, episodetitle);
+                        season.put("Season " + seasonnumber, episodeHashmap);
+                        seen.put(imdbidserie, season);
+                    } else {
+                        // Check if there is an episode of the serie that needs to be added
+                        // in the database, by checking if there is a key with the serie title
+                        DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(imdbidserie);
+                        HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serietitle.getValue();
+
+                        // If not, create a new hashmap for the serie with the episode and season in it
+                        if (seriefb == null) {
+                            HashMap<String, HashMap<String, String>> season = new HashMap<>();
+                            HashMap<String, String> episodeHashmap = new HashMap<>();
+                            episodeHashmap.put("E-" + episode, episodetitle);
+                            season.put("Season " + seasonnumber, episodeHashmap);
+                            seen.put(imdbidserie, season);
+                        } else {
+                            // If there is a episode from a specific serie in the database,
+                            // check if there is already an episode added from the season
+                            DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(imdbidserie).child("Season " + seasonnumber);
+                            HashMap<String, String> episodeHashmap = (HashMap<String, String>) seasontje.getValue();
+
+                            // If there isn't, add the season and the episode to the hashmap
+                            // with watched episodes
+                            if (episodeHashmap == null) {
+                                episodeHashmap = new HashMap<>();
+                                episodeHashmap.put("E-" + episode, episodetitle);
+                                seriefb.put("Season " + seasonnumber, episodeHashmap);
+                                seen.put(imdbidserie, seriefb);
+                            }
+                            // If there is, add the episode to the hasmap of the season and
+                            // to the hashmap with watched episodes
+                            else {
+                                episodeHashmap.put("E-" + episode, episodetitle);
+                                seriefb.put("Season " + seasonnumber, episodeHashmap);
+                                seen.put(imdbidserie, seriefb);
+                            }
+                        }
+                    }
+                    // Update the database by inserting the hashmap with watched episodes
+                    try {
+                        dbref.child("SerieWatched").setValue(seen);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
 }

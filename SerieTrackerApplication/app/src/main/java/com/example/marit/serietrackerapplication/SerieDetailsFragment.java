@@ -356,11 +356,9 @@ public class SerieDetailsFragment extends Fragment {
                 Episode episodeinfo = new Episode(title, released, episode, imdbrating, imdbid, seasonnumber);
                 addToEpisodes(episodeinfo);
             }
-            Log.d("yyyyyxxxxx", String.valueOf(episodeitems.size()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("yyyyyxxxxx", String.valueOf(episodeitems.toString()));
     }
 
     public void addToEpisodes(Episode episodeinfo) {
@@ -376,14 +374,15 @@ public class SerieDetailsFragment extends Fragment {
     public void parseJSONSerieDetails(String response) {
         try {
             JSONObject responsedata = new JSONObject(response);
-            serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
+            serieinfo = setSettersSerieClass(responsedata);
+            /**serieinfo = new Serie(responsedata.getString("Title"), responsedata.getString("Year"),
                     responsedata.getString("Released"), responsedata.getString("Runtime"),
                     responsedata.getString("Genre"), responsedata.getString("Director"),
                     responsedata.getString("Writer"), responsedata.getString("Plot"),
                     responsedata.getString("Language"), responsedata.getString("Country"),
                     responsedata.getString("Awards"), responsedata.getString("Poster"),
                     responsedata.getString("imdbRating"), responsedata.getString("imdbVotes"),
-                    responsedata.getInt("totalSeasons"));
+                    responsedata.getInt("totalSeasons"));*/
             totalseasons = responsedata.getInt("totalSeasons");
             serieName = responsedata.getString("Title");
             //seenEpisodes = findSeenEpisodes();
@@ -397,6 +396,31 @@ public class SerieDetailsFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public Serie setSettersSerieClass(JSONObject responsedata) {
+        Serie serieinfo = new Serie();
+        try {
+            serieinfo.setTitle(responsedata.getString("Title"));
+            serieinfo.setYear(responsedata.getString("Year"));
+            serieinfo.setReleased(responsedata.getString("Released"));
+            serieinfo.setRuntime(responsedata.getString("Runtime"));
+            serieinfo.setGenre(responsedata.getString("Genre"));
+            serieinfo.setDirector(responsedata.getString("Director"));
+            serieinfo.setWriter(responsedata.getString("Writer"));
+            serieinfo.setPlot(responsedata.getString("Plot"));
+            serieinfo.setLanguage(responsedata.getString("Language"));
+            serieinfo.setCountry(responsedata.getString("Country"));
+            serieinfo.setAwards(responsedata.getString("Awards"));
+            serieinfo.setPoster(responsedata.getString("Poster"));
+            serieinfo.setImdbrating(responsedata.getString("imdbRating"));
+            serieinfo.setImdbvotes(responsedata.getString("imdbVotes"));
+            serieinfo.setTotalSeasons(responsedata.getInt("totalSeasons"));
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return serieinfo;
     }
 
     public void fillTextviews() {

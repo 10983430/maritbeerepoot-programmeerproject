@@ -22,6 +22,7 @@ public class UserInfoClass {
         this.email = email;
         this.id = id;
     }
+    //TODO is deze nodig?
 
     /**
      * Constructs the class with an default constructor (for getting information from Firebase)
