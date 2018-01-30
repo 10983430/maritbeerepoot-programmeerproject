@@ -142,11 +142,14 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 3. RegisterFragment
 
 ### Dinsdag 30 januari 2018:
-- Code opgeschoond in de volgende files (status: 7/18 java files gedaan):
+- Code opgeschoond in de volgende files (status: 9.5/18 java files gedaan):
 4. ExpandableListAdapter
 5. SeriesOverviewAdapter
 6. UsersOverviewAdapter
 7. SearchResult
+8. Episode
+9. Serie
+10. EpisodeDetailsFragment (aan begonnen, niet helemaal af)
 - Design voor de logged in user info verbeterd
 - App crashed niet meer wanneer er niet ingelogd is en alle buttons die niet zichtbaar moeten zijn voor een niet ingelogde user zijn weg. Alle informatie in de app is dus zichtbaar voor een niet ingelogde user, maar de deze user kan geen gebruik maken van functionaliteiten.
 - Code Review gedaan met Jessy, de volgende punten kwamen eruit:

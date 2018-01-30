@@ -1,9 +1,8 @@
 package com.example.marit.serietrackerapplication;
-
+//TODO of alle info laten zien in serieDetails of hier de onnodige weg halen
 /**
- * Created by Marit on 16-1-2018.
+ * Contains all the information about a Serie
  */
-
 public class Serie {
     private String title;
     private String year;
@@ -21,25 +20,7 @@ public class Serie {
     private String imdbvotes;
     private String totalSeasons;
 
-    /**public Serie(String title, String year, String released, String runtime, String genre, String director, String writer, String plot, String language, String country, String awards, String poster, String imdbrating, String imdbvotes, Integer totalSeasons) {
-        this.title = title;
-        this.year = year;
-        this.released = released;
-        this.runtime = runtime;
-        this.genre = genre;
-        this.director = director;
-        this.writer = writer;
-        this.plot = plot;
-        this.language = language;
-        this.country = country;
-        this.awards = awards;
-        this.poster = poster;
-        this.imdbrating = imdbrating;
-        this.imdbvotes = imdbvotes;
-        this.totalSeasons = totalSeasons;
-    }*/
-
-    public Serie () {
+    public Serie() {
 
     }
 

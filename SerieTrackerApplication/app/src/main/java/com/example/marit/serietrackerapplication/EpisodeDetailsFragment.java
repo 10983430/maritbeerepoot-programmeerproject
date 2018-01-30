@@ -1,6 +1,7 @@
 package com.example.marit.serietrackerapplication;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * Displays the details about an episode in de UI
@@ -45,13 +48,15 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_episode_details, container, false);
-        Button search = view.findViewById(R.id.FirebaseButton);
+        Button markAsSeen = view.findViewById(R.id.SeenButton);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Hide the "I've seen this" button when there is no user logged in
         if (user == null) {
-            search.setVisibility(View.GONE);
+            markAsSeen.setVisibility(View.GONE);
         }
         // Set a listener on the search button to make it operational
-        search.setOnClickListener(this);
+        markAsSeen.setOnClickListener(this);
         return view;
     }
 
@@ -63,9 +68,39 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         if (imdbidbundle != null) {
             imdbidserie = imdbidbundle.getString("imdbidserie");
             imdbid = imdbidbundle.getString("imdbid");
+            // TODO dit uitleggen ergens
+            SharedPreferences prefs = getContext().getSharedPreferences("EpisodeDetails", MODE_PRIVATE);
+            SharedPreferences.Editor prefseditor = prefs.edit();
+            prefseditor.putString("id", imdbid);
+            prefseditor.commit();
+
+            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
+            getEpisodeData(url);
         }
-        String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-        getEpisodeData(url);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences prefs = getContext().getSharedPreferences("EpisodeDetails", MODE_PRIVATE);
+        SharedPreferences.Editor prefseditor = prefs.edit();
+        prefseditor.putString("id", imdbid);
+        prefseditor.apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences prefs = getContext().getSharedPreferences("EpisodeDetails", MODE_PRIVATE);
+        String id = prefs.getString("id", "Default");
+        //TODO if not van maken
+        if (id.equals("Default")) {
+
+        } else {
+            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + id;
+            getEpisodeData(url);
+        }
     }
 
     /**
@@ -191,7 +226,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.FirebaseButton:
+            case R.id.SeenButton:
                 markAsSeen();
         }
     }

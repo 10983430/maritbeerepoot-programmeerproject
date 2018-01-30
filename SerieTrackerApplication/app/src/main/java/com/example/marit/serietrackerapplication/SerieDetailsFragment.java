@@ -350,26 +350,18 @@ public class SerieDetailsFragment extends Fragment {
             // Get all the different characteristics of the episode
             for (int i = 0; i < data.length(); i++) {
                 String title = data.getJSONObject(i).getString("Title");
-                String released = data.getJSONObject(i).getString("Released");
                 Integer episode = Integer.valueOf(data.getJSONObject(i).getString("Episode"));
-
-                // TO-DO: Dit moet een string worden want geeft double error als er geen rating is
-                String imdbrating = data.getJSONObject(i).getString("imdbRating");
                 String imdbid = data.getJSONObject(i).getString("imdbID");
 
-                // Make the information userfull by making an class object en put alle the episodes in the list
-                Episode episodeinfo = new Episode(title, released, episode, imdbrating, imdbid, seasonnumber);
-                addToEpisodes(episodeinfo);
+                // Make an Episode class object en put all the episode in the list
+                Episode episodeinfo = new Episode(title, episode, imdbid, seasonnumber);
+                episodeitems.add(episodeinfo);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void addToEpisodes(Episode episodeinfo) {
-        episodeitems.add(episodeinfo);
-        //Log.d("Tesstttttt23423", String.valueOf(episodeitems.size()));
-    }
 
     /**
      * Parses the data when requesting data about the serie, also sends requests for all the seasons
