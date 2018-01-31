@@ -1,19 +1,13 @@
 package com.example.marit.serietrackerapplication;
 
-
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -33,15 +27,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -51,26 +40,23 @@ import static android.view.View.GONE;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Displays the details about an user in de UI
  */
 public class UserDetailsFragment extends ListFragment implements View.OnClickListener {
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String userID;
-
-    private DatabaseReference dbref;
-    String username;
-    HashMap<String, String> titles = new HashMap<>();
-    HashMap<String, String> highestepisode = new HashMap<>();
-    HashMap<String, String> highestepisodeloggedin = new HashMap<>();
+    private HashMap<String, String> titles = new HashMap<>();
+    private HashMap<String, String> lastEpisodeSeen = new HashMap<>();
+    private HashMap<String, String> lastEpisodeSeenLoggedIn = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_details, container, false);
+        // Set listeners
         Button follow = view.findViewById(R.id.FollowButton);
         Button unfollow = view.findViewById(R.id.UnfollowButton);
-        ImageButton imageButton = view.findViewById(R.id.imageView2);
+        ImageButton imageButton = view.findViewById(R.id.InfoButton);
         imageButton.setOnClickListener(this);
         follow.setOnClickListener(this);
         unfollow.setOnClickListener(this);
@@ -85,18 +71,15 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         // Get the imdbid from the serie that was clicked on
         if (bundle != null) {
             userID = bundle.getString("userid");
-            Log.d("kkkkkkkkkkkkkkkkkkkkkkkk", userID);
+
+            // Override the shared preferences, so that the episode clicked on before
+            // is not in de shared preferences anymore
             SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
             SharedPreferences.Editor prefseditor = prefs.edit();
             prefseditor.putString("id", userID);
-            prefseditor.commit();
-            getUserData(userID);
-        }
+            prefseditor.apply();
 
-        if (savedInstanceState != null) {
-            Log.d("kkkkkkkkkkkkkkkkkkkkkkkkkk", "o");
-            userID = savedInstanceState.getString("id");
-            Log.d("kkkkkkkkkkkkkkkkkkkkkkkkkk", "id" + "   save");
+            // Get the user data
             getUserData(userID);
         }
     }
@@ -104,10 +87,11 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
     @Override
     public void onPause() {
         super.onPause();
+        // Save the userID in Shared Preferences
         SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
         SharedPreferences.Editor prefseditor = prefs.edit();
         prefseditor.putString("id", userID);
-        prefseditor.apply();
+        prefseditor.commit();
     }
 
     @Override
@@ -115,42 +99,74 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         super.onResume();
         SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);
         String id = prefs.getString("id", "Default");
-        if (id.equals("Default")) {
-
-        } else {
+        if (!id.equals("Default")) {
             getUserData(id);
         }
-    }
-
-    /**
-     * Converts an HashMap to a String, by using Gson
-     */
-    public String hashMapToString(HashMap hashMap) {
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.enableComplexMapKeySerialization().setPrettyPrinting().create();
-        Type type = new TypeToken<HashMap<String, String>>() {
-        }.getType();
-        String json = gson.toJson(hashMap, type);
-        return json;
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.FollowButton:
+                // Follow the user by putting their information in Firebase
                 putUserInDatabase();
-                // TODO bug fixen dat hij niet spaced bij het updaten
-                //updateUI(view);
+                updateUI(getView());
                 break;
+
             case R.id.UnfollowButton:
-                FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-                String userid = user.getUid();
-                DatabaseReference dbref = fbdb.getReference("User/" + userid + "/UsersFollowed/" + userID);
-                dbref.removeValue();
+                // Unfollow the user by deleting their information in Firebase
+                unfollow();
+                updateUI(getView());
                 break;
-            case R.id.imageView2:
+
+            case R.id.InfoButton:
                 FragmentManager fm = getFragmentManager();
                 ColorInformationDialogFragment dialogFragment = new ColorInformationDialogFragment();
                 dialogFragment.show(fm, "Explanation colors");
+        }
+    }
+
+    /**
+     * Sets the visibility of the follow and unfollow button, according to if a user is already
+     * following the viewed user
+     */
+    public void updateUI(final View view) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String currentUser = user.getUid();
+            // Make it impossible to follow yourself
+            if (userID.equals(currentUser)) {
+                Button follow = view.findViewById(R.id.FollowButton);
+                follow.setVisibility(GONE);
+            }
+            // Check if the button should be for following or unfollowing
+            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+            String userid = user.getUid();
+            DatabaseReference dbref = fbdb.getReference("User/" + userid);
+            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot usersFollowed = dataSnapshot.child("UsersFollowed").child(userID);
+                    // If the datasnapshot is not null, this means that the user is already in
+                    // Firebase and thereby followed so show unfollow button
+                    if (usersFollowed.getValue() != null) {
+                        (view.findViewById(R.id.UnfollowButton)).setVisibility(View.VISIBLE);
+                        (view.findViewById(R.id.FollowButton)).setVisibility(GONE);
+                    }
+                    else {
+                        (view.findViewById(R.id.UnfollowButton)).setVisibility(View.GONE);
+                        (view.findViewById(R.id.FollowButton)).setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    //TODO handelen
+                }
+            });
+        } else {
+            // Hide the follow button when there is no user logged in
+            Button follow = view.findViewById(R.id.FollowButton);
+            follow.setVisibility(GONE);
         }
     }
 
@@ -159,19 +175,22 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
      */
     public void putUserInDatabase() {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-        String currentuserid = user.getUid();
-        dbref = fbdb.getReference("User/" + currentuserid + "/UsersFollowed");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String currentUserId = user.getUid();
+        final DatabaseReference dbref = fbdb.getReference("User/" + currentUserId + "/UsersFollowed");
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String, String> usersfollowed = (HashMap<String, String>) dataSnapshot.getValue();
-                if (usersfollowed == null) {
-                    usersfollowed = new HashMap<>();
+                HashMap<String, String> usersFollowed = (HashMap<String, String>) dataSnapshot.getValue();
+                if (usersFollowed == null) {
+                    usersFollowed = new HashMap<>();
                 }
-                usersfollowed.put(userID, username);
+                TextView view = getView().findViewById(R.id.UsernameInfo);
+                String username = view.getText().toString();
+                usersFollowed.put(userID, username);
                 try {
-                    dbref.setValue(usersfollowed);
+                    dbref.setValue(usersFollowed);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -179,17 +198,24 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+//TODO
             }
         });
     }
 
-
-    // TO-DO deze functie korter maken lol
+    /**
+     * Unfollows the user by removing him from the database
+     */
+    public void unfollow() {
+        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
+        DatabaseReference dbref = fbdb.getReference("User/" + userId + "/UsersFollowed/" + userID);
+        dbref.removeValue();
+    }
 
     /**
-     * Gets all the watched series a user watched from Firebase and finds the last episode that
-     * was seen
+     * Gets the last seen episode of every serie from the viewed user
      */
     public void getUserData(final String userID) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
@@ -197,83 +223,74 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                username = dataSnapshot.child("username").getValue().toString();
+                String username = dataSnapshot.child("username").getValue().toString();
                 TextView usernamehold = getView().findViewById(R.id.UsernameInfo);
                 usernamehold.setText(username);
                 HashMap<String, HashMap<String, HashMap<String, String>>> info =
                         (HashMap<String, HashMap<String, HashMap<String, String>>>) dataSnapshot.child("SerieWatched").getValue();
                 if (info == null) {
-                    TextView nonewatched = getView().findViewById(R.id.NoneWatched);
-                    nonewatched.setVisibility(View.VISIBLE);
-                    TextView serieswatched = getView().findViewById(R.id.WatchedSeries);
-                    serieswatched.setVisibility(View.GONE);
+                    (getView().findViewById(R.id.NoneWatched)).setVisibility(View.VISIBLE);
+                    (getView().findViewById(R.id.WatchedSeries)).setVisibility(View.GONE);
                 } else {
-                    // zorg dat UI klopt als niemand ingelogd
+                    // Get the data from the logged in user to compare later
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
                         getLoggedInUserData(user.getUid());
                     }
-                    highestepisode = verzinnaam(info, dataSnapshot);
-/*
-                    for (String key : info.keySet()) {
-                        getSerieData(key, 1);
-                        // TO-DO hier opdelen?
-                        DataSnapshot serieinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key);
-                        HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieinfodatasnapshot.getValue();
-                        ArrayList<Integer> seasons = new ArrayList<>();
-                        for (String key2 : serieinfo.keySet()) {
-                            String[] parts = key2.split(" ");
-                            seasons.add(Integer.parseInt(parts[1]));
-                        }
-                        String highestseason = String.valueOf(Collections.max(seasons));
-                        DataSnapshot episodeinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key).child("Season " + highestseason);
-                        HashMap<String, String> episodeinfo = (HashMap<String, String>) episodeinfodatasnapshot.getValue();
-                        ArrayList<Integer> episodes = new ArrayList<>();
-                        for (String key3 : episodeinfo.keySet()) {
-                            String[] parts = key3.split("-");
-                            episodes.add(Integer.parseInt(parts[1]));
-                        }
-                        String highestEpisode = String.valueOf(Collections.max(episodes));
-
-                        highestepisode.put(key, "S" + highestseason + "E" + highestEpisode);
-
-                    }*/
-                    Log.d("lollol", highestepisode.toString());
+                    lastEpisodeSeen = searchHighestEpisode(info, dataSnapshot);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //TODO handelen
             }
         });
     }
 
-    public HashMap<String, String> verzinnaam(HashMap<String, HashMap<String, HashMap<String, String>>> info, DataSnapshot dataSnapshot) {
+    /**
+     * Puts the name of the serie and the last episode that was seen from a serie in a hashmap
+     */
+    public HashMap<String, String> searchHighestEpisode(HashMap<String, HashMap<String, HashMap<String, String>>> info, DataSnapshot dataSnapshot) {
         HashMap<String, String> hashMap = new HashMap<>();
-        for (String key : info.keySet()) {
-            getSerieData(key, 1);
-            DataSnapshot serieinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key);
-            HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieinfodatasnapshot.getValue();
+        // Loop through all the series
+        for (String serieId : info.keySet()) {
+            getSerieData(serieId, 1);
+            DataSnapshot serieInfoDataSnapshot = dataSnapshot.child("SerieWatched").child(serieId);
+            HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieInfoDataSnapshot.getValue();
+
+            // Add all the season numbers from the serie to an arraylist
             ArrayList<Integer> seasons = new ArrayList<>();
-            for (String key2 : serieinfo.keySet()) {
-                String[] parts = key2.split(" ");
+            for (String seasonName : serieinfo.keySet()) {
+                String[] parts = seasonName.split(" ");
                 seasons.add(Integer.parseInt(parts[1]));
             }
-            String highestseason = String.valueOf(Collections.max(seasons));
-            DataSnapshot episodeinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key).child("Season " + highestseason);
-            HashMap<String, String> episodeinfo = (HashMap<String, String>) episodeinfodatasnapshot.getValue();
+
+            // Get the highest season by getting the max value from the array list
+            String highestSeason = String.valueOf(Collections.max(seasons));
+
+            // Get the data from the highest season
+            DataSnapshot episodeInfoDataSnapshot = dataSnapshot.child("SerieWatched").child(serieId).child("Season " + highestSeason);
+            HashMap<String, String> episodeinfo = (HashMap<String, String>) episodeInfoDataSnapshot.getValue();
+
+            // Add all the episodenumbers from the highest season to an arraylist
             ArrayList<Integer> episodes = new ArrayList<>();
-            for (String key3 : episodeinfo.keySet()) {
-                String[] parts = key3.split("-");
+            for (String episode : episodeinfo.keySet()) {
+                String[] parts = episode.split("-");
                 episodes.add(Integer.parseInt(parts[1]));
             }
+            // Get the highest episode by getting the max value from the array list
             String highestEpisode = String.valueOf(Collections.max(episodes));
 
-            hashMap.put(key, "S" + highestseason + "E" + highestEpisode);
+            // Put the highest season in a hashmap in the format S[seasonnumber]E[episodenumber]
+            hashMap.put(serieId, "S" + highestSeason + "E" + highestEpisode);
         }
         return hashMap;
     }
 
+    /**
+     * Gets the last seen episode of every serie from the logged in user
+     */
     public void getLoggedInUserData(String userID) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         DatabaseReference dbref = fbdb.getReference("User/" + userID);
@@ -283,42 +300,15 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                 HashMap<String, HashMap<String, HashMap<String, String>>> info =
                         (HashMap<String, HashMap<String, HashMap<String, String>>>) dataSnapshot.child("SerieWatched").getValue();
                 if (info == null) {
-                    highestepisodeloggedin = new HashMap<>();
+                    lastEpisodeSeenLoggedIn = new HashMap<>();
                 } else {
-                    highestepisodeloggedin = verzinnaam(info, dataSnapshot);
-                    //for (String key : info.keySet()) {
-                        //getSerieData(key, 2);
-                        // TO-DO hier opdelen?
-                        /*
-                        DataSnapshot serieinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key);
-                        HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieinfodatasnapshot.getValue();
-                        ArrayList<Integer> seasons = new ArrayList<>();
-                        for (String key2 : serieinfo.keySet()) {
-                            String[] parts = key2.split(" ");
-                            seasons.add(Integer.parseInt(parts[1]));
-                        }
-                        String highestseason = String.valueOf(Collections.max(seasons));
-                        DataSnapshot episodeinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key).child("Season " + highestseason);
-                        HashMap<String, String> episodeinfo = (HashMap<String, String>) episodeinfodatasnapshot.getValue();
-                        ArrayList<Integer> episodes = new ArrayList<>();
-                        for (String key3 : episodeinfo.keySet()) {
-                            String[] parts = key3.split("-");
-                            episodes.add(Integer.parseInt(parts[1]));
-                        }
-                        String highestEpisode = String.valueOf(Collections.max(episodes));
-                        Log.d("lolllzzzorr", highestEpisode);
-
-                        highestepisodeloggedin.put(key, "S" + highestseason + "E" + highestEpisode);
-                        */
-
-                    //}
-                    Log.d("lolllzzzorr", highestepisodeloggedin.toString());
+                    lastEpisodeSeenLoggedIn = searchHighestEpisode(info, dataSnapshot);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+//TODO
             }
         });
     }
@@ -339,15 +329,11 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                         try {
                             if (parameter == 1) {
                                 // Parse JSON to a object and make set adapter
-                                Log.d("oooooo", key);
-                                parseJSON(reaction.toString(), key);
-                                Log.d("lollol", titles.toString());
-
+                                getSerieTitle(reaction.toString(), key);
                                 makeListView();
                             } else {
-                                parseJSON(reaction.toString(), key);
+                                getSerieTitle(reaction.toString(), key);
                             }
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -364,7 +350,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
     /**
      * Parses the title of a serie from the JSON and puts it in a Hashmap<Title, imdbid>
      */
-    public void parseJSON(String response, String imdbid) throws JSONException {
+    public void getSerieTitle(String response, String imdbid) throws JSONException {
         try {
             JSONObject data = new JSONObject(response);
             String title = data.getString("Title");
@@ -380,82 +366,41 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
     public void makeListView() {
         HashMap<String, String> highestepontitle = new HashMap<>();
         HashMap<String, String> seenepisodes = new HashMap<>();
-        if (titles.size() == highestepisode.size()) {
-            for (String imdbid : titles.keySet()) {
-                highestepontitle.put(titles.get(imdbid), highestepisode.get(imdbid));
-                seenepisodes.put(titles.get(imdbid), highestepisodeloggedin.get(imdbid));
+        // Make sure that all the API data is parsed by checking if the titles hashmap is equal in
+        // size or bigger than the highestepisodes hashmap from the viewed user
+        if (titles.size() >= lastEpisodeSeen.size()) {
+            for (String imdbid : lastEpisodeSeen.keySet()) {
+                // Create hashMaps that have the title of the serie instead of the imdbid
+                highestepontitle.put(titles.get(imdbid), lastEpisodeSeen.get(imdbid));
+                seenepisodes.put(titles.get(imdbid), lastEpisodeSeenLoggedIn.get(imdbid));
             }
-            Log.d("lolllzzzorrloll2", seenepisodes.toString());
-            Log.d("lolllzzzorrloll23333", highestepontitle.toString());
             ListAdapter adapter = new LastEpisodeSeenAdapter(highestepontitle, seenepisodes);
             getListView().setAdapter(adapter);
+            getListView().invalidateViews();
+
         }
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        // Get the imdbid from the clicked serie
         TextView view = v.findViewById(R.id.SerieName);
-        String hoi = view.getText().toString();
-        Log.d("lolzzzz", hoi);
+        String title = view.getText().toString();
         String imdbid = new String();
         for (String key : titles.keySet()) {
-            if (titles.get(key) == hoi) {
+            if (titles.get(key).equals(title)) {
                 imdbid = key;
             }
         }
+
+        // Navigate to the serie details
         SerieDetailsFragment fragment = new SerieDetailsFragment();
         Bundle args = new Bundle();
         args.putString("imdbid", imdbid);
         fragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
     }
-
-    public void updateUI(final View view) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String currentuser = user.getUid();
-            // Make it impossible to follow yourself
-            if (userID.equals(currentuser)) {
-                Button follow = view.findViewById(R.id.FollowButton);
-                follow.setVisibility(GONE);
-            }
-            // Check if the button should be for following or unfollowing
-            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-            String userid = user.getUid();
-            DatabaseReference dbref = fbdb.getReference("User/" + userid);
-            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    DataSnapshot dataSnapshot1 = dataSnapshot.child("UsersFollowed").child(userID);
-
-                    Log.d("lolzzz", dataSnapshot1.toString());
-                    if (dataSnapshot1.getValue() != null) {
-                        String user = dataSnapshot1.getValue().toString();
-                        Button unfollow = view.findViewById(R.id.UnfollowButton);
-                        unfollow.setVisibility(View.VISIBLE);
-                        Button follow = view.findViewById(R.id.FollowButton);
-                        follow.setVisibility(GONE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        } else {
-            Button follow = view.findViewById(R.id.FollowButton);
-            follow.setVisibility(GONE);
-        }
-    }
-
-    public void openFragment(View v) {
-        Log.d("Hoiiiii", "lollzz");
-    }
-
-
 }
 
 

@@ -44,23 +44,21 @@ public class LastEpisodeSeenAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final View result;
-
         //Inflate layout
         if (convertView == null) {
-            result = LayoutInflater.from(parent.getContext())
+            convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.row_layout_episodes_seen, parent, false);
-        } else {
-            result = convertView;
         }
-
-        // Set textviews and textview colors
+        // Set textviews
         Map.Entry<String, String> item = getItem(position);
-        ((TextView) result.findViewById(R.id.SerieName)).setText(item.getKey());
-        TextView highestEp = result.findViewById(R.id.HighestEp);
+        TextView seriename = convertView.findViewById(R.id.SerieName);
+        seriename.setText(item.getKey());
+        TextView highestEp = convertView.findViewById(R.id.HighestEp);
         highestEp.setText(item.getValue());
+
+        // Set textview color
         colorPreparer(item, highestEp);
-        return result;
+        return convertView;
     }
 
     /**
@@ -68,7 +66,9 @@ public class LastEpisodeSeenAdapter extends BaseAdapter {
      */
     public void colorPreparer(Map.Entry<String, String> item, TextView highestEp) {
         for (String key : highestEpisodeLoggedIn.keySet()) {
+            Log.d("lolllolllollollololol", highestEpisodeLoggedIn.toString());
             if (key == item.getKey()) {
+                Log.d("lolllolllollollololol", item.getValue().toString());
                 String[] splitHighestViewedUser = item.getValue().split("S");
                 if (highestEpisodeLoggedIn.get(key) != null) {
                     // Split the Episode and Season number, season number is at position 0 and
@@ -92,20 +92,21 @@ public class LastEpisodeSeenAdapter extends BaseAdapter {
         // If season of viewed user is lower, the logged in user could give him spoilers
         if (Integer.parseInt(splitEpisodeLogged[0]) > Integer.parseInt(splitEpisodeViewed[0])) {
             highestep.setTextColor(Color.RED);
-        }
-        // If the seasons are the same, but the episode of the viewed is lower,
-        // the logged in user could give him spoilers
-        if (Integer.parseInt(splitEpisodeLogged[0]) == Integer.parseInt(splitEpisodeViewed[0])) {
-            if (Integer.parseInt(splitEpisodeLogged[1]) > Integer.parseInt(splitEpisodeViewed[1])) {
-                highestep.setTextColor(Color.RED);
-            }
-            // If the episode of the viewed in higher, the logged in user can not give
-            // spoilers (but can receive them, that's not taken in to account in this app)
-            if (Integer.parseInt(splitEpisodeLogged[1]) <= Integer.parseInt(splitEpisodeViewed[1])) {
+        } else {
+            // If the seasons are the same, but the episode of the viewed is lower,
+            // the logged in user could give him spoilers
+            if (Integer.parseInt(splitEpisodeLogged[0]) == Integer.parseInt(splitEpisodeViewed[0])) {
+                if (Integer.parseInt(splitEpisodeLogged[1]) > Integer.parseInt(splitEpisodeViewed[1])) {
+                    highestep.setTextColor(Color.RED);
+                }
+                // If the episode of the viewed in higher, the logged in user can not give
+                // spoilers (but can receive them, that's not taken in to account in this app)
+                if (Integer.parseInt(splitEpisodeLogged[1]) <= Integer.parseInt(splitEpisodeViewed[1])) {
+                    highestep.setTextColor(Color.GREEN);
+                }
+            } else {
                 highestep.setTextColor(Color.GREEN);
             }
-        } else {
-            highestep.setTextColor(Color.GREEN);
         }
     }
 }

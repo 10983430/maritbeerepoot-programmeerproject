@@ -170,6 +170,7 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 - Code opgeschoond in de volgende files:
 10. EpisodeDetailsFragment (afgemaakt)
 11. LastEpisodeSeenAdapter
+12. UserDetailsFragment
 
 
 ### Donderdag 1 februari 2018:

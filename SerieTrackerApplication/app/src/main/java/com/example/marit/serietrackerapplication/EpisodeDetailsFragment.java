@@ -68,13 +68,15 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         if (imdbidbundle != null) {
             imdbidSerie = imdbidbundle.getString("imdbidserie");
             imdbid = imdbidbundle.getString("imdbid");
-            // Override the shared preferences, so that the episode clicked on before is not in de
-            // shared preferences anymore
+
+            // Override the shared preferences, so that the episode clicked on before
+            // is not in de shared preferences anymore
             SharedPreferences prefs = getContext().getSharedPreferences("EpisodeDetails", MODE_PRIVATE);
             SharedPreferences.Editor prefseditor = prefs.edit();
             prefseditor.putString("id", imdbid);
             prefseditor.commit();
 
+            // Get the episode data from the API
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
             getEpisodeData(url);
         }
@@ -92,10 +94,9 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
-
+        // Get imdbid from the shared preferences and get the data from the API
         SharedPreferences prefs = getContext().getSharedPreferences("EpisodeDetails", MODE_PRIVATE);
         String id = prefs.getString("id", "Default");
-        //TODO if not van maken
         if (!id.equals("Default")) {
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + id;
             getEpisodeData(url);

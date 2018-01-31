@@ -27,7 +27,7 @@
     <string name="usernameplaceholder">Username: </string>
     <string name="useremailplaceholder">Email: </string>
     <string name="yourinformation">Your information</string>
-    <string name="episodeplaceholder">E0S0</string>
+    <string name="episodeplaceholder">S0E0</string>
     <string name="redexplanation">This means that you have seen episodes, that this user did not see yet. You can not discuss the last episode you have seen without giving spoilers.</string>
     <string name="greenexplanation">This means that you both have seen the same episodes or that the user is further in the serie. You can discuss the last episode you have seen without giving spoilers. </string>
     <string name="greyexplantion">This means that you do not watch this serie.</string>

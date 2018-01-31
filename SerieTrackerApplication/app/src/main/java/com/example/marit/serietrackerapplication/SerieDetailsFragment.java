@@ -85,6 +85,7 @@ public class SerieDetailsFragment extends Fragment {
         synchronized (this) {
             // Get the data from the clicked serie
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
+            Log.d("lolllzzz", url);
             getData(url, 1, 0);
 
         }
@@ -308,6 +309,7 @@ public class SerieDetailsFragment extends Fragment {
     public Serie setSettersSerieClass(JSONObject responsedata) {
         Serie serieinfo = new Serie();
         try {
+            Log.d("serieinfo", responsedata.toString());
             serieinfo.setTitle(responsedata.getString("Title"));
             serieinfo.setYear(responsedata.getString("Year"));
             serieinfo.setReleased(responsedata.getString("Released"));
