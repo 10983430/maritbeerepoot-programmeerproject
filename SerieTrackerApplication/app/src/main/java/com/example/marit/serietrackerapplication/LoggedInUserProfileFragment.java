@@ -167,7 +167,6 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                 setTextviews(username, email);
                 HashMap<String, String> series = (HashMap<String, String>) dataSnapshot.child("SerieWatched").getValue();
                 if (series != null) {
-                    //findSerieNames(series);
                     for (String key : series.keySet()) {
                         getSerieData(key);
                     }
@@ -215,9 +214,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                     public void onResponse(String reaction) {
                         try {
                             // Parse JSON to a object and make set adapter
-                            //Log.d("oooooo", key);
                             parseJSON(reaction.toString(), key);
-                            //Log.d("lollol", titles.toString());
                             makeListView();
 
                         } catch (Exception e) {

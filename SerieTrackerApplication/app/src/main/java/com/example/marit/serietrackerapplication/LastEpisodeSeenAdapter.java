@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Marit on 24-1-2018.
+ * Creates an adapter that displays the episode name and the number & gives the number a color which
+ * indicates if you can talk about the last episode you have seen without
  */
-
 public class LastEpisodeSeenAdapter extends BaseAdapter {
     private final ArrayList mData;
     private HashMap<String, String> highestepisodeloggedin;

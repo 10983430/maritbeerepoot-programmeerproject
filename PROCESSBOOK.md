@@ -163,6 +163,7 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 4. Lange class omvormen naar JSONObject
 5. Comments nog niet compleet
 6. Dubbele en lange code
+- **Keuze:** Om te zorgen dat fragments niet leeg zijn wanneer er op een on back pressed wordt geklikt is er gebruik gemaakt van shared preferences. Deze worden in bijna elk file in de onCreate en onPause gezet. Dit moet ook in de onCreate gebeuren aangezien anders de vorige opgeklikte episode tevoorschijn komt. Dit komt omdat in de lifecycle van de Fragment eerst de onCreate wordt aangeroepen en daarna de onPause. De code runt dus altijd de onPause ook.
 
 ### Woensdag 31 januari 2018:
 - Hard bezig geweest met functies verkorten, helper functies schrijven en beter te voldoen aan de eisen van better code hub.
