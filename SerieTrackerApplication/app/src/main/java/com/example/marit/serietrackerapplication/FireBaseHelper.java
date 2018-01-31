@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 /**
- * TODO omschrijving
+ * Contains methodes that mark an episode as seen or as unseen in Firebase
  */
 
 public class FireBaseHelper {
@@ -36,71 +36,91 @@ public class FireBaseHelper {
     /**
      * Puts the episode in Firebase and thereby marks it as seen
      */
-    public static void markAsSeen(final String episodeTitle, final String seasonNumber,
-                                  final String episodeNumber, FirebaseUser user,
-                                  final String imdbid) {
+    public static void markAsSeen(String episodeTitle, String seasonNumber, String episodeNumber,
+                                  FirebaseUser user, String imdbid) {
         if (user != null) {
             FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
             String userid = user.getUid();
             final DatabaseReference dbref = fbdb.getReference("User/" + userid);
-            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    DataSnapshot value = dataSnapshot.child("SerieWatched");
-                    HashMap<String, HashMap<String, HashMap<String, String>>> seen =
-                            (HashMap<String, HashMap<String, HashMap<String, String>>>) value.getValue();
+            dbref.addListenerForSingleValueEvent(new FirebaseValueEventListener(episodeTitle,
+                    seasonNumber, episodeNumber, user, imdbid, dbref));
 
-                    // If this is the first episode ever added to firebase, create a new
-                    // new hashmap for all the episodes
-                    if (seen == null) {
-                        seen = new HashMap<>();
-                        seen = firstTimeAdd(episodeNumber, episodeTitle, seasonNumber, imdbid, seen);
-                    } else {
-                        // Check if there is an episode of the serie that needs to be added
-                        // in the database, by checking if there is a key with the serie title
-                        DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(imdbid);
-                        HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serietitle.getValue();
-
-                        // If not, create a new hashmap for the serie with the episode and season in it
-                        if (seriefb == null) {
-                            seen = firstTimeAdd(episodeNumber, episodeTitle, seasonNumber, imdbid, seen);
-                        } else {
-                            // If there is a episode from a specific serie in the database,
-                            // check if there is already an episode added from the season
-                            DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(imdbid).child("Season " + seasonNumber);
-                            HashMap<String, String> episodeHashmap = (HashMap<String, String>) seasontje.getValue();
-
-                            // If there isn't, add the season and the episode to the hashmap
-                            // with watched episodes
-                            if (episodeHashmap == null) {
-                                episodeHashmap = new HashMap<>();
-                                seen = addToExistingSerie(episodeHashmap, episodeNumber, episodeTitle, seasonNumber, imdbid, seen, seriefb);
-                            }
-
-                            // If there is, add the episode to the hasmap of the season and
-                            // to the hashmap with watched episodes
-                            else {
-                                seen = addToExistingSerie(episodeHashmap, episodeNumber, episodeTitle, seasonNumber, imdbid, seen, seriefb);
-                            }
-                        }
-                    }
-
-                    // Update the database by inserting the hashmap with watched episodes
-                    try {
-                        dbref.child("SerieWatched").setValue(seen);
-                    } catch (Exception e) {
-                        // TODO errorhandelen
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // TODO errorhandelen
-                }
-            });
         }
 
+    }
+
+    public static class FirebaseValueEventListener implements ValueEventListener {
+        private String episodeTitle;
+        private String seasonNumber;
+        private String episodeNumber;
+        FirebaseUser user;
+        private String imdbid;
+        private DatabaseReference dbref;
+
+        public FirebaseValueEventListener(String episodeTitle, String seasonNumber,
+                                          String episodeNumber, FirebaseUser user, String imdbid,
+                                          DatabaseReference dbref) {
+            this.episodeTitle = episodeTitle;
+            this.seasonNumber=seasonNumber;
+            this.episodeNumber = episodeNumber;
+            this.user = user;
+            this.imdbid = imdbid;
+            this.dbref = dbref;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            DataSnapshot value = dataSnapshot.child("SerieWatched");
+            HashMap<String, HashMap<String, HashMap<String, String>>> seen = (HashMap<String, HashMap<String, HashMap<String, String>>>) value.getValue();
+
+            // If this is the first episode ever added to firebase, create a new
+            // new hashmap for all the episodes
+            if (seen == null) {
+                seen = new HashMap<>();
+                seen = firstTimeAdd(episodeNumber, episodeTitle, seasonNumber, imdbid, seen);
+            } else {
+                // Check if there is an episode of the serie that needs to be added
+                // in the database, by checking if there is a key with the serie title
+                DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(imdbid);
+                HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serietitle.getValue();
+
+                // If not, create a new hashmap for the serie with the episode and season in it
+                if (seriefb == null) {
+                    seen = firstTimeAdd(episodeNumber, episodeTitle, seasonNumber, imdbid, seen);
+                } else {
+                    // If there is a episode from a specific serie in the database,
+                    // check if there is already an episode added from the season
+                    DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(imdbid).child("Season " + seasonNumber);
+                    HashMap<String, String> episodeHashmap = (HashMap<String, String>) seasontje.getValue();
+
+                    // If there isn't, add the season and the episode to the hashmap
+                    // with watched episodes
+                    if (episodeHashmap == null) {
+                        episodeHashmap = new HashMap<>();
+                        seen = addToExistingSerie(episodeHashmap, episodeNumber, episodeTitle, seasonNumber, imdbid, seen, seriefb);
+                    }
+
+                    // If there is, add the episode to the hasmap of the season and
+                    // to the hashmap with watched episodes
+                    else {
+                        seen = addToExistingSerie(episodeHashmap, episodeNumber, episodeTitle, seasonNumber, imdbid, seen, seriefb);
+                    }
+                }
+            }
+
+            // Update the database by inserting the hashmap with watched episodes
+            try {
+                dbref.child("SerieWatched").setValue(seen);
+            } catch (Exception e) {
+                // TODO errorhandelen
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            // TODO errorhandelen
+        }
     }
 
     /**

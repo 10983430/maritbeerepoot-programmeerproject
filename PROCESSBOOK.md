@@ -136,13 +136,13 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 - Checkbox error in de child van de explandble listview opgelost
 - Interactie design verbeterd
 - Geprobeerd om de navigatie tussen fragments te fixen, maar dat is niet helemaal gelukt..
-- Code opgeschoond in de volgende files (status: 3/18 java files gedaan):
+- Code opgeschoond in de volgende files (status: 3/19 java files gedaan):
 1. LoginFragment
 2. ColorInformationDialogFragment
 3. RegisterFragment
 
 ### Dinsdag 30 januari 2018:
-- Code opgeschoond in de volgende files (status: 9.5/18 java files gedaan):
+- Code opgeschoond in de volgende files (status: 9.5/19 java files gedaan):
 4. ExpandableListAdapter
 5. SeriesOverviewAdapter
 6. UsersOverviewAdapter

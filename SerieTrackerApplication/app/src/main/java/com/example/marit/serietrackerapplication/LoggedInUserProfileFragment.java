@@ -322,8 +322,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     private class ClickDetailsSeries implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-            TextView serieTitleHolder = view.findViewById(R.id.UserNameHolder);
-            String serieTitle = serieTitleHolder.getText().toString();
+            String serieTitle = ((TextView) view.findViewById(R.id.UserNameHolder)).getText().toString();
             String imdbid = new String();
             for (String key : titles.keySet()) {
                 if (titles.get(key).equals(serieTitle)) {
@@ -346,8 +345,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     private class ClickDetailsUsers implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-            TextView usernameHolder = view.findViewById(R.id.UserNameHolder);
-            String username = usernameHolder.getText().toString();
+            String username = ((TextView) view.findViewById(R.id.UserNameHolder)).getText().toString();
             String userid = new String();
             for (String key : userData.keySet()) {
                 if (userData.get(key).equals(username)) {
