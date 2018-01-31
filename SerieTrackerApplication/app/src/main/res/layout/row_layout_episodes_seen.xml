@@ -7,7 +7,7 @@
     android:layout_height="46dp">
 
     <TextView
-        android:id="@+id/Seriename"
+        android:id="@+id/SerieName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/Highestep"
+        android:id="@+id/HighestEp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

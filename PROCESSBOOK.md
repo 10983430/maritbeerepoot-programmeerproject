@@ -168,6 +168,8 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 ### Woensdag 31 januari 2018:
 - Hard bezig geweest met functies verkorten, helper functies schrijven en beter te voldoen aan de eisen van better code hub.
 - Code opgeschoond in de volgende files:
+10. EpisodeDetailsFragment (afgemaakt)
+11. LastEpisodeSeenAdapter
 
 
 ### Donderdag 1 februari 2018:

@@ -165,7 +165,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
     /**
      * Gets information about if a user that is followed has already seen this episode from Firebase
      */
-    public void getFollowInfo(final String seasonNumber, final String EpisodeNumber) {
+    public void getFollowInfo(final String seasonNumber, final String episodeNumber) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             final String userid = user.getUid();
@@ -215,7 +215,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                         getView().findViewById(R.id.EpisodeSeasonInfo)).getText().toString();
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                FireBaseHelper.markAsSeen(episodeTitle, seasonNumber, episodeNumber, user, imdbid);
+                FireBaseHelper.markAsSeen(episodeTitle, seasonNumber, episodeNumber, user, imdbidSerie);
         }
     }
 

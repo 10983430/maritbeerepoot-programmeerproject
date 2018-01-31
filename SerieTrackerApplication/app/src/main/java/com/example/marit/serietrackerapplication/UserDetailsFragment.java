@@ -212,8 +212,8 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                     if (user != null) {
                         getLoggedInUserData(user.getUid());
                     }
-                    Log.d("lollol", "hiii");
-                    Log.d("lollol", info.keySet().toString());
+                    highestepisode = verzinnaam(info, dataSnapshot);
+/*
                     for (String key : info.keySet()) {
                         getSerieData(key, 1);
                         // TO-DO hier opdelen?
@@ -236,7 +236,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
 
                         highestepisode.put(key, "S" + highestseason + "E" + highestEpisode);
 
-                    }
+                    }*/
                     Log.d("lollol", highestepisode.toString());
                 }
             }
@@ -246,6 +246,32 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
 
             }
         });
+    }
+
+    public HashMap<String, String> verzinnaam(HashMap<String, HashMap<String, HashMap<String, String>>> info, DataSnapshot dataSnapshot) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        for (String key : info.keySet()) {
+            getSerieData(key, 1);
+            DataSnapshot serieinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key);
+            HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieinfodatasnapshot.getValue();
+            ArrayList<Integer> seasons = new ArrayList<>();
+            for (String key2 : serieinfo.keySet()) {
+                String[] parts = key2.split(" ");
+                seasons.add(Integer.parseInt(parts[1]));
+            }
+            String highestseason = String.valueOf(Collections.max(seasons));
+            DataSnapshot episodeinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key).child("Season " + highestseason);
+            HashMap<String, String> episodeinfo = (HashMap<String, String>) episodeinfodatasnapshot.getValue();
+            ArrayList<Integer> episodes = new ArrayList<>();
+            for (String key3 : episodeinfo.keySet()) {
+                String[] parts = key3.split("-");
+                episodes.add(Integer.parseInt(parts[1]));
+            }
+            String highestEpisode = String.valueOf(Collections.max(episodes));
+
+            hashMap.put(key, "S" + highestseason + "E" + highestEpisode);
+        }
+        return hashMap;
     }
 
     public void getLoggedInUserData(String userID) {
@@ -259,9 +285,11 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                 if (info == null) {
                     highestepisodeloggedin = new HashMap<>();
                 } else {
-                    for (String key : info.keySet()) {
+                    highestepisodeloggedin = verzinnaam(info, dataSnapshot);
+                    //for (String key : info.keySet()) {
                         //getSerieData(key, 2);
                         // TO-DO hier opdelen?
+                        /*
                         DataSnapshot serieinfodatasnapshot = dataSnapshot.child("SerieWatched").child(key);
                         HashMap<String, HashMap<String, String>> serieinfo = (HashMap<String, HashMap<String, String>>) serieinfodatasnapshot.getValue();
                         ArrayList<Integer> seasons = new ArrayList<>();
@@ -281,7 +309,9 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                         Log.d("lolllzzzorr", highestEpisode);
 
                         highestepisodeloggedin.put(key, "S" + highestseason + "E" + highestEpisode);
-                    }
+                        */
+
+                    //}
                     Log.d("lolllzzzorr", highestepisodeloggedin.toString());
                 }
             }
@@ -297,7 +327,6 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
      * Requests the data for imdbid, so the title can be parsed to create a listview with the
      * title and the last episode from a serie someone saw
      */
-
     public void getSerieData(final String key, final int parameter) {
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + key;
         // Create new queue
@@ -357,6 +386,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                 seenepisodes.put(titles.get(imdbid), highestepisodeloggedin.get(imdbid));
             }
             Log.d("lolllzzzorrloll2", seenepisodes.toString());
+            Log.d("lolllzzzorrloll23333", highestepontitle.toString());
             ListAdapter adapter = new LastEpisodeSeenAdapter(highestepontitle, seenepisodes);
             getListView().setAdapter(adapter);
         }
@@ -365,7 +395,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        TextView view = v.findViewById(R.id.Seriename);
+        TextView view = v.findViewById(R.id.SerieName);
         String hoi = view.getText().toString();
         Log.d("lolzzzz", hoi);
         String imdbid = new String();
