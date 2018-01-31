@@ -29,13 +29,13 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/usernameLogged"
+                android:id="@+id/UserNameLogged"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/useremailLogged"
+                android:id="@+id/UserEmailLogged"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black" />
@@ -51,10 +51,10 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/buttonLogout"
+                android:id="@+id/ButtonLogout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log out" />
+                android:text="@string/log_out" />
 
 
         </LinearLayout>
@@ -65,23 +65,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="Please log in or register to see your user details"
+        android:text="@string/pleaselogin"
         android:visibility="gone"
         android:layout_gravity="center"/>
 
     <Button
-        android:id="@+id/buttonRegister"
+        android:id="@+id/ButtonRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:text="@string/register" />
 
     <Button
-        android:id="@+id/buttonLogin"
+        android:id="@+id/ButtonLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:text="@string/login" />
 
 
 
@@ -92,35 +92,35 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/seriesseen"
+            android:id="@+id/SeriesSeen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="Series seen"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
             android:paddingTop="4dp"
-            android:layout_marginLeft="10dp"/>
+            android:text="@string/series_seen"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <ListView
-            android:id="@+id/serielistview"
+            android:id="@+id/SerieListview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2" />
 
         <TextView
-            android:id="@+id/following"
+            android:id="@+id/Following"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="Following"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
             android:paddingTop="4dp"
-            android:layout_marginLeft="10dp"/>
+            android:text="@string/following"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <ListView
-            android:id="@+id/userslistview"
+            android:id="@+id/UsersListview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2">

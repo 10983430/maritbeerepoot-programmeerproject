@@ -40,22 +40,22 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * Shows the user information for the user that is logged including shortcuts to the users he follows
+ * and the series he saw at least one episode from
+ */
 public class LoggedInUserProfileFragment extends Fragment implements View.OnClickListener {
-    HashMap<String, String> titles = new HashMap<>();
-    HashMap<String, String> userdata = new HashMap<>();
-    ArrayList<String> usernames;
-    ArrayList<String> serienames;
-    public View view;
+    private HashMap<String, String> titles = new HashMap<>();
+    private HashMap<String, String> userData = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment and set listeners
-        view = inflater.inflate(R.layout.fragment_logged_in_user_profile, container, false);
-        Button login = view.findViewById(R.id.buttonLogin);
-        Button register = view.findViewById(R.id.buttonRegister);
-        Button logout = view.findViewById(R.id.buttonLogout);
+        View view = inflater.inflate(R.layout.fragment_logged_in_user_profile, container, false);
+        Button login = view.findViewById(R.id.ButtonLogin);
+        Button register = view.findViewById(R.id.ButtonRegister);
+        Button logout = view.findViewById(R.id.ButtonLogout);
         login.setOnClickListener(this);
         logout.setOnClickListener(this);
         register.setOnClickListener(this);
@@ -90,17 +90,17 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.buttonLogin:
+            case R.id.ButtonLogin:
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LoginFragment loginfragment = new LoginFragment();
                 fragmentTransaction.replace(R.id.fragment_container, loginfragment).commit();
                 break;
-            case R.id.buttonRegister:
+            case R.id.ButtonRegister:
                 FragmentTransaction fragmentTransactionregister = getFragmentManager().beginTransaction();
                 RegisterFragment registerFragment = new RegisterFragment();
                 fragmentTransactionregister.replace(R.id.fragment_container, registerFragment).commit();
                 break;
-            case R.id.buttonLogout:
+            case R.id.ButtonLogout:
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getContext(), "Logged out", Toast.LENGTH_SHORT).show();
                 // Refresh the layout, so the logout button isn't visible anymore
@@ -127,30 +127,34 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
      * Hides the login and register button when a user is already logged in
      */
     public void updateWhenLoggedIn(View view) {
-        Button login = view.findViewById(R.id.buttonLogin);
-        Button register = view.findViewById(R.id.buttonRegister);
+        Button login = view.findViewById(R.id.ButtonLogin);
+        Button register = view.findViewById(R.id.ButtonRegister);
         login.setVisibility(View.GONE);
         register.setVisibility(View.GONE);
     }
 
     /**
-     * Hides the logout button when there is no user logged in
+     * Hides the logout button and headers when there is no user logged in and shows a message
      */
     public void updateWhenLoggedOut(View view) {
-        Button logout = view.findViewById(R.id.buttonLogout);
+        Button logout = view.findViewById(R.id.ButtonLogout);
         logout.setVisibility(View.GONE);
-        TextView loginmessage = view.findViewById(R.id.DisplayLogout);
-        loginmessage.setVisibility(View.VISIBLE);
+
         TextView UserInformationView = view.findViewById(R.id.UserInformationView);
         UserInformationView.setVisibility(View.GONE);
-        TextView seriesseen = view.findViewById(R.id.seriesseen);
+
+        TextView seriesseen = view.findViewById(R.id.SeriesSeen);
         seriesseen.setVisibility(View.GONE);
-        TextView following = view.findViewById(R.id.following);
+
+        TextView following = view.findViewById(R.id.Following);
         following.setVisibility(View.GONE);
+
+        TextView loginmessage = view.findViewById(R.id.DisplayLogout);
+        loginmessage.setVisibility(View.VISIBLE);
     }
 
     /**
-     *
+     * Gets the user data from firebase
      */
     public void getUserData(String userid) {
         // Set the database references
@@ -162,47 +166,60 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Go through the database to get the username and email
-                String username = dataSnapshot.child("username").getValue().toString();
-                String email = dataSnapshot.child("email").getValue().toString();
-                setTextviews(username, email);
-                HashMap<String, String> series = (HashMap<String, String>) dataSnapshot.child("SerieWatched").getValue();
-                if (series != null) {
-                    for (String key : series.keySet()) {
-                        getSerieData(key);
-                    }
-                } else {
-                    TextView seriesseen = view.findViewById(R.id.seriesseen);
-                    seriesseen.setText(seriesseen.getText() + "(None yet)");
-                }
-                HashMap<String, String> users = (HashMap<String, String>) dataSnapshot.child("UsersFollowed").getValue();
-                if (users != null) {
-                    for (String key : users.keySet()) {
-                        getFollowedUserData(key);
-                    }
-                    Log.d("ooooooo", "test2");
-
-                } else {
-                    TextView following = view.findViewById(R.id.following);
-                    following.setText(following.getText() + "(None yet)");
-                }
-
+                setTextviews(dataSnapshot.child("username").getValue().toString(), dataSnapshot.child("email").getValue().toString());
+                // Get the watched series and followed users
+                getFollowedUsersWatchedSeries(dataSnapshot);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Log error
+                //TODO
                 Log.d("Database error", databaseError.toString());
             }
         });
     }
 
+    /**
+     * Gets the watched series and requests the seriename from getSerieData and gets the followed
+     * users and requests their usernames from getFollowedUserData
+     * //TODO
+     */
+    public void getFollowedUsersWatchedSeries(DataSnapshot dataSnapshot) {
+        // Get series
+        HashMap<String, String> series = (HashMap<String, String>) dataSnapshot.child("SerieWatched").getValue();
+        if (series != null) {
+            for (String key : series.keySet()) {
+                getSerieData(key);
+            }
+        } else {
+            TextView seriesSeen = getView().findViewById(R.id.SeriesSeen);
+            seriesSeen.setText(seriesSeen.getText() + "(None yet)");
+        }
+        // Get users
+        HashMap<String, String> users = (HashMap<String, String>) dataSnapshot.child("UsersFollowed").getValue();
+        if (users != null) {
+            for (String key : users.keySet()) {
+                getFollowedUserData(key);
+            }
+        } else {
+            TextView following = getView().findViewById(R.id.Following);
+            following.setText(following.getText() + "(None yet)");
+        }
+    }
+
+
+    /**
+     * Shows the username and email in the UI
+     */
     public void setTextviews(String username, String email) {
-        TextView usernameLogged = view.findViewById(R.id.usernameLogged);
+        TextView usernameLogged = getView().findViewById(R.id.UserNameLogged);
         usernameLogged.setText(getString(R.string.usernameplaceholder) + " " + username);
-        TextView useremailLogged = view.findViewById(R.id.useremailLogged);
+        TextView useremailLogged = getView().findViewById(R.id.UserEmailLogged);
         useremailLogged.setText(getString(R.string.useremailplaceholder) + " " + email + " (Only you can see your email!)");
     }
 
+    /**
+     * Gets the data from the serie to convert the imdbid to the title of the serie
+     */
     public void getSerieData(final String key) {
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + key;
         // Create new queue
@@ -215,7 +232,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                         try {
                             // Parse JSON to a object and make set adapter
                             parseJSON(reaction.toString(), key);
-                            makeListView();
+                            makeSerieListView();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -243,18 +260,25 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
         }
     }
 
-    public void makeListView() {
-        ListView serielistview = view.findViewById(R.id.serielistview);
-        serienames = new ArrayList<>();
+    /**
+     * Creates a listview consisting of the series saved in Firebase
+     */
+    public void makeSerieListView() {
+        ListView serielistview = getView().findViewById(R.id.SerieListview);
+        // Create an arraylist with serienames
+        ArrayList serieNames = new ArrayList<>();
         for (String key : titles.keySet()) {
-            serienames.add(titles.get(key));
+            serieNames.add(titles.get(key));
         }
-        //TO-DO useroverview naam aanpassen
-        ListAdapter adapter = new UsersOverviewAdapter(getContext(), serienames);
+        // Set the adapter
+        ListAdapter adapter = new UsersOverviewAdapter(getContext(), serieNames);
         serielistview.setAdapter(adapter);
         serielistview.setOnItemClickListener(new ClickDetailsSeries());
     }
 
+    /**
+     * Gets information about who the user follows from firebase
+     */
     public void getFollowedUserData(final String key) {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         DatabaseReference dbref = fbdb.getReference("User/" + key);
@@ -265,65 +289,78 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Go through the database to get the username and email
                 String username = dataSnapshot.child("username").getValue().toString();
-                userdata.put(key, username);
+                userData.put(key, username);
                 makeUsersListview();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+//TODO
             }
         });
     }
 
+    /**
+     * Creates a listview consisting of the users the logged in user is following
+     */
     public void makeUsersListview() {
-        ListView userslistview = view.findViewById(R.id.userslistview);
-        usernames = new ArrayList<>();
-        for (String key : userdata.keySet()) {
-            usernames.add(userdata.get(key));
+        ListView userslistview = getView().findViewById(R.id.UsersListview);
+        // Create an arraylist with usernames
+        ArrayList userNames = new ArrayList<>();
+        for (String key : userData.keySet()) {
+            userNames.add(userData.get(key));
         }
-        //TO-DO useroverview naam aanpassen
-        ListAdapter adapter = new UsersOverviewAdapter(getContext(), usernames);
+        // Set the adapter
+        ListAdapter adapter = new UsersOverviewAdapter(getContext(), userNames);
         userslistview.setAdapter(adapter);
         userslistview.setOnItemClickListener(new ClickDetailsUsers());
     }
 
+    /**
+     * Handles a click on the listview with series
+     */
     private class ClickDetailsSeries implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-            TextView hidden = view.findViewById(R.id.UserNameHolder);
-            String serietitle = hidden.getText().toString();
+            TextView serieTitleHolder = view.findViewById(R.id.UserNameHolder);
+            String serieTitle = serieTitleHolder.getText().toString();
             String imdbid = new String();
             for (String key : titles.keySet()) {
-                if (titles.get(key).equals(serietitle)) {
+                if (titles.get(key).equals(serieTitle)) {
                     imdbid = key;
                 }
             }
+            // Navigate to the serie details fragment
             SerieDetailsFragment fragment = new SerieDetailsFragment();
             Bundle args = new Bundle();
             args.putString("imdbid", imdbid);
             fragment.setArguments(args);
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null).commit();
         }
     }
 
+    /**
+     * Handles a click on the listview with followed users
+     */
     private class ClickDetailsUsers implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-            // TODO position ophalen
-            TextView hidden = view.findViewById(R.id.UserNameHolder);
-            String username = hidden.getText().toString();
+            TextView usernameHolder = view.findViewById(R.id.UserNameHolder);
+            String username = usernameHolder.getText().toString();
             String userid = new String();
-            for (String key : userdata.keySet()) {
-                if (userdata.get(key).equals(username)) {
+            for (String key : userData.keySet()) {
+                if (userData.get(key).equals(username)) {
                     userid = key;
                 }
             }
+            // Navigate to the user details fragment
             UserDetailsFragment fragment = new UserDetailsFragment();
             Bundle args = new Bundle();
             args.putString("userid", userid);
             fragment.setArguments(args);
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null).commit();
         }
     }
 }

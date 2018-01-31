@@ -32,4 +32,8 @@
     <string name="greenexplanation">This means that you both have seen the same episodes or that the user is further in the serie. You can discuss the last episode you have seen without giving spoilers. </string>
     <string name="greyexplantion">This means that you do not watch this serie.</string>
     <string name="close">Close</string>
+    <string name="pleaselogin">Please log in or register to see your user details</string>
+    <string name="series_seen">Series seen</string>
+    <string name="following">Following</string>
+    <string name="log_out">Log out</string>
 </resources>

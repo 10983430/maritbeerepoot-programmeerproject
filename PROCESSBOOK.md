@@ -171,6 +171,8 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 10. EpisodeDetailsFragment (afgemaakt)
 11. LastEpisodeSeenAdapter
 12. UserDetailsFragment
+13. FragmentContainer
+14. LoggedInUserProfileFragment
 
 
 ### Donderdag 1 februari 2018:
