@@ -165,6 +165,9 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 6. Dubbele en lange code
 
 ### Woensdag 31 januari 2018:
+- Hard bezig geweest met functies verkorten, helper functies schrijven en beter te voldoen aan de eisen van better code hub.
+- Code opgeschoond in de volgende files:
+
 
 ### Donderdag 1 februari 2018:
 

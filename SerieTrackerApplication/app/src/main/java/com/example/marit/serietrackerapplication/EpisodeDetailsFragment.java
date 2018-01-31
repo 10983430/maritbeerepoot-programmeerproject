@@ -92,6 +92,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
+
         SharedPreferences prefs = getContext().getSharedPreferences("EpisodeDetails", MODE_PRIVATE);
         String id = prefs.getString("id", "Default");
         //TODO if not van maken
@@ -195,6 +196,8 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
             dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    TextView lol = getView().findViewById(R.id.FollowersInfo);
+                    lol.setText("");
                     DataSnapshot snapshot = dataSnapshot.child(userid).child("UsersFollowed");
                     HashMap<String, String> followed = (HashMap<String, String>) snapshot.getValue();
                     if (followed != null) {
@@ -205,10 +208,10 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                             DataSnapshot lol23 = dataSnapshot.child(key).child("SerieWatched").child(imdbidserie).child("Season " + seasonnumber).child("E-" + episode);
 
                             if (lol23.getValue() == null) {
-                                TextView lol = getView().findViewById(R.id.FollowersInfo);
+                                //TextView lol = getView().findViewById(R.id.FollowersInfo);
                                 lol.setText(lol.getText().toString() + username + " didn't watch this episode yet!\n");
                             } else {
-                                TextView lol = getView().findViewById(R.id.FollowersInfo);
+                                //TextView lol = getView().findViewById(R.id.FollowersInfo);
                                 lol.setText(lol.getText().toString() + username + " did watch this episode!\n");
                             }
                         }

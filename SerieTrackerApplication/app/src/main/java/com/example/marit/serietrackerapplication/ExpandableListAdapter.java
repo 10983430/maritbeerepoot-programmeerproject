@@ -118,7 +118,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             findSeenEpisodes(title, groupPosition, childPosition, convertView);
         }
         else {
-            CheckBox checkBox = convertView.findViewById(R.id.checkBox);
+            CheckBox checkBox = convertView.findViewById(R.id.CheckBox);
             checkBox.setVisibility(View.GONE);
         }
 
@@ -167,7 +167,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     // After the list for a season is made, check the boxes of
                     // the episodes that are in the list
                     Episode episode = (Episode) getChild(groupPosition, childPosition);
-                    CheckBox checkBox = convertView.findViewById(R.id.checkBox);
+                    CheckBox checkBox = convertView.findViewById(R.id.CheckBox);
                     if (user != null) {
                         for (int i = 0; i < seenEpisodes.size(); i++) {
                             if (Integer.parseInt(seenEpisodes.get(i)) == episode.getEpisode()) {
