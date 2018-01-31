@@ -74,14 +74,6 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        //SharedPreferences prefs = getContext().getSharedPreferences("LoggedInUserInfo", Context.MODE_PRIVATE);
-        //SharedPreferences.Editor prefsEditor = prefs.edit();
-        //prefsEditor.putString("usernames", usernames);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

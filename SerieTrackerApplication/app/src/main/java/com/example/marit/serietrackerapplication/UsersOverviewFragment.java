@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class UsersOverviewFragment extends ListFragment { //implements View.OnClickListener {
+public class UsersOverviewFragment extends ListFragment {
     private HashMap<String, String> UsernameUserid = new HashMap<>();
     private ArrayList<UserInfoClass> allusers = new ArrayList<UserInfoClass>();
 

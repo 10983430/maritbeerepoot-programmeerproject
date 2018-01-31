@@ -208,10 +208,8 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                             DataSnapshot lol23 = dataSnapshot.child(key).child("SerieWatched").child(imdbidserie).child("Season " + seasonnumber).child("E-" + episode);
 
                             if (lol23.getValue() == null) {
-                                //TextView lol = getView().findViewById(R.id.FollowersInfo);
                                 lol.setText(lol.getText().toString() + username + " didn't watch this episode yet!\n");
                             } else {
-                                //TextView lol = getView().findViewById(R.id.FollowersInfo);
                                 lol.setText(lol.getText().toString() + username + " did watch this episode!\n");
                             }
                         }

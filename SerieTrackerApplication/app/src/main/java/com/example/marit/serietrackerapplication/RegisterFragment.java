@@ -70,7 +70,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("Loginstatus", "createUserWithEmail:success");
 
-                    // Add the username to Firebase and update UI updateUI(user);
+                    // Add the username to Firebase and update UI
                     FirebaseUser user = mAuth.getCurrentUser();
                     String id = user.getUid();
                     EditText emailinput = getView().findViewById(R.id.RegistrationEmailField);
@@ -80,7 +80,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                     LoggedInUserProfileFragment fragment = new LoggedInUserProfileFragment();
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 } else {
-                    // If sign in fails, display a message to the user updateUI(null);
+                    // If sign in fails, display a message to the user
                     Log.w("Loginstatus", "createUserWithEmail:failure", task.getException());
                     Toast.makeText(getContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
 

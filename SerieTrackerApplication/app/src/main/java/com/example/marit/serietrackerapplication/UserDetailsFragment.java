@@ -214,7 +214,6 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                     }
                     Log.d("lollol", "hiii");
                     Log.d("lollol", info.keySet().toString());
-                    //ArrayList<String> keyset = (ArrayList<String>) info.keySet();
                     for (String key : info.keySet()) {
                         getSerieData(key, 1);
                         // TO-DO hier opdelen?

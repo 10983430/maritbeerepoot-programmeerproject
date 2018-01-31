@@ -97,7 +97,6 @@ public class SerieDetailsFragment extends Fragment {
         SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
         String title = prefs.getString("title", "Default");
         String plot = prefs.getString("plot", "Default");
-        //String s = prefs.getString("name", "defaultValue");
         Log.d("Test", title);
         TextView view1 = getView().findViewById(R.id.SerieNameInfo);
         TextView view2 = getView().findViewById(R.id.PlotInfo);
