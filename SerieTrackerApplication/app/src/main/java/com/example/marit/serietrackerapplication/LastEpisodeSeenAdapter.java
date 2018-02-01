@@ -66,9 +66,7 @@ public class LastEpisodeSeenAdapter extends BaseAdapter {
      */
     public void colorPreparer(Map.Entry<String, String> item, TextView highestEp) {
         for (String key : highestEpisodeLoggedIn.keySet()) {
-            Log.d("lolllolllollollololol", highestEpisodeLoggedIn.toString());
             if (key == item.getKey()) {
-                Log.d("lolllolllollollololol", item.getValue().toString());
                 String[] splitHighestViewedUser = item.getValue().split("S");
                 if (highestEpisodeLoggedIn.get(key) != null) {
                     // Split the Episode and Season number, season number is at position 0 and

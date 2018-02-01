@@ -1,5 +1,4 @@
 package com.example.marit.serietrackerapplication;
-//TODO of alle info laten zien in serieDetails of hier de onnodige weg halen
 /**
  * Contains all the information about a Serie
  */
@@ -9,8 +8,8 @@ public class Serie {
     private String plot;
     private String awards;
     private String poster;
-    private String imdbrating;
-    private String imdbvotes;
+    private String imdbRating;
+    private String imdbVotes;
     private String totalSeasons;
 
     public Serie() {
@@ -39,11 +38,11 @@ public class Serie {
     }
 
     public String getImdbrating() {
-        return imdbrating;
+        return imdbRating;
     }
 
     public String getImdbvotes() {
-        return imdbvotes;
+        return imdbVotes;
     }
 
     public String getTotalSeasons() {
@@ -71,11 +70,11 @@ public class Serie {
     }
 
     public void setImdbrating(String imdbrating) {
-        this.imdbrating = imdbrating;
+        this.imdbRating = imdbrating;
     }
 
     public void setImdbvotes(String imdbvotes) {
-        this.imdbvotes = imdbvotes;
+        this.imdbVotes = imdbvotes;
     }
 
     public void setTotalSeasons(String totalSeasons) {

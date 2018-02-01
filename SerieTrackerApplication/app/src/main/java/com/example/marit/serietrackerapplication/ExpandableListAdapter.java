@@ -133,7 +133,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     /**
      * Gets the information from the serie from the database and when an episode in in Firebase,
      * it checked the episode, because that means the episode is seen
-     * TODO is dit duidelijk
      * All the variables are final, because they can't be changed during the process of setting
      * the checkboxes checked
      */
@@ -180,7 +179,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                // This error can only occur when there is an server-side reason to do so
+                System.out.println("FIREBASE ERROR");
             }
         });
 

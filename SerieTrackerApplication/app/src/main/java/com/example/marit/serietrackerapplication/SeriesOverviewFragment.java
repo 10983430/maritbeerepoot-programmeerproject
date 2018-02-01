@@ -58,22 +58,19 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ButtonSearch:
-                // Get the searchinput
-                EditText searchinputfield = getView().findViewById(R.id.EditTextSearch);
-                String searchinput = searchinputfield.getText().toString();
+        // Get the searchinput
+        EditText searchinputfield = getView().findViewById(R.id.EditTextSearch);
+        String searchinput = searchinputfield.getText().toString();
 
-                // Put back the start list when searchinput is empty, but search is clicked
-                if (searchinput.length() != 0) {
+        // Put back the start list when searchinput is empty, but search is clicked
+        if (searchinput.length() != 0) {
 
-                    // Clear the current list with results
-                    items = new ArrayList<>();
+            // Clear the current list with results
+            items = new ArrayList<>();
 
-                    // Get the data
-                    String url = "http://www.omdbapi.com/?apikey=14f4cb52&type=series&s=" + searchinput;
-                    getData(url);
-                }
+            // Get the data
+            String url = "http://www.omdbapi.com/?apikey=14f4cb52&type=series&s=" + searchinput;
+            getData(url);
         }
     }
 

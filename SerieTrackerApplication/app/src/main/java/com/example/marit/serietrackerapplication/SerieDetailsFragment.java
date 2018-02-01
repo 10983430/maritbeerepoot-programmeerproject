@@ -82,7 +82,6 @@ public class SerieDetailsFragment extends Fragment {
         String imdbid = prefs.getString("imdbid", "Default");
         count = 0;
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-        Log.d("TESSTT", url);
         getData(url, 1, 0);
     }
 
@@ -137,103 +136,6 @@ public class SerieDetailsFragment extends Fragment {
             }
         });
         RQe.add(stringRequeset);
-    }
-
-    /**
-     * Checks if all the data is gathered and puts the data in de right format
-     */
-    private void fixData() {
-        // Check if the information off all seasons is requested
-        if (count == Integer.valueOf(serieinfo.getTotalSeasons())) {
-            // Create an hashmap that consists of the season name and the episodes
-            // from that season
-            HashMap<String, List<Episode>> seasonAndEpisodes = new HashMap<>();
-            for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
-                ArrayList<Episode> episodes = new ArrayList<>();
-                for (int x = 0; x < episodeitems.size(); x++) {
-                    if (episodeitems.get(x).getSeasonnumber() == i) {
-                        episodes.add(episodeitems.get(x));
-                    }
-                }
-                seasonAndEpisodes.put("Season " + i, episodes);
-            }
-            setAdapter(seasonAndEpisodes);
-        }
-
-    }
-
-    /**
-     * Sets the expandable listview adapter and puts listeners on it
-     */
-    public void setAdapter(HashMap hashMap) {
-        ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
-        ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
-        view.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        // Put listeners on the adapter
-        view.setOnChildClickListener(new ChildClickListener());
-        view.setOnItemLongClickListener(new ChildLongClickListener());
-    }
-
-    /**
-     * Navigates user to the corresponding EpisodeDetailsFragment, when clicking on a child
-     */
-    private class ChildClickListener implements ExpandableListView.OnChildClickListener {
-        @Override
-        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            TextView episodetitleholder = v.findViewById(R.id.EpisodeTitleView);
-            String episodetitle = episodetitleholder.getText().toString();
-            for (int x = 0; x < episodeitems.size(); x++) {
-                if (episodeitems.get(x).getTitle() == episodetitle) {
-                    String imdbidepisode = episodeitems.get(x).getImdbid();
-                    EpisodeDetailsFragment fragment = new EpisodeDetailsFragment();
-                    Bundle args = new Bundle();
-                    args.putString("imdbidserie", imdbid);
-                    args.putString("imdbid", imdbidepisode);
-                    fragment.setArguments(args);
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
-                }
-            }
-            return true;
-        }
-    }
-
-    /**
-     * Marks an episode as seen or unseen on a long click
-     */
-    private class ChildLongClickListener implements AdapterView.OnItemLongClickListener {
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-            if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                CheckBox checkBox = view.findViewById(R.id.CheckBox);
-                // Get the object from class Episode that was clicked on
-                Episode clickedEpisode = (Episode) parent.getAdapter().getItem(position);
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) {
-                    String seasonnumber = clickedEpisode.getSeasonnumber().toString();
-                    String episodenumber = clickedEpisode.getEpisode().toString();
-                    String episodetitle = clickedEpisode.getTitle();
-
-                    if (checkBox.isChecked()) {
-                        // If the checkbox is checked, this means that the episode was already seen,
-                        // so mark it as unseen
-                        FireBaseHelper.deleteEpisodeFromFirebase(seasonnumber, episodenumber, user, imdbid);
-                        Toast.makeText(getContext(), "Marked as not seen", Toast.LENGTH_SHORT).show();
-                        checkBox.setChecked(false);
-                    } else {
-                        // If it was not seen yet, mark it as seen
-                        FireBaseHelper.markAsSeen(episodetitle, seasonnumber, episodenumber, user, imdbid);
-                        checkBox.setChecked(true);
-                        Toast.makeText(getContext(), "Marked as seen", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-
-                } else {
-                    Toast.makeText(getContext(), "Please log in to mark episodes as seen", Toast.LENGTH_SHORT).show();
-                }
-            }
-            return false;
-        }
     }
 
     /**
@@ -318,23 +220,123 @@ public class SerieDetailsFragment extends Fragment {
     }
 
     /**
+     * Checks if all the data is gathered and puts the data in de right format
+     */
+    private void fixData() {
+        // Check if the information off all seasons is requested
+        if (count == Integer.valueOf(serieinfo.getTotalSeasons())) {
+            // Create an hashmap that consists of the season name and the episodes
+            // from that season
+            HashMap<String, List<Episode>> seasonAndEpisodes = new HashMap<>();
+            for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
+                ArrayList<Episode> episodes = new ArrayList<>();
+                for (int x = 0; x < episodeitems.size(); x++) {
+                    if (episodeitems.get(x).getSeasonnumber() == i) {
+                        episodes.add(episodeitems.get(x));
+                    }
+                }
+                seasonAndEpisodes.put("Season " + i, episodes);
+            }
+            setAdapter(seasonAndEpisodes);
+        }
+
+    }
+
+    /**
+     * Sets the expandable listview adapter and puts listeners on it
+     */
+    public void setAdapter(HashMap hashMap) {
+        ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
+        ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
+        view.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        // Put listeners on the adapter
+        view.setOnChildClickListener(new ChildClickListener());
+        view.setOnItemLongClickListener(new ChildLongClickListener());
+    }
+
+    /**
+     * Navigates user to the corresponding EpisodeDetailsFragment, when clicking on a child
+     */
+    private class ChildClickListener implements ExpandableListView.OnChildClickListener {
+        @Override
+        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+            // Get the name of the clicked episode
+            TextView episodetitleholder = v.findViewById(R.id.EpisodeTitleView);
+            String episodetitle = episodetitleholder.getText().toString();
+            // Get the corresponding imdbid
+            for (int x = 0; x < episodeitems.size(); x++) {
+                if (episodeitems.get(x).getTitle() == episodetitle) {
+                    String imdbidepisode = episodeitems.get(x).getImdbid();
+                    // Navigate to the fragment with details about the episode
+                    EpisodeDetailsFragment fragment = new EpisodeDetailsFragment();
+                    Bundle args = new Bundle();
+                    args.putString("imdbidserie", imdbid);
+                    args.putString("imdbid", imdbidepisode);
+                    fragment.setArguments(args);
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                }
+            }
+            return true;
+        }
+    }
+
+    /**
+     * Marks an episode as seen or unseen on a long click
+     */
+    private class ChildLongClickListener implements AdapterView.OnItemLongClickListener {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                CheckBox checkBox = view.findViewById(R.id.CheckBox);
+                // Get the object from class Episode that was clicked on
+                Episode clickedEpisode = (Episode) parent.getAdapter().getItem(position);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    String seasonnumber = clickedEpisode.getSeasonnumber().toString();
+                    String episodenumber = clickedEpisode.getEpisode().toString();
+                    String episodetitle = clickedEpisode.getTitle();
+
+                    if (checkBox.isChecked()) {
+                        // If the checkbox is checked, this means that the episode was already seen,
+                        // so mark it as unseen
+                        FireBaseHelper.deleteEpisodeFromFirebase(seasonnumber, episodenumber, user, imdbid);
+                        Toast.makeText(getContext(), "Marked as not seen", Toast.LENGTH_SHORT).show();
+                        checkBox.setChecked(false);
+                    } else {
+                        // If it was not seen yet, mark it as seen
+                        FireBaseHelper.markAsSeen(episodetitle, seasonnumber, episodenumber, user, imdbid);
+                        checkBox.setChecked(true);
+                        Toast.makeText(getContext(), "Marked as seen", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+
+                } else {
+                    Toast.makeText(getContext(), "Please log in to mark episodes as seen", Toast.LENGTH_SHORT).show();
+                }
+            }
+            return false;
+        }
+    }
+
+    /**
      * Puts the serie information in the textiews
      */
     public void fillTextviews() {
-        TextView nameview = getView().findViewById(R.id.SerieNameInfo);
-        nameview.setText(serieinfo.getTitle());
+        TextView nameView = getView().findViewById(R.id.SerieNameInfo);
+        nameView.setText(serieinfo.getTitle());
 
-        TextView releaseview = getView().findViewById(R.id.SerieReleaseInfo);
-        releaseview.setText(serieinfo.getReleased());
+        TextView releaseView = getView().findViewById(R.id.SerieReleaseInfo);
+        releaseView.setText(serieinfo.getReleased());
 
-        TextView plotview = getView().findViewById(R.id.PlotInfo);
-        plotview.setText(serieinfo.getPlot());
+        TextView plotView = getView().findViewById(R.id.PlotInfo);
+        plotView.setText(serieinfo.getPlot());
 
-        TextView imdbratingview = getView().findViewById(R.id.imdbratinginfo);
-        imdbratingview.setText(serieinfo.getImdbrating() + " based on " + serieinfo.getImdbvotes() + " votes");
+        TextView imdbratingView = getView().findViewById(R.id.imdbratinginfo);
+        imdbratingView.setText(serieinfo.getImdbrating() + " based on " + serieinfo.getImdbvotes() + " votes");
 
-        TextView awardsview = getView().findViewById(R.id.AwardsInfo);
-        awardsview.setText(serieinfo.getAwards());
+        TextView awardsView = getView().findViewById(R.id.AwardsInfo);
+        awardsView.setText(serieinfo.getAwards());
 
         ImageView imageView = getView().findViewById(R.id.imageView);
         if (!serieinfo.getPoster().equals("N/A")) {

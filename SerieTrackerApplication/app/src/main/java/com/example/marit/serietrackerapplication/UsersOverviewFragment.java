@@ -69,7 +69,8 @@ public class UsersOverviewFragment extends ListFragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-//TODO
+                // This error can only occur when there is an server-side reason to do so
+                System.out.println("FIREBASE ERROR");
             }
         });
     }

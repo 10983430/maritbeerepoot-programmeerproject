@@ -172,8 +172,8 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //TODO
-                Log.d("Database error", databaseError.toString());
+                // This error can only occur when there is an server-side reason to do so
+                System.out.println("FIREBASE ERROR");
             }
         });
     }
@@ -181,7 +181,6 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
     /**
      * Gets the watched series and requests the seriename from getSerieData and gets the followed
      * users and requests their usernames from getFollowedUserData
-     * //TODO
      */
     public void getFollowedUsersWatchedSeries(DataSnapshot dataSnapshot) {
         // Get series
@@ -192,7 +191,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
             }
         } else {
             TextView seriesSeen = getView().findViewById(R.id.SeriesSeen);
-            seriesSeen.setText(seriesSeen.getText() + "(None yet)");
+            seriesSeen.setText(seriesSeen.getText() + " (None yet)");
         }
         // Get users
         HashMap<String, String> users = (HashMap<String, String>) dataSnapshot.child("UsersFollowed").getValue();
@@ -202,7 +201,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
             }
         } else {
             TextView following = getView().findViewById(R.id.Following);
-            following.setText(following.getText() + "(None yet)");
+            following.setText(following.getText() + " (None yet)");
         }
     }
 
@@ -295,7 +294,8 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-//TODO
+                // This error can only occur when there is an server-side reason to do so
+                System.out.println("FIREBASE ERROR");
             }
         });
     }

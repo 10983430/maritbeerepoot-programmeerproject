@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -33,16 +34,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.loginButton:
-                // Get the entered email and password and try to login with it
-                EditText emailfield = getView().findViewById(R.id.EmailField);
-                EditText passwordfield = getView().findViewById(R.id.PasswordField);
-                String email = emailfield.getText().toString();
-                String password = passwordfield.getText().toString();
-                SignIn(email, password);
+        // Get the entered email and password and try to login with it
+        EditText emailfield = getView().findViewById(R.id.EmailField);
+        EditText passwordfield = getView().findViewById(R.id.PasswordField);
+        String email = emailfield.getText().toString();
+        String password = passwordfield.getText().toString();
+        SignIn(email, password);
 
-        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.example.marit.serietrackerapplication;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,6 +50,9 @@ public class FireBaseHelper {
 
     }
 
+    /**
+     *  Puts the episode in Firebase
+     */
     public static class FirebaseValueEventListener implements ValueEventListener {
         private String episodeTitle;
         private String seasonNumber;
@@ -81,8 +85,8 @@ public class FireBaseHelper {
             } else {
                 // Check if there is an episode of the serie that needs to be added
                 // in the database, by checking if there is a key with the serie title
-                DataSnapshot serietitle = dataSnapshot.child("SerieWatched").child(imdbid);
-                HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serietitle.getValue();
+                DataSnapshot serieTitle = dataSnapshot.child("SerieWatched").child(imdbid);
+                HashMap<String, HashMap<String, String>> seriefb = (HashMap<String, HashMap<String, String>>) serieTitle.getValue();
 
                 // If not, create a new hashmap for the serie with the episode and season in it
                 if (seriefb == null) {
@@ -90,8 +94,8 @@ public class FireBaseHelper {
                 } else {
                     // If there is a episode from a specific serie in the database,
                     // check if there is already an episode added from the season
-                    DataSnapshot seasontje = dataSnapshot.child("SerieWatched").child(imdbid).child("Season " + seasonNumber);
-                    HashMap<String, String> episodeHashmap = (HashMap<String, String>) seasontje.getValue();
+                    DataSnapshot season = dataSnapshot.child("SerieWatched").child(imdbid).child("Season " + seasonNumber);
+                    HashMap<String, String> episodeHashmap = (HashMap<String, String>) season.getValue();
 
                     // If there isn't, add the season and the episode to the hashmap
                     // with watched episodes
@@ -112,14 +116,14 @@ public class FireBaseHelper {
             try {
                 dbref.child("SerieWatched").setValue(seen);
             } catch (Exception e) {
-                // TODO errorhandelen
                 e.printStackTrace();
             }
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-            // TODO errorhandelen
+            // This error can only occur when there is an server-side reason to do so
+            System.out.println("FIREBASE ERROR");
         }
     }
 

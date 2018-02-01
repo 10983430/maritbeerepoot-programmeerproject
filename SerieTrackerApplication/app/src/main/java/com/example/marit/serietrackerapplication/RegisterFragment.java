@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.HashMap;
 
 /**
@@ -36,23 +38,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.RegisterButton:
-                EditText emailinput = getView().findViewById(R.id.RegistrationEmailField);
-                EditText passwordinput = getView().findViewById(R.id.RegistrationPasswordField);
-                String email = emailinput.getText().toString();
-                String password = passwordinput.getText().toString();
-                if (passwordinput.length() >= 6) {
-                    try {
-                        createAccount(email, password);
-                    } catch (Exception e) {
-                        // When createAccount has no input, it throws an error so this lets the user know that no information was filled out
-                        Toast.makeText(getContext(), "Please fill out your information", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Please make sure your password has a length of atleast 6!", Toast.LENGTH_SHORT).show();
-                }
+        EditText emailinput = getView().findViewById(R.id.RegistrationEmailField);
+        EditText passwordinput = getView().findViewById(R.id.RegistrationPasswordField);
+        String email = emailinput.getText().toString();
+        String password = passwordinput.getText().toString();
+        if (passwordinput.length() >= 6) {
+            try {
+                createAccount(email, password);
+            } catch (Exception e) {
+                // When createAccount has no input, it throws an error so this lets the user know that no information was filled out
+                Toast.makeText(getContext(), "Please fill out your information", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getContext(), "Please make sure your password has a length of atleast 6!", Toast.LENGTH_SHORT).show();
         }
     }
 

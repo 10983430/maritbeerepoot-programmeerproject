@@ -195,28 +195,26 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-// TODO hier wat
+                    // This error can only occur when there is an server-side reason to do so
+                    System.out.println("FIREBASE ERROR");
                 }
             });
         }
     }
 
-    //TODO of deze switch aanpassen want maar 1 case, of nog een unseen button maken door te checken of item al in Firebase zit
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.SeenButton:
-                String episodeTitle = ((TextView)
-                        getView().findViewById(R.id.EpisodeNameInfo)).getText().toString();
-                String episodeNumber = ((TextView)
-                        getView().findViewById(R.id.EpisodeNumberInfo)).getText().toString();
-                String seasonNumber = ((TextView)
-                        getView().findViewById(R.id.EpisodeSeasonInfo)).getText().toString();
+        String episodeTitle = ((TextView)
+                getView().findViewById(R.id.EpisodeNameInfo)).getText().toString();
+        String episodeNumber = ((TextView)
+                getView().findViewById(R.id.EpisodeNumberInfo)).getText().toString();
+        String seasonNumber = ((TextView)
+                getView().findViewById(R.id.EpisodeSeasonInfo)).getText().toString();
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                FireBaseHelper.markAsSeen(episodeTitle, seasonNumber, episodeNumber, user, imdbidSerie);
-        }
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FireBaseHelper.markAsSeen(episodeTitle, seasonNumber, episodeNumber, user, imdbidSerie);
     }
-
-
 }
+
+
+

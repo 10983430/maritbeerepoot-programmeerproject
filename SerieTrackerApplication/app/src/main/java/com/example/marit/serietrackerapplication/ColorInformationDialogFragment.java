@@ -26,15 +26,11 @@ public class ColorInformationDialogFragment extends DialogFragment implements Vi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.CloseDialog:
-                // Close dialogfragment when the button is pressed
-                Fragment prev = getFragmentManager().findFragmentByTag("Explanation colors");
-                if (prev != null) {
-                    DialogFragment df = (DialogFragment) prev;
-                    df.dismiss();
-                    break;
-                }
+        // Close dialogfragment when the button is pressed
+        Fragment prev = getFragmentManager().findFragmentByTag("Explanation colors");
+        if (prev != null) {
+            DialogFragment df = (DialogFragment) prev;
+            df.dismiss();
         }
     }
 }
