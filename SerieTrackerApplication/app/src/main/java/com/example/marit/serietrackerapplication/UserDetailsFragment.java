@@ -119,9 +119,8 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
                 break;
 
             case R.id.InfoButton:
-                FragmentManager fm = getFragmentManager();
                 ColorInformationDialogFragment dialogFragment = new ColorInformationDialogFragment();
-                dialogFragment.show(fm, "Explanation colors");
+                dialogFragment.show(getFragmentManager(), "Explanation colors");
         }
     }
 

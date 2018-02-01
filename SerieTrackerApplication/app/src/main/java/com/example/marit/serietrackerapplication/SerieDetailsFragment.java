@@ -323,21 +323,14 @@ public class SerieDetailsFragment extends Fragment {
      * Puts the serie information in the textiews
      */
     public void fillTextviews() {
-        TextView nameView = getView().findViewById(R.id.SerieNameInfo);
-        nameView.setText(serieinfo.getTitle());
-
-        TextView releaseView = getView().findViewById(R.id.SerieReleaseInfo);
-        releaseView.setText(serieinfo.getReleased());
-
-        TextView plotView = getView().findViewById(R.id.PlotInfo);
-        plotView.setText(serieinfo.getPlot());
+        ((TextView) getView().findViewById(R.id.SerieNameInfo)).setText(serieinfo.getTitle());
+        ((TextView) getView().findViewById(R.id.SerieReleaseInfo)).setText(serieinfo.getReleased());
+        ((TextView) getView().findViewById(R.id.PlotInfo)).setText(serieinfo.getPlot());
+        ((TextView) getView().findViewById(R.id.AwardsInfo)).setText(serieinfo.getAwards());
 
         TextView imdbratingView = getView().findViewById(R.id.imdbratinginfo);
         imdbratingView.setText(serieinfo.getImdbrating() + " based on " + serieinfo.getImdbvotes() + " votes");
-
-        TextView awardsView = getView().findViewById(R.id.AwardsInfo);
-        awardsView.setText(serieinfo.getAwards());
-
+        
         ImageView imageView = getView().findViewById(R.id.imageView);
         if (!serieinfo.getPoster().equals("N/A")) {
             Picasso.with(getContext()).load(serieinfo.getPoster()).into(imageView);
