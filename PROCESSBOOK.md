@@ -153,7 +153,7 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 - Design voor de logged in user info verbeterd
 - App crashed niet meer wanneer er niet ingelogd is en alle buttons die niet zichtbaar moeten zijn voor een niet ingelogde user zijn weg. Alle informatie in de app is dus zichtbaar voor een niet ingelogde user, maar de deze user kan geen gebruik maken van functionaliteiten.
 - Code Review gedaan met Jessy, de volgende punten kwamen eruit:
-1. Switch met één case
+1. Switch met Ã©Ã©n case
 -Nesting voorkomen waar mogelijk
 
 2. Enters tussen code als je aan een nieuw onderdeel begint
@@ -179,9 +179,12 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 18. SerieOverviewFragment
 19. SerieDetailsFragment (missen nog wat kleine dingen)
 
-
 ### Donderdag 1 februari 2018:
-
+- Geprobeerd laatste dingen aan code netjes te maken, bettercodehub hoger te krijgen etc.
+- Nog een bug gefixt in de back navigation
+- Proposal geschreven
+- Github netjes gemaakt
+- Screens gemaakt en toegevoegd
 
 
 
