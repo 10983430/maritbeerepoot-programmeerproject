@@ -1,5 +1,6 @@
-Ik hou de hoofdlijnen van de style guide van android aan die hier te vinden is: https://source.android.com/setup/code-style en die van java (gemaakt door google) die hier te vinden is: https://google.github.io/styleguide/javaguide.html
-
+# Styleguide
+Ik hou de hoofdlijnen van de style guide van android aan die hier te vinden is: https://source.android.com/setup/code-style en die van java (gemaakt door google) die hier te vinden is: https://google.github.io/styleguide/javaguide.html  
+De belangrijkste punten om op te letten zijn voor mij:
 1. Alles in een taal schrijven (Engels)
 2. Negeer geen exceptions
 3. Geen anonymous listeners
