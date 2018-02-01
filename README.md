@@ -5,6 +5,14 @@ Marit Beerepoot, 10983430
 Deze applicatie maakt het mogelijk om bij te houden wat de laatste aflevering is die gezien is van een serie. Daarnaast geeft het ook de basis informatie weer over de serie en de episodes, zoals het plot en de imdb rating. Door middel van een zoekfunctie kunnen series worden gevonden. Bovendien is het ook mogelijk om gebruikers te volgen. 
 Gebruikers kunnen worden gevonden in een overzicht van de gebruikers. De app voorkomt ook dat de gebruiker spoilers geeft zijn vrienden. Dit doet de app door op de pagina van gebruiker informatie met kleuren aan te geven of de ingelogde gebruiker kan praten over de episode met de bekeken gebruikers. De tot nu toe bekeken series en gevolgde gebruikers worden weergeven in een overzicht van informatie van de ingelogde gebruiker, zodat deze niet steeds in de 'database' hoeven worden terug gevonden.
 
+## Features
+- Database waar bijna alle series in te vinden zijn
+- Mogelijkheid om door de serie database heen te zoeken
+- Mogelijkheid om episodes te markeren als gezien, waardoor je nooit meer kwijt raakt waar in een serie je bent
+- Mogelijkheid om vrienden te volgen en te zien waar je vrienden in een serie zijn
+- Serie details en episode details kunnen bekeken worden
+- App kan bekeken worden zonder in te loggen, maar dan kunnen er geen users gevolgd worden of episodes als gezien worden gemarkeerd
+
 ## Doel
 ### Probleem beschrijving
 Het doel van de app is om de volgende problemen op te lossen:
@@ -34,6 +42,7 @@ v.l.n.r.: LoggedInUserInfo (als ingelogd), SerieDetails (als uitgelogd), Episode
 - [Firebase](https://firebase.google.com/) (Licensed onder Creative Commons Attribution 3.0 License)
 - [Picasso](http://square.github.io/picasso/) (Licensed onder Apache 2.0)
 - [The open movie database](http://www.omdbapi.com/)  (Licensed onder CC BY-NC 4.0.)
+- [Volley](https://github.com/google/volley) (Licensed onder Apache 2.0)
 
 ## Better code hub
 [![BCH compliance](https://bettercodehub.com/edge/badge/10983430/maritbeerepoot-programmeerproject?branch=master)](https://bettercodehub.com/)
