@@ -15,6 +15,15 @@ Het doel van de app is om de volgende problemen op te lossen:
 De doelgroep is simpelweg iedereen die graag naar series kijkt en dat ook regelmatig doe. Echter biedt de app ook informatie aan over series, waardoor het een doelgroep die meer informatie over series wilt ook aanspreekt. Daarnaast is een andere doelgroep ook vriendengroepen die afleveringen van series niet willen spoilen aan de rest van de groep. Over het algemeen is de doelgroep dus mensen die actief series kijken. 
 
 ## Screenshots
+![](doc/ScreensReek2.png)
+![](doc/ScreensReek3.png)
+![](doc/ScreensReek1.png)
+![](doc/ScreensReek4.png)
+Reeks 1 v.l.n.r.: SeriesOverview, SerieDetails, EpisodeDetails
+Reeks 2 v.l.n.r.: UserOverview, UserDetails, ColorDialogFragment
+Reeks 3 v.l.n.r.: LoggedInUserInfo (als uitgelogd), Register, Login
+Reeks 4 v.l.n.r.: LoggedInUserInfo (als ingelogd), SerieDetails (als uitgelogd), EpisodeDetails (als uitgelogd)
+
 
 ## Sources
 - [Firebase](https://firebase.google.com/) (Licensed onder Creative Commons Attribution 3.0 License)

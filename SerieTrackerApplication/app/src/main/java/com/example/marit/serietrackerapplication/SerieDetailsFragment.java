@@ -79,31 +79,22 @@ public class SerieDetailsFragment extends Fragment {
         seenEpisodes = new ArrayList();
         Bundle bundle = this.getArguments();
         // Get the imdbid from the serie that was clicked on
-        Log.d("sdsfsddsf", bundle.toString());
         if (bundle != null) {
 
             imdbid = bundle.getString("imdbid");
         }
-        synchronized (this) {
-            // Get the data from the clicked serie
-            String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-            getData(url, 1, 0);
-
-        }
-
+        String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
+        getData(url, 1, 0);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
-        String title = prefs.getString("title", "Default");
-        String plot = prefs.getString("plot", "Default");
-        Log.d("Test", title);
-        TextView view1 = getView().findViewById(R.id.SerieNameInfo);
-        TextView view2 = getView().findViewById(R.id.PlotInfo);
-        view1.setText(title);
-        view2.setText(plot);
+        String imdbid = prefs.getString("imdb", "Default");
+        count = 0;
+        String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
+        getData(url, 1, 0);
     }
 
 
@@ -112,11 +103,7 @@ public class SerieDetailsFragment extends Fragment {
         super.onPause();
         SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = prefs.edit();
-        TextView view1 = getView().findViewById(R.id.SerieNameInfo);
-        TextView view2 = getView().findViewById(R.id.PlotInfo);
-        prefsEditor.putString("title", view1.getText().toString());
-        prefsEditor.putString("plot", view2.getText().toString());
-        //prefsEditor.put
+        prefsEditor.putString("imdb", imdbid);
         prefsEditor.apply();
     }
 
@@ -164,7 +151,10 @@ public class SerieDetailsFragment extends Fragment {
      * Checks if all the data is gathered and puts the data in de right format
      */
     private void fixData() {
+        Log.d("testjeee", String.valueOf(count) + " " + String.valueOf(totalseasons));
         if (count == totalseasons) {
+            Log.d("testjeee", String.valueOf(count) + " " + String.valueOf(totalseasons));
+            hashMap = new HashMap<>();
             for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
                 ArrayList<Episode> listje = new ArrayList<>();
                 for (int x = 0; x < episodeitems.size(); x++) {
@@ -186,6 +176,7 @@ public class SerieDetailsFragment extends Fragment {
      */
     public void setAdapter() {
         // Set adapter
+        Log.d("Testje", SeasonList.toString() + " " + hashMap.toString() + " " + imdbid);
         adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
@@ -256,7 +247,6 @@ public class SerieDetailsFragment extends Fragment {
         }
     }
 
-
     /**
      * Parses the JSON respons when requesting details about an specifid season and puts
      * all the episode information in an arraylist
@@ -282,7 +272,6 @@ public class SerieDetailsFragment extends Fragment {
         }
     }
 
-
     /**
      * Parses the data when requesting data about the serie, also sends requests for all the seasons
      */
@@ -296,7 +285,9 @@ public class SerieDetailsFragment extends Fragment {
                 for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
                     String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
                     getData(url, 2, i);
-                    SeasonList.add("Season " + String.valueOf(i));
+                    if (!SeasonList.contains("Season " + String.valueOf(i))) {
+                        SeasonList.add("Season " + String.valueOf(i));
+                    }
                 }
             } else {
                 fillTextviews();

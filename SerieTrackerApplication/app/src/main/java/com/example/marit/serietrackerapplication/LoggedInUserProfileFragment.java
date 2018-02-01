@@ -93,12 +93,12 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
             case R.id.ButtonLogin:
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 LoginFragment loginfragment = new LoginFragment();
-                fragmentTransaction.replace(R.id.fragment_container, loginfragment).commit();
+                fragmentTransaction.replace(R.id.fragment_container, loginfragment).addToBackStack(null).commit();
                 break;
             case R.id.ButtonRegister:
                 FragmentTransaction fragmentTransactionregister = getFragmentManager().beginTransaction();
                 RegisterFragment registerFragment = new RegisterFragment();
-                fragmentTransactionregister.replace(R.id.fragment_container, registerFragment).commit();
+                fragmentTransactionregister.replace(R.id.fragment_container, registerFragment).addToBackStack(null).commit();
                 break;
             case R.id.ButtonLogout:
                 FirebaseAuth.getInstance().signOut();
