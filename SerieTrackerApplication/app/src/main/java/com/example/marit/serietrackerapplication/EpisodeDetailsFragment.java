@@ -168,8 +168,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             final String userid = user.getUid();
-            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-            DatabaseReference dbref = fbdb.getReference("User/");
+            DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("User/");
             dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
