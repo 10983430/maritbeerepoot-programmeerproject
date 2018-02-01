@@ -20,7 +20,7 @@ Het doel van de app is om de volgende problemen op te lossen:
 2. Het is ook super vervelend als je achterloopt met een serie kijken, en je vrienden, waar jij bij bent, over een aflevering gaan praten die je nog niet gezien hebt. Zonder dat je er om vraagt vliegen de spoilers om je oren.
 
 ### Doelgroep
-De doelgroep is simpelweg iedereen die graag naar series kijkt en dat ook regelmatig doe. Echter biedt de app ook informatie aan over series, waardoor het een doelgroep die meer informatie over series wilt ook aanspreekt. Daarnaast is een andere doelgroep ook vriendengroepen die afleveringen van series niet willen spoilen aan de rest van de groep. Over het algemeen is de doelgroep dus mensen die actief series kijken. 
+De doelgroep is simpelweg iedereen die graag naar series kijkt en dat ook regelmatig doet. Om nog specifieker te zijn: mensen die series kijken en graag bijhouden waar ze in de serie zijn, of een hekel hebben aan het terug zoeken waar ze in een serie zijn. Daarnaast is een andere doelgroep ook vriendengroepen die afleveringen van series niet willen spoilen aan de rest van de groep. Over het algemeen is de doelgroep dus mensen die actief series kijken. 
 
 ## Video 
 Komt later vandaag
