@@ -178,7 +178,7 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
             //TODO handelen
         }
     }
-    
+
 
     /**
      * 'Follows" the user by putting the user in the database
@@ -187,31 +187,39 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String currentUserId = user.getUid();
-        final DatabaseReference dbref = fbdb.getReference("User/" + currentUserId + "/UsersFollowed");
-        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String, String> usersFollowed = (HashMap<String, String>) dataSnapshot.getValue();
-                if (usersFollowed == null) {
-                    usersFollowed = new HashMap<>();
-                }
-                TextView view = getView().findViewById(R.id.UsernameInfo);
-                String username = view.getText().toString();
-                usersFollowed.put(userID, username);
-                try {
-                    dbref.setValue(usersFollowed);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-//TODO
-            }
-        });
+        DatabaseReference dbref = fbdb.getReference("User/" + currentUserId + "/UsersFollowed");
+        dbref.addListenerForSingleValueEvent(new AddFirebaseValueEventListener(dbref));
     }
+
+    public class AddFirebaseValueEventListener implements ValueEventListener {
+        private DatabaseReference dbref;
+
+        public AddFirebaseValueEventListener(DatabaseReference dbref) {
+            this.dbref = dbref;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            HashMap<String, String> usersFollowed = (HashMap<String, String>) dataSnapshot.getValue();
+            if (usersFollowed == null) {
+                usersFollowed = new HashMap<>();
+            }
+            TextView view = getView().findViewById(R.id.UsernameInfo);
+            String username = view.getText().toString();
+            usersFollowed.put(userID, username);
+            try {
+                dbref.setValue(usersFollowed);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+//TODO
+        }
+    }
+    
 
     /**
      * Unfollows the user by removing him from the database
