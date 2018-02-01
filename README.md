@@ -17,10 +17,13 @@ De doelgroep is simpelweg iedereen die graag naar series kijkt en dat ook regelm
 ## Screenshots
 v.l.n.r.: SeriesOverview, SerieDetails, EpisodeDetails   
 ![](doc/ScreensReek2.png)  
+  
 v.l.n.r.: UserOverview, UserDetails, ColorDialogFragment  
 ![](doc/ScreensReek3.png)  
+  
 v.l.n.r.: LoggedInUserInfo (als uitgelogd), Register, Login  
 ![](doc/ScreensReek1.png)  
+  
 v.l.n.r.: LoggedInUserInfo (als ingelogd), SerieDetails (als uitgelogd), EpisodeDetails (als uitgelogd)  
 ![](doc/ScreensReek4.png)  
 
@@ -29,7 +32,7 @@ v.l.n.r.: LoggedInUserInfo (als ingelogd), SerieDetails (als uitgelogd), Episode
 - [Picasso](http://square.github.io/picasso/) (Licensed onder Apache 2.0)
 - [The open movie database](http://www.omdbapi.com/)  (Licensed onder CC BY-NC 4.0.)
 
-## Better code hub:
+## Better code hub
 [![BCH compliance](https://bettercodehub.com/edge/badge/10983430/maritbeerepoot-programmeerproject?branch=master)](https://bettercodehub.com/)
 
 ## Copyright
