@@ -24,6 +24,7 @@ De doelgroep is simpelweg iedereen die graag naar series kijkt en dat ook regelm
 
 ## Video 
 Komt later vandaag
+[Klik hier om de demo op YouTube te bekijken](https://youtu.be/k1UjwAWjRzA)  
 
 ## Screenshots
 v.l.n.r.: SeriesOverview, SerieDetails, EpisodeDetails   
