@@ -14,6 +14,9 @@ Het doel van de app is om de volgende problemen op te lossen:
 ### Doelgroep
 De doelgroep is simpelweg iedereen die graag naar series kijkt en dat ook regelmatig doe. Echter biedt de app ook informatie aan over series, waardoor het een doelgroep die meer informatie over series wilt ook aanspreekt. Daarnaast is een andere doelgroep ook vriendengroepen die afleveringen van series niet willen spoilen aan de rest van de groep. Over het algemeen is de doelgroep dus mensen die actief series kijken. 
 
+## Video 
+Komt later vandaag
+
 ## Screenshots
 v.l.n.r.: SeriesOverview, SerieDetails, EpisodeDetails   
 ![](doc/ScreensReek2.png)  
