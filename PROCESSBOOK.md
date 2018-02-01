@@ -173,8 +173,11 @@ Soms is het alleen tijdens het scrollen zo dat opeens alle checkboxes gecheckt w
 12. UserDetailsFragment
 13. FragmentContainer
 14. LoggedInUserProfileFragment
-15. UserInfoClass  -> uiteindelijk verwijderd
-16. UsersOverviewFragment
+15. FireBaseHelper
+16. UserInfoClass
+17. UsersOverviewFragment
+18. SerieOverviewFragment
+19. SerieDetailsFragment (missen nog wat kleine dingen)
 
 
 ### Donderdag 1 februari 2018:

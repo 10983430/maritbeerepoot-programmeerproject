@@ -45,7 +45,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 /**
- * TODO A simple {@link Fragment} subclass.
+ * Shows details from the serie to the UI
  */
 public class SerieDetailsFragment extends Fragment {
     String imdbid;
@@ -160,6 +160,9 @@ public class SerieDetailsFragment extends Fragment {
         RQe.add(stringRequeset);
     }
 
+    /**
+     * Checks if all the data is gathered and puts the data in de right format
+     */
     private void fixData() {
         if (count == totalseasons) {
             for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
@@ -254,7 +257,6 @@ public class SerieDetailsFragment extends Fragment {
     }
 
 
-
     /**
      * Parses the JSON respons when requesting details about an specifid season and puts
      * all the episode information in an arraylist
@@ -283,8 +285,6 @@ public class SerieDetailsFragment extends Fragment {
 
     /**
      * Parses the data when requesting data about the serie, also sends requests for all the seasons
-     *
-     * @param response
      */
     public void parseJSONSerieDetails(String response) {
         try {
@@ -295,7 +295,6 @@ public class SerieDetailsFragment extends Fragment {
                 totalseasons = Integer.parseInt(responsedata.getString("totalSeasons"));
                 for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
                     String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
-                    Log.d("dsfsuewirewpirpwe", "hoiii222");
                     getData(url, 2, i);
                     SeasonList.add("Season " + String.valueOf(i));
                 }
@@ -307,6 +306,9 @@ public class SerieDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets all the setters of the Serie class
+     */
     public Serie setSettersSerieClass(JSONObject responsedata) {
         Serie serieinfo = new Serie();
         try {
@@ -332,6 +334,9 @@ public class SerieDetailsFragment extends Fragment {
         return serieinfo;
     }
 
+    /**
+     * Puts the serie information in the textiews
+     */
     public void fillTextviews() {
         TextView nameview = getView().findViewById(R.id.SerieNameInfo);
         nameview.setText(serieinfo.getTitle());
