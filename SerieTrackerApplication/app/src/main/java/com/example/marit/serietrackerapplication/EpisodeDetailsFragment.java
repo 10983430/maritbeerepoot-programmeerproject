@@ -151,6 +151,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
             ((TextView) getView().findViewById(R.id.EpisodeWriterInfo)).setText(data.getString("Writer"));
             ((TextView) getView().findViewById(R.id.EpisodePlotInfo)).setText(data.getString("Plot"));
             ((TextView) getView().findViewById(R.id.EpisodeLanguageInfo)).setText(data.getString("Language"));
+
             // Hide the imageview if there is no image available
             final ImageView imageview = getView().findViewById(R.id.EpisodePoster);
             if (!data.getString("Poster").equals("N/A")) {
@@ -175,13 +176,14 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                     // Make sure the textview is empty (for when onResume is called)
                     TextView followersInfo = getView().findViewById(R.id.FollowersInfo);
                     followersInfo.setText("");
+
                     // Get all the users that the logged in user is following
                     HashMap<String, String> followed = (HashMap<String, String>) dataSnapshot.child(userid).child("UsersFollowed").getValue();
                     if (followed != null) {
                         for (String key : followed.keySet()) {
                             String username = dataSnapshot.child(key).child("username").getValue().toString();
-                            // Check if the episode is in the Firebase
 
+                            // Check if the episode is in the Firebase
                             DataSnapshot episodeInfo = dataSnapshot.child(key).child("SerieWatched").child(imdbidSerie).child("Season " + seasonNumber).child("E-" + episodeNumber);
                             if (episodeInfo.getValue() == null) {
                                 followersInfo.setText(followersInfo.getText().toString() + username + " didn't watch this episode yet!\n");

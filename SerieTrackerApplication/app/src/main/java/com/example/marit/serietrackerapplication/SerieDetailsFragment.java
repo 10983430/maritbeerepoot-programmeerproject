@@ -42,10 +42,10 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class SerieDetailsFragment extends Fragment {
     private String imdbid;
-    private ArrayList<Episode> episodeitems = new ArrayList<Episode>();
+    private ArrayList<Episode> episodeItems = new ArrayList<Episode>();
     private List<String> SeasonList = new ArrayList<>();
     private Integer count = 0;
-    private Serie serieinfo;
+    private Serie serieInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -155,8 +155,8 @@ public class SerieDetailsFragment extends Fragment {
                 String imdbid = data.getJSONObject(i).getString("imdbID");
 
                 // Make an Episode class object en put all the episode in the list
-                Episode episodeinfo = new Episode(title, episode, imdbid, seasonnumber);
-                episodeitems.add(episodeinfo);
+                Episode episodeInfo = new Episode(title, episode, imdbid, seasonnumber);
+                episodeItems.add(episodeInfo);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -169,10 +169,10 @@ public class SerieDetailsFragment extends Fragment {
     public void parseJSONSerieDetails(String response) {
         try {
             // Parse JSON to instance of class Serie
-            JSONObject responsedata = new JSONObject(response);
-            serieinfo = setSettersSerieClass(responsedata);
+            JSONObject responseData = new JSONObject(response);
+            serieInfo = setSettersSerieClass(responseData);
             // Send an request for every season
-            getAdditionalInfo(responsedata.getString("totalSeasons"));
+            getAdditionalInfo(responseData.getString("totalSeasons"));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -186,7 +186,7 @@ public class SerieDetailsFragment extends Fragment {
         // Check if there are seasons known in the API
         if (!numberOfSeasons.equals("N/A")) {
             //totalseasons = Integer.parseInt(numberOfSeasons);
-            for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
+            for (int i = 1; i <= Integer.parseInt(serieInfo.getTotalSeasons()); i++) {
                 String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
                 getData(url, 2, i);
                 // Keep an list with the name of every season
@@ -224,15 +224,15 @@ public class SerieDetailsFragment extends Fragment {
      */
     private void fixData() {
         // Check if the information off all seasons is requested
-        if (count == Integer.valueOf(serieinfo.getTotalSeasons())) {
+        if (count == Integer.valueOf(serieInfo.getTotalSeasons())) {
             // Create an hashmap that consists of the season name and the episodes
             // from that season
             HashMap<String, List<Episode>> seasonAndEpisodes = new HashMap<>();
-            for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
+            for (int i = 1; i <= Integer.parseInt(serieInfo.getTotalSeasons()); i++) {
                 ArrayList<Episode> episodes = new ArrayList<>();
-                for (int x = 0; x < episodeitems.size(); x++) {
-                    if (episodeitems.get(x).getSeasonnumber() == i) {
-                        episodes.add(episodeitems.get(x));
+                for (int x = 0; x < episodeItems.size(); x++) {
+                    if (episodeItems.get(x).getSeasonnumber() == i) {
+                        episodes.add(episodeItems.get(x));
                     }
                 }
                 seasonAndEpisodes.put("Season " + i, episodes);
@@ -264,10 +264,12 @@ public class SerieDetailsFragment extends Fragment {
             // Get the name of the clicked episode
             TextView episodetitleholder = v.findViewById(R.id.EpisodeTitleView);
             String episodetitle = episodetitleholder.getText().toString();
+
             // Get the corresponding imdbid
-            for (int x = 0; x < episodeitems.size(); x++) {
-                if (episodeitems.get(x).getTitle() == episodetitle) {
-                    String imdbidepisode = episodeitems.get(x).getImdbid();
+            for (int x = 0; x < episodeItems.size(); x++) {
+                if (episodeItems.get(x).getTitle() == episodetitle) {
+                    String imdbidepisode = episodeItems.get(x).getImdbid();
+
                     // Navigate to the fragment with details about the episode
                     EpisodeDetailsFragment fragment = new EpisodeDetailsFragment();
                     Bundle args = new Bundle();
@@ -292,6 +294,7 @@ public class SerieDetailsFragment extends Fragment {
                 // Get the object from class Episode that was clicked on
                 Episode clickedEpisode = (Episode) parent.getAdapter().getItem(position);
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                 if (user != null) {
                     String seasonnumber = clickedEpisode.getSeasonnumber().toString();
                     String episodenumber = clickedEpisode.getEpisode().toString();
@@ -323,17 +326,17 @@ public class SerieDetailsFragment extends Fragment {
      * Puts the serie information in the textiews
      */
     public void fillTextviews() {
-        ((TextView) getView().findViewById(R.id.SerieNameInfo)).setText(serieinfo.getTitle());
-        ((TextView) getView().findViewById(R.id.SerieReleaseInfo)).setText(serieinfo.getReleased());
-        ((TextView) getView().findViewById(R.id.PlotInfo)).setText(serieinfo.getPlot());
-        ((TextView) getView().findViewById(R.id.AwardsInfo)).setText(serieinfo.getAwards());
+        ((TextView) getView().findViewById(R.id.SerieNameInfo)).setText(serieInfo.getTitle());
+        ((TextView) getView().findViewById(R.id.SerieReleaseInfo)).setText(serieInfo.getReleased());
+        ((TextView) getView().findViewById(R.id.PlotInfo)).setText(serieInfo.getPlot());
+        ((TextView) getView().findViewById(R.id.AwardsInfo)).setText(serieInfo.getAwards());
 
         TextView imdbratingView = getView().findViewById(R.id.imdbratinginfo);
-        imdbratingView.setText(serieinfo.getImdbrating() + " based on " + serieinfo.getImdbvotes() + " votes");
-        
+        imdbratingView.setText(serieInfo.getImdbrating() + " based on " + serieInfo.getImdbvotes() + " votes");
+
         ImageView imageView = getView().findViewById(R.id.imageView);
-        if (!serieinfo.getPoster().equals("N/A")) {
-            Picasso.with(getContext()).load(serieinfo.getPoster()).into(imageView);
+        if (!serieInfo.getPoster().equals("N/A")) {
+            Picasso.with(getContext()).load(serieInfo.getPoster()).into(imageView);
         }
     }
 

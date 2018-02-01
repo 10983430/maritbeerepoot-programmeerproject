@@ -90,6 +90,7 @@ public class UsersOverviewFragment extends ListFragment {
         // Get the userId by checking which username has which ID
         TextView usernameHolder = v.findViewById(R.id.UserNameHolder);
         String username = usernameHolder.getText().toString();
+
         // Navigate to user details
         Bundle args = new Bundle();
         args.putString("userid", getUserId(username));

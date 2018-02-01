@@ -91,17 +91,20 @@ public class LastEpisodeSeenAdapter extends BaseAdapter {
         if (Integer.parseInt(splitEpisodeLogged[0]) > Integer.parseInt(splitEpisodeViewed[0])) {
             highestep.setTextColor(Color.RED);
         } else {
+
             // If the seasons are the same, but the episode of the viewed is lower,
             // the logged in user could give him spoilers
             if (Integer.parseInt(splitEpisodeLogged[0]) == Integer.parseInt(splitEpisodeViewed[0])) {
                 if (Integer.parseInt(splitEpisodeLogged[1]) > Integer.parseInt(splitEpisodeViewed[1])) {
                     highestep.setTextColor(Color.RED);
                 }
+
                 // If the episode of the viewed in higher, the logged in user can not give
                 // spoilers (but can receive them, that's not taken in to account in this app)
                 if (Integer.parseInt(splitEpisodeLogged[1]) <= Integer.parseInt(splitEpisodeViewed[1])) {
                     highestep.setTextColor(Color.GREEN);
                 }
+
             } else {
                 highestep.setTextColor(Color.GREEN);
             }

@@ -310,6 +310,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
         for (String key : userData.keySet()) {
             userNames.add(userData.get(key));
         }
+
         // Set the adapter
         ListAdapter adapter = new UsersOverviewAdapter(getContext(), userNames);
         userslistview.setAdapter(adapter);
@@ -329,6 +330,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                     imdbid = key;
                 }
             }
+
             // Navigate to the serie details fragment
             SerieDetailsFragment fragment = new SerieDetailsFragment();
             Bundle args = new Bundle();
@@ -352,6 +354,7 @@ public class LoggedInUserProfileFragment extends Fragment implements View.OnClic
                     userid = key;
                 }
             }
+
             // Navigate to the user details fragment
             UserDetailsFragment fragment = new UserDetailsFragment();
             Bundle args = new Bundle();

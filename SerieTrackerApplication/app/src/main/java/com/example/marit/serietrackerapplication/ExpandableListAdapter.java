@@ -92,8 +92,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         convertView.setFocusable(false);
 
         // Set the textview with the name of the season
-        TextView viewtje = convertView.findViewById(R.id.usernameHolder);
-        viewtje.setText(title);
+        TextView textView = convertView.findViewById(R.id.usernameHolder);
+        textView.setText(title);
         return convertView;
     }
 
@@ -108,8 +108,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         Episode episode = (Episode) getChild(groupPosition, childPosition);
 
         //Set the textview with the title of the episode
-        TextView viewtje = convertView.findViewById(R.id.EpisodeTitleView);
-        viewtje.setText(episode.getTitle());
+        TextView textView = convertView.findViewById(R.id.EpisodeTitleView);
+        textView.setText(episode.getTitle());
 
         // Find the episodes that are already seen and check the checkboxes of those
         String title = (String) getGroup(groupPosition);
@@ -156,6 +156,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     // an episode from the serie yet, so create an empty list
                     seenEpisodes = new ArrayList<>();
                 } else {
+
                     // If there are entries for a specific season and serie in Firebase, get the
                     // episode, parse the string with regex and add it to the seenEpisodes list
                     seenEpisodes = new ArrayList<>();
