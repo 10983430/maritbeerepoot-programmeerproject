@@ -10,10 +10,10 @@ De tot nu toe bekeken series en gevolgde gebruikers worden weergeven in een over
 ## Technical design
 
 ### Algemeen
-Er zijn 9 fragments, te verdelen in 3 flows (zie reeksen afbeeldingen users):
-- Van het SeriesOverviewFragment kan naar het SerieDetailsFragment worden gegaan, en vanuit daar naar het EpisodeDetailsFragment.
-- Van het UsersOverviewFragment kan naar het UserDetailsFragment worden gegaan. Vanuit daar kan er naar het SerieDetailsFragment worden gegaan, en weer door naar het EpisodeDetailsFragment.
-- Van het LoggedInProfile kan naar het SerieDetailsFragment worden gegaan, en vanuit daar naar het EpisodeDetailsFragment. Daarnaast kan er vanuit het LoggedInProfile kan naar het UsersOverviewFragment kan naar het UserDetailsFragment worden gegaan (en daarmee dus ook weer naar SerieDetailsFragment en EpisodeDetailsFragment).
+Er zijn 9 fragments, te verdelen in 3 flows (zie reeksen afbeeldingen in de readme):
+- Van het SeriesOverviewFragment kan via de listview naar het SerieDetailsFragment worden gegaan, en vanuit daar kan via de expandable listview naar het EpisodeDetailsFragment.
+- Van het UsersOverviewFragment kan via de listview naar het UserDetailsFragment worden gegaan. Vanuit daar kan er via de listview naar het SerieDetailsFragment worden gegaan, en weer door naar het EpisodeDetailsFragment.
+- Van het LoggedInProfile kan via een listview naar het SerieDetailsFragment worden gegaan, en vanuit daar naar het EpisodeDetailsFragment. Daarnaast kan er vanuit het LoggedInProfile via de listview naar het UsersOverviewFragment kan naar het UserDetailsFragment worden gegaan (en daarmee dus ook weer naar SerieDetailsFragment en EpisodeDetailsFragment).
 
 ### Class beschrijving (op volgorde van flow door app heen)
 - *Listerners*: naast alle onderstaande java files worden er in sommige files ook classen aangemaakt voor de listeners. Deze classen heb ik hier niet apart benoemd aangezien het dan een grote lijst van telkens hetzelfde wordt. De classen die een OnItemClickListener implementeren kijken of er op de listview wordt geklikt en handelen dat. De class die OnChildClickListener implementeerd kijkt naar of er op een child van de expandable listview wordt geklikt. De classen die en ValueEventListener implementeren halen data uit Firebase en houden bij of deze veranderd.
@@ -95,6 +95,9 @@ Om een episode als gezien te markeren moet deze in FireBase gezet worden. Echter
 
 ### Fragments en onBackPressed
 Ik heb besloten om fragments te gaan gebruiken zodat ik op een makkelijke manier een bottom navigatie heb kunnen maken. Echter was mijn ervaring met fragments vrij minimaal, waardoor ik tegen vrij veel bugs ben aangelopen. Ik kreeg het bijvoorbeeld vrij lang niet voor elkaar om als er op de terug knop wordt gedrukt, de data te weergeven in het fragment. Deze bleef namelijk leeg. Uiteindelijk heb ik het kunnen fixen door SharedPreferences te gebruiken, en daarmee de id van de serie of user op te slaan, om in de onResume dan weer de data op te halen. Maar daarmee loop je gelijk tegen het probleem aan dat de onResume en onCreate beide altijd worden aangeroepen wanneer een fragment voor het eerst opent. Hierdoor wordt de data 2x opgehaald, maar in de onResume kan daardoor een andere userid staan dan in de oncreate. Dit is uiteindelijk gefixt (na veel proberen samen met een assistent) door in de onCreate de sharedprefs al een keer te overschrijven met het nieuwe id, zodat in de onResume geen oude informatie meer staat. Dit is ook weer een probleem waar ik vrij lang over heb gedaan om het te kunnen fixen.
+
+### De grote hoeveelheid listviews
+De applicatie bevat 6 listviews, die net allemaal iets anders zijn. Het was een uitdaging om deze allemaal werkend en netjes te krijgen.
 
 ### Tijd
 De grootste challenge was de tijd. Aan het begin dacht ik dat ik ruim de tijd had, maar toen ik tegen steeds meer errors aan ging lopen die ook niet binnen enkele dagen weg gingen, begon te tijd wel te dringen. Mijn originele planning liep compleet in de soep. 
