@@ -23,7 +23,6 @@ Het doel van de app is om de volgende problemen op te lossen:
 De doelgroep is simpelweg iedereen die graag naar series kijkt en dat ook regelmatig doet. Om nog specifieker te zijn: mensen die series kijken en graag bijhouden waar ze in de serie zijn, of een hekel hebben aan het terug zoeken waar ze in een serie zijn. Daarnaast is een andere doelgroep ook vriendengroepen die afleveringen van series niet willen spoilen aan de rest van de groep. Over het algemeen is de doelgroep dus mensen die actief series kijken. 
 
 ## Video 
-Komt later vandaag
 [Klik hier om de demo op YouTube te bekijken](https://youtu.be/k1UjwAWjRzA)  
 
 ## Screenshots
