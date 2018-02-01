@@ -196,7 +196,6 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     // This error can only occur when there is an server-side reason to do so
-                    System.out.println("FIREBASE ERROR");
                 }
             });
         }
