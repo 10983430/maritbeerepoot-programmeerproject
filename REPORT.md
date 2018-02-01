@@ -50,7 +50,7 @@ De tot nu toe bekeken series en gevolgde gebruikers worden weergeven in een over
 
 - *UserInfo.java*: Class die de basis informatie van de gebruiker bevat. Wordt gebruikt bij het registreren (in Register.java).
 
-## Veranderingen ten opzichte van het design document/Keuzes:
+## Veranderingen ten opzichte van het design document/Keuzes
 Ten eerste wordt de Jikan API niet gebruikt. Het plan was om deze ook te gebruiken, maar deze API geeft de data in een hele andere format, waardoor het vrij complex werd om dezelfde fragments voor alle twee de APIs te laten werken. Na feedback van de presentatie in week 1 heb ik ervoor gekozen om dit achterwege te laten en alleen door te gaan met de OMDb API.  
 
 Een ander element wat ik heb aangepast is dat er geen rekening wordt gehouden met series die niet op volgorde worden gekeken (hier bedoel ik mee dat er sommige series zijn waar je episode 10 ook voor episode 1 kan kijken, omdat de afleveringen niet heel nauw met elkaar verbonden zijn). Echter heb ik dit na feedback van de presentaties in week 1 ook niet gedaan. Dit zou mijn onnodig complex maken voor maar een heel klein aantal series, aangezien de meeste wel op volgorde worden gekeken.  
@@ -71,8 +71,11 @@ Andere kleine veranderingen zijn:
 - In de listview bij de UserProfileActivity is het vrij nutteloos dat er in de listview nog wordt aangegeven dat je een serie volgt, aangezien de kleuren zijn afgestemd op welke episodes je gezien hebt. Volg je een serie niet, is het episode nummer in het grijs weergeven. Dit had ik mij niet gerealiseerd met het maken van het design document.
 - Bij het design document was het het idee om ingelogd te moeten zijn om de app te kunnen gebruiken. Uiteindelijk heb ik ervoor gekozen om dit niet te doen. Gebruikers kunnen dus door de series en users heen browsen zonder ingelogd te zijn. Ze kunnen dan alleen geen mensen volgen of episodes als gezien markeren. Er is hiervoor gekozen zodat een user kan checken of al zijn favoriete series en zijn vrienden de app gebruiken, voor hij/zij een account aanmaakt.
 
+## Defence veranderingen
+Alle bovenstaande veranderingen hebben ervoor gezorgd dat er nu een product staat waar ik best trots op ben. Het is een app die smooth loopt en alle functionaliteiten bevat die ik erin wilde, en dat in maar 3 weken programmeren. Ik heb design veranderingen gemaakt omdat het oog ook wat wilt. Mijn voorgestelde design was niet geweldig, dus er was veel ruimte voor verbeteringen. Ondanks het design nogsteeds wat gebreken heeft, vind ik dat het nu wel op een acceptabel niveau zit. Het blijft echter een simpel design. De andere veranderingen zijn over het algemeen gemaakt om onnodige complexiteit tegen te gaan. Ik heb erg blij dat ik feedback heb gekregen tijdens de presentaties en daarmee mijn app wat minder complex heb kunnen maken. Anders had ik het nooit afgered.  
+Ik ben blij met alle keuzes die ik heb gemaakt, maar in een 'an ideal world, given much more time' had ik graag meer aan het design gedaan. Daarna had ik nog eens goed naar de databastructuur willen kijken om het minder 'nested' te maken waar dat mogelijk is. Ook zou ik de dialog fragment eruit willen halen en een betere oplossing vinden om aan te geven of er spoilers gegeven kunnen worden. Als design uitgelegd moet worden betekent dat namelijk vaak dat het geen goed design is. Maar helaas had ik niet meer tijd om deze punten nog eens langs te gaan.
 
-## Challenges:
+## Challenges
 
 ### Expandable listview maken
 Een van de grootste challenges van deze applicatie was om de expandable listview te maken. Aangezien ik dit nog nooit gedaan had was dit vrij lastig. Het maken van de listview adapter was vrij simpel. Met het kijken van wat tutorials was dit goed te doen. Het lastige gedeelte kwam doordat ik graag wilde dat in de expandable listview de checkboxes van episodes die al gezien zijn 'gecheckt' zijn. Ik heb daarom de volgende dingen geprobeerd:
