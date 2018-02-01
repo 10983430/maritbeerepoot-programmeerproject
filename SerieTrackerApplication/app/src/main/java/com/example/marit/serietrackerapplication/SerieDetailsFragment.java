@@ -3,22 +3,16 @@ package com.example.marit.serietrackerapplication;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +24,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -48,20 +41,11 @@ import static android.content.Context.MODE_PRIVATE;
  * Shows details from the serie to the UI
  */
 public class SerieDetailsFragment extends Fragment {
-    String imdbid;
+    private String imdbid;
     private ArrayList<Episode> episodeitems = new ArrayList<Episode>();
-    private ExpandableListAdapter adapter;
-    private ExpandableListView listview;
-    private List<String> SeasonList;
-    private HashMap<String, List<Episode>> hashMap;
-    Integer totalseasons;
-    Integer count = 0;
-    Serie serieinfo;
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    DataSnapshot watched;
-    String serieName;
-    Parcelable state;
-    private ArrayList seenEpisodes;
+    private List<String> SeasonList = new ArrayList<>();
+    private Integer count = 0;
+    private Serie serieinfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,15 +58,19 @@ public class SerieDetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SeasonList = new ArrayList<>();
-        hashMap = new HashMap<>();
-        seenEpisodes = new ArrayList();
-        Bundle bundle = this.getArguments();
         // Get the imdbid from the serie that was clicked on
+        Bundle bundle = this.getArguments();
         if (bundle != null) {
-
             imdbid = bundle.getString("imdbid");
+
+            // Override the shared preferences, so that the episode clicked on before
+            // is not in de shared preferences anymore
+            SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
+            SharedPreferences.Editor prefsEditor = prefs.edit();
+            prefsEditor.putString("imdbid", imdbid);
+            prefsEditor.apply();
         }
+        // Get data
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
         getData(url, 1, 0);
     }
@@ -91,9 +79,10 @@ public class SerieDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
-        String imdbid = prefs.getString("imdb", "Default");
+        String imdbid = prefs.getString("imdbid", "Default");
         count = 0;
         String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
+        Log.d("TESSTT", url);
         getData(url, 1, 0);
     }
 
@@ -103,7 +92,7 @@ public class SerieDetailsFragment extends Fragment {
         super.onPause();
         SharedPreferences prefs = getContext().getSharedPreferences("SerieDetails", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = prefs.edit();
-        prefsEditor.putString("imdb", imdbid);
+        prefsEditor.putString("imdbid", imdbid);
         prefsEditor.apply();
     }
 
@@ -127,13 +116,16 @@ public class SerieDetailsFragment extends Fragment {
                             if (type2 == 1) {
                                 parseJSONSerieDetails(response);
                             } else {
+                                // This counts keeps track of if every season is requested
                                 count += 1;
                                 parseJSONSeasons(response, seasonnumber);
+
+                                // Get data ready for the expandable listview
                                 fixData();
+
+                                // Set textviews
                                 fillTextviews();
-
                             }
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -151,33 +143,30 @@ public class SerieDetailsFragment extends Fragment {
      * Checks if all the data is gathered and puts the data in de right format
      */
     private void fixData() {
-        Log.d("testjeee", String.valueOf(count) + " " + String.valueOf(totalseasons));
-        if (count == totalseasons) {
-            Log.d("testjeee", String.valueOf(count) + " " + String.valueOf(totalseasons));
-            hashMap = new HashMap<>();
+        // Check if the information off all seasons is requested
+        if (count == Integer.valueOf(serieinfo.getTotalSeasons())) {
+            // Create an hashmap that consists of the season name and the episodes
+            // from that season
+            HashMap<String, List<Episode>> seasonAndEpisodes = new HashMap<>();
             for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
-                ArrayList<Episode> listje = new ArrayList<>();
+                ArrayList<Episode> episodes = new ArrayList<>();
                 for (int x = 0; x < episodeitems.size(); x++) {
                     if (episodeitems.get(x).getSeasonnumber() == i) {
-
-                        listje.add(episodeitems.get(x));
+                        episodes.add(episodeitems.get(x));
                     }
                 }
-                hashMap.put("Season " + i, listje);
+                seasonAndEpisodes.put("Season " + i, episodes);
             }
-            setAdapter();
+            setAdapter(seasonAndEpisodes);
         }
 
     }
 
-
     /**
      * Sets the expandable listview adapter and puts listeners on it
      */
-    public void setAdapter() {
-        // Set adapter
-        Log.d("Testje", SeasonList.toString() + " " + hashMap.toString() + " " + imdbid);
-        adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
+    public void setAdapter(HashMap hashMap) {
+        ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(), SeasonList, hashMap, imdbid);
         ExpandableListView view = getView().findViewById(R.id.ExpandableListview);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -219,7 +208,7 @@ public class SerieDetailsFragment extends Fragment {
                 CheckBox checkBox = view.findViewById(R.id.CheckBox);
                 // Get the object from class Episode that was clicked on
                 Episode clickedEpisode = (Episode) parent.getAdapter().getItem(position);
-
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
                     String seasonnumber = clickedEpisode.getSeasonnumber().toString();
                     String episodenumber = clickedEpisode.getEpisode().toString();
@@ -277,23 +266,34 @@ public class SerieDetailsFragment extends Fragment {
      */
     public void parseJSONSerieDetails(String response) {
         try {
+            // Parse JSON to instance of class Serie
             JSONObject responsedata = new JSONObject(response);
             serieinfo = setSettersSerieClass(responsedata);
-            serieName = responsedata.getString("Title");
-            if (!responsedata.getString("totalSeasons").equals("N/A")) {
-                totalseasons = Integer.parseInt(responsedata.getString("totalSeasons"));
-                for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
-                    String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
-                    getData(url, 2, i);
-                    if (!SeasonList.contains("Season " + String.valueOf(i))) {
-                        SeasonList.add("Season " + String.valueOf(i));
-                    }
-                }
-            } else {
-                fillTextviews();
-            }
+            // Send an request for every season
+            getAdditionalInfo(responsedata.getString("totalSeasons"));
+
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Sends requests to the API for every season of a serie
+     */
+    public void getAdditionalInfo(String numberOfSeasons) {
+        // Check if there are seasons known in the API
+        if (!numberOfSeasons.equals("N/A")) {
+            //totalseasons = Integer.parseInt(numberOfSeasons);
+            for (int i = 1; i <= Integer.parseInt(serieinfo.getTotalSeasons()); i++) {
+                String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid + "&season=" + String.valueOf(i);
+                getData(url, 2, i);
+                // Keep an list with the name of every season
+                if (!SeasonList.contains("Season " + String.valueOf(i))) {
+                    SeasonList.add("Season " + String.valueOf(i));
+                }
+            }
+        } else {
+            fillTextviews();
         }
     }
 
@@ -303,17 +303,9 @@ public class SerieDetailsFragment extends Fragment {
     public Serie setSettersSerieClass(JSONObject responsedata) {
         Serie serieinfo = new Serie();
         try {
-            Log.d("serieinfo", responsedata.toString());
             serieinfo.setTitle(responsedata.getString("Title"));
-            serieinfo.setYear(responsedata.getString("Year"));
             serieinfo.setReleased(responsedata.getString("Released"));
-            serieinfo.setRuntime(responsedata.getString("Runtime"));
-            serieinfo.setGenre(responsedata.getString("Genre"));
-            serieinfo.setDirector(responsedata.getString("Director"));
-            serieinfo.setWriter(responsedata.getString("Writer"));
             serieinfo.setPlot(responsedata.getString("Plot"));
-            serieinfo.setLanguage(responsedata.getString("Language"));
-            serieinfo.setCountry(responsedata.getString("Country"));
             serieinfo.setAwards(responsedata.getString("Awards"));
             serieinfo.setPoster(responsedata.getString("Poster"));
             serieinfo.setImdbrating(responsedata.getString("imdbRating"));

@@ -134,41 +134,51 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         if (user != null) {
             String currentUser = user.getUid();
             // Make it impossible to follow yourself
+            Log.d("Tessssttt", userID + " " + currentUser);
+            Log.d("Tessssttt", String.valueOf(userID.equals(currentUser)));
             if (userID.equals(currentUser)) {
                 Button follow = view.findViewById(R.id.FollowButton);
                 follow.setVisibility(GONE);
+            } else {
+                // Check if the button should be for following or unfollowing
+                FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+                DatabaseReference dbref = fbdb.getReference("User/" + user.getUid());
+                dbref.addListenerForSingleValueEvent(new FirebaseValueEventListener(view));
             }
-            // Check if the button should be for following or unfollowing
-            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-            String userid = user.getUid();
-            DatabaseReference dbref = fbdb.getReference("User/" + userid);
-            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    DataSnapshot usersFollowed = dataSnapshot.child("UsersFollowed").child(userID);
-                    // If the datasnapshot is not null, this means that the user is already in
-                    // Firebase and thereby followed so show unfollow button
-                    if (usersFollowed.getValue() != null) {
-                        (view.findViewById(R.id.UnfollowButton)).setVisibility(View.VISIBLE);
-                        (view.findViewById(R.id.FollowButton)).setVisibility(GONE);
-                    }
-                    else {
-                        (view.findViewById(R.id.UnfollowButton)).setVisibility(View.GONE);
-                        (view.findViewById(R.id.FollowButton)).setVisibility(View.VISIBLE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    //TODO handelen
-                }
-            });
         } else {
             // Hide the follow button when there is no user logged in
             Button follow = view.findViewById(R.id.FollowButton);
             follow.setVisibility(GONE);
         }
     }
+
+    public class FirebaseValueEventListener implements ValueEventListener {
+        View view;
+
+        public FirebaseValueEventListener(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            DataSnapshot usersFollowed = dataSnapshot.child("UsersFollowed").child(userID);
+            // If the datasnapshot is not null, this means that the user is already in
+            // Firebase and thereby followed so show unfollow button
+            if (usersFollowed.getValue() != null) {
+                (view.findViewById(R.id.UnfollowButton)).setVisibility(View.VISIBLE);
+                (view.findViewById(R.id.FollowButton)).setVisibility(GONE);
+            } else {
+                (view.findViewById(R.id.UnfollowButton)).setVisibility(View.GONE);
+                (view.findViewById(R.id.FollowButton)).setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            //TODO handelen
+        }
+    }
+    
 
     /**
      * 'Follows" the user by putting the user in the database
