@@ -29,15 +29,16 @@ import java.util.HashMap;
 import java.util.List;
 
 
+/**
+ * Displays a list of all the Firebase users
+ */
 public class UsersOverviewFragment extends ListFragment {
-    private HashMap<String, String> UsernameUserid = new HashMap<>();
-    private ArrayList<UserInfoClass> allusers = new ArrayList<UserInfoClass>();
-
+    private HashMap<String, String> usernameUserid = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment\
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_users_overview, container, false);
         return view;
     }
@@ -48,22 +49,9 @@ public class UsersOverviewFragment extends ListFragment {
         getData();
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        FragmentManager fragmentManager = getFragmentManager();
-        UserDetailsFragment fragment = new UserDetailsFragment();
-        // Get the userId by checking which username has which ID
-        TextView usernameHolder = v.findViewById(R.id.UserNameHolder);
-        String username = usernameHolder.getText().toString();
-        Bundle args = new Bundle();
-        args.putString("userid", getUserId(username));
-        fragment.setArguments(args);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "SeriesOverview");
-        fragmentTransaction.commit();
-    }
-
+    /**
+     * Gets all the user ids usernames from Firebase
+     */
     public void getData() {
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         DatabaseReference dbref = fbdb.getReference("User");
@@ -72,41 +60,50 @@ public class UsersOverviewFragment extends ListFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    String userid = child.getKey();
-                    Log.d("testertje", dataSnapshot.child(userid).child("username").toString());
-                    String username = dataSnapshot.child(userid).child("username").getValue().toString();
-                    String email = dataSnapshot.child(userid).child("email").getValue().toString();
-
-                    // TO-DO, dit klopt niet meer
-                    HashMap<String, String> followseries = new HashMap<>();
-                    HashMap<String, String> follususers = new HashMap<>();
-
-                    // TO-DO, opzich is dit ook niet nodig hier, aangezien je alleen ID en username nodig hebt, weghalen dus
-                    UserInfoClass user = new UserInfoClass(userid, username, followseries, follususers, email);
-
-                    allusers.add(user);
-                    UsernameUserid.put(username, userid.toString());
+                    String userId = child.getKey();
+                    String userName = dataSnapshot.child(userId).child("username").getValue().toString();
+                    usernameUserid.put(userName, userId.toString());
                 }
-                makeListView(UsernameUserid);
+                makeListView(usernameUserid);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+//TODO
             }
         });
     }
 
+    /**
+     * Creates a listview from the usernames
+     */
     public void makeListView(HashMap hashMap) {
         ArrayList<String> users = new ArrayList<String>(hashMap.keySet());
         Adapter adapter = new UsersOverviewAdapter(getActivity(), users);
         this.setListAdapter((ListAdapter) adapter);
     }
 
-    public String getUserId(String username){
-        for (String key : UsernameUserid.keySet()){
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        // Get the userId by checking which username has which ID
+        TextView usernameHolder = v.findViewById(R.id.UserNameHolder);
+        String username = usernameHolder.getText().toString();
+        // Navigate to user details
+        Bundle args = new Bundle();
+        args.putString("userid", getUserId(username));
+        UserDetailsFragment fragment = new UserDetailsFragment();
+        fragment.setArguments(args);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+    }
+
+    /**
+     * Finds the corresponding userid for the input username
+     */
+    public String getUserId(String username) {
+        for (String key : usernameUserid.keySet()) {
             if (key == username) {
-                String value = UsernameUserid.get(key);
+                String value = usernameUserid.get(key);
                 return value;
             }
         }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,6 @@ public class UserDetailsFragment extends ListFragment implements View.OnClickLis
         // Get the imdbid from the serie that was clicked on
         if (bundle != null) {
             userID = bundle.getString("userid");
-
             // Override the shared preferences, so that the episode clicked on before
             // is not in de shared preferences anymore
             SharedPreferences prefs = getContext().getSharedPreferences("UserDetails", MODE_PRIVATE);

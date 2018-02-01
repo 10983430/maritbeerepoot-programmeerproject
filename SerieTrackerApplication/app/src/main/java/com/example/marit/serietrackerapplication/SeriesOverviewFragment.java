@@ -12,18 +12,23 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-
+/**
+ * Creates an overview of the series from the searchresult
+ */
 public class SeriesOverviewFragment extends ListFragment implements View.OnClickListener {
     private ArrayList<SearchResult> items = new ArrayList<>();
 
@@ -34,7 +39,7 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_series_overview, container, false);
 
         // Put a listener on the bottom to make search possible
-        Button search = view.findViewById(R.id.buttonSearch);
+        Button search = view.findViewById(R.id.ButtonSearch);
         search.setOnClickListener(this);
         return view;
     }
@@ -52,11 +57,11 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
     }
 
     @Override
-    public void onClick(View view){
+    public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.buttonSearch:
+            case R.id.ButtonSearch:
                 // Get the searchinput
-                EditText searchinputfield = getView().findViewById(R.id.editTextSearch);
+                EditText searchinputfield = getView().findViewById(R.id.EditTextSearch);
                 String searchinput = searchinputfield.getText().toString();
 
                 // Put back the start list when searchinput is empty, but search is clicked
@@ -106,19 +111,16 @@ public class SeriesOverviewFragment extends ListFragment implements View.OnClick
      */
     public void parseJSON(String respons) throws JSONException {
         try {
-            TextView NoResultsMessage = getView().findViewById(R.id.NoResultsMessage);
-            NoResultsMessage.setVisibility(View.GONE);
+            (getView().findViewById(R.id.NoResultsMessage)).setVisibility(View.GONE);
             JSONObject data = new JSONObject(respons);
             JSONArray results = data.getJSONArray("Search");
             for (int i = 0; i < results.length(); i++) {
                 items.add(new SearchResult(results.getJSONObject(i).getString("Title"),
-                                            results.getJSONObject(i).getString("Poster"),
-                                            results.getJSONObject(i).getString("imdbID")));
+                        results.getJSONObject(i).getString("Poster"),
+                        results.getJSONObject(i).getString("imdbID")));
             }
-        }
-        catch (JSONException e) {
-            TextView NoResultsMessage = getView().findViewById(R.id.NoResultsMessage);
-            NoResultsMessage.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            (getView().findViewById(R.id.NoResultsMessage)).setVisibility(View.VISIBLE);
             e.printStackTrace();
         }
     }

@@ -12,7 +12,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="name">Name:</string>
-    <string name="relaeased">Realeased:</string>
+    <string name="relaeased">Released:</string>
     <string name="genre">Genre:</string>
     <string name="plot">Plot:</string>
     <string name="director">Director:</string>
@@ -36,4 +36,5 @@
     <string name="series_seen">Series seen</string>
     <string name="following">Following</string>
     <string name="log_out">Log out</string>
+    <string name="robot">Robot</string>
 </resources>

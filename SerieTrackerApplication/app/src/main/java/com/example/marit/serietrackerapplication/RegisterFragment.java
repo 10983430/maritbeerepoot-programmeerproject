@@ -101,8 +101,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         String username = usernameinput.getText().toString();
 
         // Create a new instance of the class UserInfoClass for an user and insert into Firebase
-        // TODO dit fixen
-        UserInfoClass user = new UserInfoClass(id, username, favorites, favorites, email);
+        UserInfo user = new UserInfo(id, username, email);
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         DatabaseReference dbref = fbdb.getReference("User");
         dbref.child(id).setValue(user);

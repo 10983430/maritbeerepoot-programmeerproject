@@ -18,7 +18,6 @@ public class UsersOverviewAdapter extends ArrayAdapter<String> {
     private Context context;
     private ArrayList<String> user;
 
-    //TODO style deze
     public UsersOverviewAdapter(Context context, ArrayList<String> listofusers) {
         super(context, 0, listofusers);
         this.context = context;

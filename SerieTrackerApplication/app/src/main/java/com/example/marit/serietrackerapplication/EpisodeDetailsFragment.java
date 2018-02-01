@@ -153,9 +153,7 @@ public class EpisodeDetailsFragment extends Fragment implements View.OnClickList
             ((TextView) getView().findViewById(R.id.EpisodeLanguageInfo)).setText(data.getString("Language"));
             // Hide the imageview if there is no image available
             final ImageView imageview = getView().findViewById(R.id.EpisodePoster);
-            if (data.getString("Poster").equals("N/A")) {
-                imageview.setVisibility(View.GONE);
-            } else {
+            if (!data.getString("Poster").equals("N/A")) {
                 Picasso.with(getContext()).load(data.getString("Poster")).into(imageview);
             }
         } catch (JSONException e) {

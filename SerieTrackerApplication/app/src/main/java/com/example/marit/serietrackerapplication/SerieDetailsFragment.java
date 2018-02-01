@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,7 +87,6 @@ public class SerieDetailsFragment extends Fragment {
         synchronized (this) {
             // Get the data from the clicked serie
             String url = "http://www.omdbapi.com/?apikey=14f4cb52&i=" + imdbid;
-            Log.d("lolllzzz", url);
             getData(url, 1, 0);
 
         }
@@ -346,6 +347,11 @@ public class SerieDetailsFragment extends Fragment {
 
         TextView awardsview = getView().findViewById(R.id.AwardsInfo);
         awardsview.setText(serieinfo.getAwards());
+
+        ImageView imageView = getView().findViewById(R.id.imageView);
+        if (!serieinfo.getPoster().equals("N/A")) {
+            Picasso.with(getContext()).load(serieinfo.getPoster()).into(imageView);
+        }
     }
 
 }
